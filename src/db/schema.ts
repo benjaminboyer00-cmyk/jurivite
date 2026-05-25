@@ -19,6 +19,8 @@ export const users = pgTable("user", {
   name: text("name"),
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
+  /** Mot de passe (bcrypt) — optionnel si connexion Google / lien magique uniquement */
+  passwordHash: text("password_hash"),
   image: text("image"),
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripe_customer_id"),

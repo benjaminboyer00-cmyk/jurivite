@@ -38,6 +38,13 @@ npm run db:up      # Docker Postgres
 npm run db:push    # Tables Drizzle
 ```
 
+### Compte utilisateur
+
+- **Inscription** : `/login` → onglet « Inscription » (e-mail + mot de passe, 8 car. min.)
+- **Un e-mail = un compte** (normalisation minuscules, contrainte SQL `unique`)
+- **Connexion** : mot de passe, lien magique Resend, ou Google OAuth
+- **Espace compte** : `/dashboard/compte` (mot de passe, abonnement Stripe, suppression RGPD)
+
 ## 3. Stripe (mode test)
 
 1. [dashboard.stripe.com](https://dashboard.stripe.com) → **Mode test**

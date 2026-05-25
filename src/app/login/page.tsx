@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Scale } from "lucide-react";
 
 import { LoginForm } from "@/components/auth/login-form";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, siteConfig } from "@/lib/seo";
+import { safeCallbackUrl } from "@/lib/auth/safe-redirect";
 
 export const metadata: Metadata = createMetadata({
   title: "Connexion",
@@ -13,7 +15,14 @@ export const metadata: Metadata = createMetadata({
   noIndex: true,
 });
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string; error?: string; mode?: string }>;
+}) {
+  const params = await searchParams;
+  const callbackUrl = safeCallbackUrl(params.callbackUrl, siteConfig.url);
+
   const showGoogle = !!(
     process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
   );
@@ -30,7 +39,13 @@ export default function LoginPage() {
         </span>
         Retour à JuriVite
       </Link>
-      <LoginForm showGoogle={showGoogle} showEmail={showEmail} />
+      <Suspense fallback={<div className="h-96 w-full max-w-md animate-pulse rounded-xl bg-muted" />}>
+        <LoginForm
+          showGoogle={showGoogle}
+          showEmail={showEmail}
+          callbackUrl={callbackUrl}
+        />
+      </Suspense>
       <p className="mt-6 max-w-sm text-center text-xs text-muted-foreground">
         Pas de compte requis pour générer un PDF. La connexion sert à l&apos;historique
         et aux abonnements Pro / Business.

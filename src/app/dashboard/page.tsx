@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { FileText } from "lucide-react";
 
+import { SessionPlanSync } from "@/components/auth/session-plan-sync";
 import { CheckoutButton } from "@/components/auth/checkout-button";
 import { DocumentDownloadButton } from "@/components/auth/document-download-button";
 import { AccountPrivacyPanel } from "@/components/dashboard/account-privacy-panel";
@@ -72,6 +74,9 @@ export default async function DashboardPage({
 
   return (
     <div className="page-container max-w-4xl py-10 sm:py-14">
+      <Suspense fallback={null}>
+        <SessionPlanSync />
+      </Suspense>
       {params.checkout === "success" && (
         <Alert variant="success" title="Paiement confirmé" className="mb-6">
           Plan{" "}
@@ -85,7 +90,10 @@ export default async function DashboardPage({
           <h1 className="text-3xl font-bold tracking-tight">Tableau de bord</h1>
           <p className="mt-1 text-muted-foreground">{session.user.email}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <ButtonLink href="/dashboard/compte" variant="outline" size="sm">
+            Mon compte
+          </ButtonLink>
           <Badge variant={plan === "free" ? "secondary" : "default"}>
             {planBadgeLabel(plan)}
           </Badge>

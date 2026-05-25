@@ -4,31 +4,14 @@ import type Stripe from "stripe";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import type { Plan } from "@/lib/plans";
-import { planFromStripePriceId } from "@/lib/plans";
 import { captureServerError } from "@/lib/observability/sentry";
+import type { Plan } from "@/lib/plans";
+import {
+  applyPlanToUser,
+  resolvePlanFromSubscription,
+  resolveUserIdFromCheckoutSession,
+} from "@/lib/stripe/sync-user-plan";
 import { stripe } from "@/lib/stripe";
-
-async function resolvePlanFromSubscription(
-  subscription: Stripe.Subscription,
-): Promise<Plan> {
-  const isActive =
-    subscription.status === "active" ||
-    subscription.status === "trialing";
-
-  if (!isActive) return "free";
-
-  const priceId = subscription.items.data[0]?.price?.id;
-  if (priceId) {
-    const mapped = planFromStripePriceId(priceId);
-    if (mapped) return mapped;
-  }
-
-  const metaPlan = subscription.metadata?.plan as Plan | undefined;
-  if (metaPlan === "pro" || metaPlan === "business") return metaPlan;
-
-  return "pro";
-}
 
 export async function POST(request: Request) {
   if (!stripe || !db) {
@@ -53,64 +36,74 @@ export async function POST(request: Request) {
 
   console.info(`[stripe webhook] ${event.type} (${event.id})`);
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const userId = session.metadata?.userId;
-      const customerId = session.customer as string | null;
-      const subscriptionId = session.subscription as string | null;
-      const metaPlan = session.metadata?.plan as Plan | undefined;
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const userId = await resolveUserIdFromCheckoutSession(session);
+        const customerId = session.customer as string | null;
+        const subscriptionId = session.subscription as string | null;
 
-      let plan: Plan = metaPlan === "business" ? "business" : "pro";
+        let plan: Plan =
+          session.metadata?.plan === "business" ? "business" : "pro";
 
-      if (subscriptionId) {
-        const sub = await stripe.subscriptions.retrieve(subscriptionId);
-        plan = await resolvePlanFromSubscription(sub);
-      }
+        if (subscriptionId) {
+          const sub = await stripe.subscriptions.retrieve(subscriptionId);
+          plan = await resolvePlanFromSubscription(sub);
+        }
 
-      if (!userId) {
-        console.warn(
-          "[stripe webhook] checkout.session.completed sans metadata.userId — plan non mis à jour",
+        if (!userId) {
+          console.warn(
+            `[stripe webhook] checkout.session.completed — utilisateur introuvable (session ${session.id})`,
+          );
+          break;
+        }
+
+        await applyPlanToUser(userId, plan, customerId, subscriptionId);
+
+        console.info(
+          `[stripe webhook] utilisateur ${userId} → plan ${plan} (session ${session.id})`,
         );
         break;
       }
+      case "customer.subscription.deleted":
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        const plan = await resolvePlanFromSubscription(subscription);
 
-      await db
-        .update(users)
-        .set({
-          plan,
-          stripeCustomerId: customerId ?? undefined,
-          stripeSubscriptionId: subscriptionId ?? undefined,
-        })
-        .where(eq(users.id, userId));
+        const result = await db
+          .update(users)
+          .set({
+            plan,
+            stripeSubscriptionId: subscription.id,
+          })
+          .where(eq(users.stripeCustomerId, customerId))
+          .returning({ id: users.id });
 
-      console.info(
-        `[stripe webhook] utilisateur ${userId} → plan ${plan} (session ${session.id})`,
-      );
-      break;
+        console.info(
+          `[stripe webhook] ${event.type} customer ${customerId} → plan ${plan} (${result.length} user(s))`,
+        );
+        break;
+      }
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = invoice.customer as string;
+        await db
+          .update(users)
+          .set({ plan: "free" })
+          .where(eq(users.stripeCustomerId, customerId));
+        console.warn(
+          `[stripe webhook] invoice.payment_failed — plan free pour customer ${customerId}`,
+        );
+        break;
+      }
+      default:
+        console.info(`[stripe webhook] événement ignoré : ${event.type}`);
     }
-    case "customer.subscription.deleted":
-    case "customer.subscription.updated": {
-      const subscription = event.data.object as Stripe.Subscription;
-      const customerId = subscription.customer as string;
-      const plan = await resolvePlanFromSubscription(subscription);
-
-      const result = await db
-        .update(users)
-        .set({
-          plan,
-          stripeSubscriptionId: subscription.id,
-        })
-        .where(eq(users.stripeCustomerId, customerId))
-        .returning({ id: users.id });
-
-      console.info(
-        `[stripe webhook] ${event.type} customer ${customerId} → plan ${plan} (${result.length} user(s))`,
-      );
-      break;
-    }
-    default:
-      console.info(`[stripe webhook] événement ignoré : ${event.type}`);
+  } catch (err) {
+    captureServerError(err, { route: "stripe-webhook-handler", type: event.type });
+    return NextResponse.json({ error: "Handler error" }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });

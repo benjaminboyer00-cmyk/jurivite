@@ -19,7 +19,9 @@ export default async function AdminLayout({
   const gate = await requireAdmin();
 
   if (!gate.ok) {
-    if (gate.reason === "unauthenticated") redirect("/login?callbackUrl=/admin");
+    if (gate.reason === "unauthenticated") {
+      redirect("/login?callbackUrl=%2Fadmin");
+    }
     redirect("/");
   }
 

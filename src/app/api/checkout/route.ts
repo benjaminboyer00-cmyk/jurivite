@@ -71,13 +71,28 @@ export async function POST(request: Request) {
       .where(eq(users.id, session.user.id));
   }
 
+  const currentPlan = user?.plan ?? "free";
+  if (
+    (plan === "pro" && currentPlan === "pro") ||
+    (plan === "business" && currentPlan === "business")
+  ) {
+    return NextResponse.json(
+      { error: "Vous avez déjà cet abonnement. Gérez-le depuis Mon compte." },
+      { status: 400 },
+    );
+  }
+
   const checkoutSession = await stripe.checkout.sessions.create({
     customer: customerId,
+    client_reference_id: session.user.id,
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${siteConfig.url}/dashboard?checkout=success&plan=${plan}`,
     cancel_url: `${siteConfig.url}/tarifs?checkout=cancel`,
     metadata: { userId: session.user.id, plan, acceptedCgv: "true" },
+    subscription_data: {
+      metadata: { userId: session.user.id, plan },
+    },
     custom_text: {
       terms_of_service_acceptance: {
         message: `J'accepte les Conditions Générales de Vente de JuriVite (${siteConfig.url}/cgv).`,
