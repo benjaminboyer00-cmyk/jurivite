@@ -50,6 +50,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
   }
 
+  console.info(`[stripe webhook] ${event.type} (${event.id})`);
+
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
@@ -65,16 +67,25 @@ export async function POST(request: Request) {
         plan = await resolvePlanFromSubscription(sub);
       }
 
-      if (userId) {
-        await db
-          .update(users)
-          .set({
-            plan,
-            stripeCustomerId: customerId ?? undefined,
-            stripeSubscriptionId: subscriptionId ?? undefined,
-          })
-          .where(eq(users.id, userId));
+      if (!userId) {
+        console.warn(
+          "[stripe webhook] checkout.session.completed sans metadata.userId — plan non mis à jour",
+        );
+        break;
       }
+
+      await db
+        .update(users)
+        .set({
+          plan,
+          stripeCustomerId: customerId ?? undefined,
+          stripeSubscriptionId: subscriptionId ?? undefined,
+        })
+        .where(eq(users.id, userId));
+
+      console.info(
+        `[stripe webhook] utilisateur ${userId} → plan ${plan} (session ${session.id})`,
+      );
       break;
     }
     case "customer.subscription.deleted":
@@ -83,15 +94,22 @@ export async function POST(request: Request) {
       const customerId = subscription.customer as string;
       const plan = await resolvePlanFromSubscription(subscription);
 
-      await db
+      const result = await db
         .update(users)
         .set({
           plan,
           stripeSubscriptionId: subscription.id,
         })
-        .where(eq(users.stripeCustomerId, customerId));
+        .where(eq(users.stripeCustomerId, customerId))
+        .returning({ id: users.id });
+
+      console.info(
+        `[stripe webhook] ${event.type} customer ${customerId} → plan ${plan} (${result.length} user(s))`,
+      );
       break;
     }
+    default:
+      console.info(`[stripe webhook] événement ignoré : ${event.type}`);
   }
 
   return NextResponse.json({ received: true });

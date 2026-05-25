@@ -50,13 +50,37 @@ npm run dev
 
 # Terminal 2
 stripe login
-stripe listen --forward-to localhost:3000/api/webhooks/stripe
+bash scripts/stripe-webhook-dev.sh
 # Copier whsec_... dans STRIPE_WEBHOOK_SECRET puis redémarrer npm run dev
 ```
 
 Carte test : `4242 4242 4242 4242` — date future — CVC quelconque.
 
-## 4. Resend (magic link)
+## 4. Pages légales JuriVite (dogfooding)
+
+Le site expose déjà les pages statiques générées à partir de la structure de nos modèles :
+
+| Page | URL |
+|------|-----|
+| CGV | `/cgv` |
+| Mentions légales | `/mentions-legales` |
+| Confidentialité | `/confidentialite` |
+
+**Avant la prod**, complétez `src/lib/legal/jurivite-site.ts` (SIRET, adresse, hébergeur, directeur de publication). Vous pouvez aussi regénérer le texte via `/generate/cgv` etc. avec vos vraies données et mettre à jour les pages.
+
+Liens dans le footer du site.
+
+## 5. Nom de domaine & Resend (à faire de votre côté)
+
+1. Acheter **jurivite.fr** (OVH, Cloudflare, Hostinger…)
+2. Resend → ajouter le domaine → copier les enregistrements **TXT / MX / DKIM** chez le registrar
+3. `EMAIL_FROM=JuriVite <noreply@jurivite.fr>` dans `.env.local`
+4. `NEXT_PUBLIC_SITE_URL=https://jurivite.fr`
+5. Au déploiement VPS : enregistrement **A** vers l’IP du serveur
+
+Sans domaine vérifié, les magic links partent de `onboarding@resend.dev` (limité à votre email de test).
+
+## 6. Resend (magic link) — détail technique
 
 **Sans domaine** (tests locaux) :
 
@@ -69,13 +93,13 @@ Carte test : `4242 4242 4242 4242` — date future — CVC quelconque.
 - Configurer DNS (SPF, DKIM)
 - `EMAIL_FROM=JuriVite <noreply@jurivite.fr>`
 
-## 5. Google OAuth (optionnel)
+## 7. Google OAuth (optionnel)
 
 Google Cloud Console → OAuth 2.0 → redirect URI :
 
 `http://localhost:3000/api/auth/callback/google`
 
-## 6. Test E2E (la vérité du terrain)
+## 8. Test E2E (la vérité du terrain)
 
 | Étape | Attendu |
 |-------|---------|
@@ -94,7 +118,14 @@ npm run db:studio
 # table user → colonne plan = pro
 ```
 
-## 7. Commandes utiles
+Logs attendus après paiement test :
+
+```
+[stripe webhook] checkout.session.completed (evt_...)
+[stripe webhook] utilisateur <id> → plan pro (session cs_...)
+```
+
+## 9. Commandes utiles
 
 ```bash
 npm run dev          # Node 20 via fnm automatique

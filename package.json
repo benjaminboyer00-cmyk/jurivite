@@ -13,7 +13,8 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:up": "docker compose up -d",
-    "check:env": "bash scripts/check-env.sh"
+    "check:env": "bash scripts/check-env.sh",
+    "stripe:listen": "bash scripts/stripe-webhook-dev.sh"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

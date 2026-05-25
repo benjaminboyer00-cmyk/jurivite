@@ -10,7 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <p className="font-semibold">{siteConfig.name}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -46,6 +46,27 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Informations légales">
+            <p className="text-sm font-semibold">Informations légales</p>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link href="/mentions-legales" className="hover:text-foreground">
+                  Mentions légales
+                </Link>
+              </li>
+              <li>
+                <Link href="/confidentialite" className="hover:text-foreground">
+                  Politique de confidentialité
+                </Link>
+              </li>
+              <li>
+                <Link href="/cgv" className="hover:text-foreground">
+                  CGV
+                </Link>
+              </li>
             </ul>
           </nav>
 
