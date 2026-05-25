@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Accord de confidentialité (NDA) — {{companyName}}</title>
+    <style><!-- LEGAL_STYLES --></style>
+  </head>
+  <body>
+    <h1>Accord de Confidentialité<br /><span style="font-size:11pt;font-weight:normal">(Non-Disclosure Agreement)</span></h1>
+    <p class="meta-block">Établi le {{dateDuJour}} — Durée : {{durationLabel}}</p>
+
+    <div class="parties-block">
+      <strong>ENTRE :</strong>
+      <p>
+        <strong>{{companyName}}</strong>, {{legalForm}}, {{address}}, SIRET {{siret}},
+        ci-après « <strong>la Partie divulgatrice</strong> »,
+      </p>
+      <strong>ET :</strong>
+      <p>
+        <strong>{{recipientName}}</strong>, {{recipientAddress}}, en qualité de
+        <em>{{recipientRole}}</em>,
+        ci-après « <strong>la Partie réceptrice</strong> ».
+      </p>
+    </div>
+
+    <h2>Article 1 — Objet</h2>
+    <p>
+      Dans le cadre de : <em>{{purpose}}</em>, la Partie divulgatrice pourra communiquer à la
+      Partie réceptrice des Informations Confidentielles au sens du présent accord.
+    </p>
+
+    <h2>Article 2 — Définition</h2>
+    <p>
+      Sont réputées « Informations Confidentielles » toutes informations, données, documents,
+      savoir-faire et éléments communiqués, sous quelque forme que ce soit, notamment :
+    </p>
+    <p><em>{{confidentialScope}}</em></p>
+
+    <h2>Article 3 — Obligations de la Partie réceptrice</h2>
+    <p>La Partie réceptrice s'engage à :</p>
+    <ul class="clause-list">
+      <li>ne pas divulguer les Informations Confidentielles à des tiers sans accord écrit préalable ;</li>
+      <li>limiter l'accès aux seules personnes ayant besoin d'en connaître, liées par la même confidentialité ;</li>
+      <li>utiliser les informations uniquement pour l'objet défini à l'article 1 ;</li>
+      <li>appliquer un niveau de protection au moins équivalent à celui accordé à ses propres secrets.</li>
+    </ul>
+
+    <h2>Article 4 — Exceptions</h2>
+    <p>Ne sont pas confidentielles les informations qui :</p>
+    <ul class="clause-list">
+      <li>sont ou deviennent publiques sans manquement de la Partie réceptrice ;</li>
+      <li>étaient déjà connues de manière licite ;</li>
+      <li>doivent être divulguées en vertu d'une obligation légale ou d'une décision de justice.</li>
+    </ul>
+
+    <h2>Article 5 — Durée</h2>
+    <p>
+      Le présent accord prend effet à sa date de signature pour une durée de {{durationLabel}}.
+      Les obligations de confidentialité survivent {{survivalYears}} ans après son terme.
+    </p>
+
+    <h2>Article 6 — Sanctions</h2>
+    <p>
+      Toute violation pourra entraîner des dommages-intérêts et des mesures d'urgence (référé),
+      sans préjudice des autres voies de droit.
+    </p>
+
+    <h2>Article 7 — Droit applicable</h2>
+    <p>Accord soumis au droit français. Tribunaux du ressort du siège de la Partie divulgatrice.</p>
+
+    <div class="signature-block">
+      <div class="signature-box"><strong>Partie divulgatrice</strong><br />{{companyName}}<br /><br />Signature :</div>
+      <div class="signature-box"><strong>Partie réceptrice</strong><br />{{recipientName}}<br /><br />Signature :</div>
+    </div>
+
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
+  </body>
+</html>

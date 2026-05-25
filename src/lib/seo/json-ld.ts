@@ -198,6 +198,31 @@ export function documentHowToSteps(slug: DocumentSlug): string[] {
       "Renseignez client, prestation et montants HT/TVA",
       "Téléchargez un devis conforme en PDF",
     ],
+    facture: [
+      "Identifiez votre structure (forme juridique, SIRET)",
+      "Saisissez client, numéro de facture et montants",
+      "Exportez une facture PDF prête à envoyer",
+    ],
+    "cession-droits-auteur": [
+      "Renseignez le cédant (auteur / studio)",
+      "Définissez l'œuvre, le territoire et la rémunération",
+      "Générez le contrat de cession en PDF",
+    ],
+    "conditions-utilisation": [
+      "Indiquez l'éditeur du service",
+      "Décrivez le service et la clause de responsabilité",
+      "Publiez vos CGU en PDF",
+    ],
+    "accord-confidentialite": [
+      "Identifiez la partie divulgatrice",
+      "Précisez le destinataire et le périmètre confidentiel",
+      "Signez un NDA structuré en PDF",
+    ],
+    "convention-stage": [
+      "Renseignez l'organisme d'accueil et le tuteur",
+      "Décrivez le stagiaire, l'école et la mission",
+      "Téléchargez la convention de stage",
+    ],
   };
   return steps[slug];
 }

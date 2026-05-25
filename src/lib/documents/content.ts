@@ -146,7 +146,7 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
       },
       {
         heading: "Clauses essentielles incluses",
-        body: "Identification des parties, description de la prestation, prix, paiement, livraison. Pour des missions créatives, ajoutez une clause de cession de droits d'auteur (document à venir dans JuriVite).",
+        body: "Identification des parties, description de la prestation, prix, paiement, livraison. Pour des missions créatives, complétez avec notre contrat de cession de droits d'auteur.",
       },
       {
         heading: "Risques d'un oral ou d'un simple mail",
@@ -197,6 +197,110 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
       {
         question: "Quelle durée de validité pour un devis ?",
         answer: "Souvent 30 jours — au-delà, précisez que les tarifs peuvent être révisés.",
+      },
+    ],
+  },
+  facture: {
+    metaTitle: "Générateur de facture conforme pour freelance",
+    metaDescription:
+      "Créez une facture PDF avec SIRET, TVA ou art. 293 B, échéance et mentions de pénalités. Micro-entreprise et sociétés.",
+    h1: "Générateur de facture",
+    intro:
+      "Facture structurée en PDF, avec clauses TVA adaptées à votre forme juridique et nom de fichier professionnel.",
+    seoBlocks: [
+      {
+        heading: "Mentions obligatoires sur une facture",
+        body: "Numéro unique, dates, identités complètes, description, HT/TVA/TTC ou mention 293 B, conditions de paiement.",
+      },
+      {
+        heading: "Facture micro-entreprise vs société",
+        body: "JuriVite adapte automatiquement la mention TVA et affiche le capital social et le RCS lorsque vous êtes une société.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Puis-je facturer sans TVA ?",
+        answer: "Oui en franchise en base (art. 293 B) — sélectionnez Micro-entreprise ou Auto-entrepreneur.",
+      },
+    ],
+  },
+  "cession-droits-auteur": {
+    metaTitle: "Contrat de cession de droits d'auteur — modèle PDF",
+    metaDescription:
+      "Cédez reproduction et représentation : œuvre, territoire, durée, prix. Clauses garanties et droits moraux.",
+    h1: "Cession de droits d'auteur",
+    intro:
+      "Contrat de cession pour créateurs, agences et freelances — structure juridique complète, pas une simple liste.",
+    seoBlocks: [
+      {
+        heading: "Pourquoi formaliser la cession ?",
+        body: "Sans écrit, le client n'a pas de preuve de droits exploitables. La cession précise périmètre, supports et rémunération.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Cession totale ou partielle ?",
+        answer: "Le formulaire permet de limiter territoire, supports et durée — ajustez selon votre négociation.",
+      },
+    ],
+  },
+  "conditions-utilisation": {
+    metaTitle: "CGU — Conditions générales d'utilisation SaaS",
+    metaDescription:
+      "Générez des CGU pour application ou SaaS : usage, PI, responsabilité, données personnelles.",
+    h1: "Conditions Générales d'Utilisation",
+    intro:
+      "CGU en articles pour encadrer l'accès à votre service en ligne, complémentaires des CGV et de la politique RGPD.",
+    seoBlocks: [
+      {
+        heading: "CGU vs CGV",
+        body: "Les CGU régissent l'usage du service (compte, API, contenus). Les CGV encadrent la vente et le paiement.",
+      },
+    ],
+    faqs: [
+      {
+        question: "CGU obligatoires pour un SaaS ?",
+        answer: "Fortement recommandées pour limiter les abus et clarifier la responsabilité.",
+      },
+    ],
+  },
+  "accord-confidentialite": {
+    metaTitle: "NDA — Accord de confidentialité en PDF",
+    metaDescription:
+      "Modèle NDA français : définition des informations, obligations, durée, survie des clauses.",
+    h1: "Accord de confidentialité (NDA)",
+    intro:
+      "Protégez vos échanges avant un partenariat, une levée ou une due diligence — document structuré « avocat-like ».",
+    seoBlocks: [
+      {
+        heading: "Quand signer un NDA ?",
+        body: "Avant de partager roadmap, données clients, code source ou chiffres financiers à un prospect ou partenaire.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Durée standard d'un NDA ?",
+        answer: "Souvent 2 à 5 ans avec survie de 2 à 3 ans sur les secrets — paramétrable dans le formulaire.",
+      },
+    ],
+  },
+  "convention-stage": {
+    metaTitle: "Convention de stage — modèle PDF",
+    metaDescription:
+      "Convention entre organisme d'accueil et stagiaire : mission, tuteur, durée, gratification, assurance.",
+    h1: "Convention de stage",
+    intro:
+      "Base tripartite à compléter avec l'établissement — articles encadrement, gratification et confidentialité.",
+    seoBlocks: [
+      {
+        heading: "Gratification de stage",
+        body: "Au-delà de 2 mois consécutifs, une gratification minimale est due — indiquez le montant dans le formulaire.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Remplace-t-elle la convention tripartite ?",
+        answer: "Non — elle complète le document officiel fourni par l'école ou l'université.",
       },
     ],
   },

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Facture n° {{invoiceNumber}} — {{companyName}}</title>
+    <style><!-- LEGAL_STYLES --></style>
+  </head>
+  <body>
+    <h1>Facture n° {{invoiceNumber}}</h1>
+
+    <p class="meta-block">
+      Date d'émission : <strong>{{invoiceDate}}</strong><br />
+      Date d'échéance : <strong>{{dueDate}}</strong>
+    </p>
+
+    <h2>Prestataire / Vendeur</h2>
+    <p>
+      <strong>{{companyName}}</strong> — {{legalForm}}<br />
+      {{address}}<br />
+      SIRET : {{siret}} — {{email}} — {{phone}}
+      {{#if isSociete}}{{#if hasShareCapital}}<br />Capital : {{shareCapital}} €{{/if}}{{#if hasRcs}} — RCS {{rcsCity}}{{/if}}{{/if}}
+      {{#if hasVatNumber}}<br />N° TVA : {{vatNumber}}{{/if}}
+    </p>
+
+    <h2>Client</h2>
+    <p>
+      <strong>{{clientName}}</strong><br />
+      {{clientAddress}}
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Désignation</th>
+          <th>Qté</th>
+          <th>Prix unitaire HT</th>
+          <th>Total HT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{serviceDescription}}</td>
+          <td>1</td>
+          <td>{{amountHtFormatted}} €</td>
+          <td>{{amountHtFormatted}} €</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align:right">TVA ({{vatRate}} %)</td>
+          <td>{{vatAmountFormatted}} €</td>
+        </tr>
+        <tr class="totals-row">
+          <td colspan="3" style="text-align:right">Total TTC</td>
+          <td>{{amountTtc}} €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    {{#if tvaMentionArticle293B}}
+    <p class="tva-mention">TVA non applicable, article 293 B du CGI.</p>
+    {{/if}}
+
+    <h2>Conditions de règlement</h2>
+    <p>{{paymentTerms}}</p>
+    <p>
+      En cas de retard, application des pénalités légales et de l'indemnité forfaitaire de
+      recouvrement de 40 € (art. L.441-10 C. com.).
+    </p>
+    <p class="legal-notice">Facture à conserver 10 ans (obligations comptables).</p>
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
+  </body>
+</html>

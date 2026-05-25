@@ -13,6 +13,7 @@ import {
   type DocumentSlug,
 } from "@/lib/documents/registry";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
+import { buildDocumentFileName } from "@/lib/pdf/legal";
 import type { Plan } from "@/lib/plans";
 import { hasNoWatermark } from "@/lib/plans";
 import { validatePdfPayload } from "@/lib/schemas/pdf-payloads";
@@ -78,7 +79,10 @@ export async function generateDocument(
   );
 
   const docMeta = getDocumentBySlug(slug)!;
-  const fileName = `jurivite-${slug}-${Date.now()}.pdf`;
+  const fileName = buildDocumentFileName(
+    slug as DocumentSlug,
+    validated.data,
+  );
 
   if (userId && db) {
     const companyParse = companySchema.safeParse(validated.data);

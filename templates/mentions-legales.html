@@ -3,33 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <title>Mentions légales — {{siteName}}</title>
-    <style>
-      body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
-      h1 { font-size: 18pt; }
-      h2 { font-size: 13pt; margin-top: 1.5em; }
-    </style>
+    <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
-    <h1>Mentions légales</h1>
-    <p>Site : <strong>{{siteName}}</strong> — {{websiteUrl}}</p>
+    <h1>Mentions Légales</h1>
+    <p class="meta-block">Site : <strong>{{siteName}}</strong> — {{websiteUrl}}<br />Dernière mise à jour : {{dateDuJour}}</p>
 
-    <h2>Éditeur du site</h2>
+    <h2>Article 1 — Éditeur du site</h2>
     <p>
-      {{companyName}} — {{legalForm}}<br />
-      SIRET : {{siret}}<br />
-      {{address}}<br />
-      E-mail : {{email}} · Tél. : {{phone}}
+      Le site {{websiteUrl}} est édité par :<br />
+      <strong>{{companyName}}</strong>, {{legalForm}},
+      {{#if isSociete}}{{#if hasShareCapital}}au capital de {{shareCapital}} euros, {{/if}}{{#if hasRcs}}RCS {{rcsCity}}, {{/if}}{{/if}}
+      dont le siège est situé {{address}}, immatriculée sous le numéro SIRET {{siret}}.<br />
+      Contact : {{email}} — {{phone}}
     </p>
 
-    <h2>Directeur de publication</h2>
-    <p>{{directorName}}</p>
-
-    <h2>Hébergement</h2>
+    <h2>Article 2 — Directeur de publication</h2>
     <p>
-      Hébergeur : {{hostingProvider}}<br />
+      Le directeur de la publication est : <strong>{{directorName}}</strong>, en qualité de
+      représentant légal de l'éditeur.
+    </p>
+
+    <h2>Article 3 — Hébergement</h2>
+    <p>
+      Le site est hébergé par :<br />
+      <strong>{{hostingProvider}}</strong><br />
       {{hostingAddress}}
     </p>
 
-    <p><em>Document généré par JuriVite.</em></p>
+    <h2>Article 4 — Propriété intellectuelle</h2>
+    <p>
+      L'ensemble des éléments du site (textes, images, logos, structure) est protégé par le droit
+      de la propriété intellectuelle. Toute reproduction non autorisée constitue une contrefaçon
+      sanctionnée par les articles L.335-2 et suivants du Code de la propriété intellectuelle.
+    </p>
+
+    <h2>Article 5 — Données personnelles</h2>
+    <p>
+      Pour les traitements de données personnelles effectués via le site, le responsable du
+      traitement est {{companyName}}. Les droits RGPD (accès, rectification, effacement,
+      opposition) peuvent être exercés à : {{email}}.
+    </p>
+
+    <h2>Article 6 — Limitation de responsabilité</h2>
+    <p>
+      L'éditeur s'efforce d'assurer l'exactitude des informations diffusées mais ne saurait
+      garantir l'absence d'erreurs ou d'omissions. L'utilisateur reste seul responsable de
+      l'usage qu'il fait des informations du site.
+    </p>
+
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
 </html>

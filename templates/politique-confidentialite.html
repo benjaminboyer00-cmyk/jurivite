@@ -3,38 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <title>Politique de confidentialité — {{companyName}}</title>
-    <style>
-      body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
-      h1 { font-size: 18pt; }
-      h2 { font-size: 13pt; margin-top: 1.5em; }
-    </style>
+    <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
-    <h1>Politique de confidentialité</h1>
-    <p>Site concerné : {{websiteUrl}}</p>
-
-    <h2>Responsable du traitement</h2>
-    <p>
-      {{companyName}} — {{legalForm}}<br />
-      {{address}} — {{email}} — {{phone}}
+    <h1>Politique de Confidentialité</h1>
+    <p class="meta-block">
+      Site concerné : {{websiteUrl}}<br />
+      Responsable du traitement : {{companyName}} — {{legalForm}}<br />
+      Mise à jour : {{dateDuJour}}
     </p>
 
-    <h2>Données collectées</h2>
+    <h2>Article 1 — Responsable du traitement</h2>
+    <p>
+      {{companyName}}, {{legalForm}}, {{address}}, SIRET {{siret}}, {{email}}, {{phone}},
+      est responsable du traitement des données personnelles collectées via le site et ses
+      formulaires de contact.
+    </p>
+
+    <h2>Article 2 — Données collectées</h2>
     <p>{{dataCollected}}</p>
 
-    <h2>Finalités</h2>
+    <h2>Article 3 — Finalités et bases légales</h2>
     <p>{{processingPurpose}}</p>
+    <p>Les traitements reposent selon les cas sur :</p>
+    <ul class="clause-list">
+      <li>l'exécution d'un contrat ou de mesures précontractuelles ;</li>
+      <li>le consentement de la personne concernée ;</li>
+      <li>l'intérêt légitime du responsable (sécurité, amélioration du service) ;</li>
+      <li>une obligation légale (facturation, comptabilité).</li>
+    </ul>
 
-    <h2>Durée de conservation</h2>
+    <h2>Article 4 — Durée de conservation</h2>
     <p>{{retentionPeriod}}</p>
 
-    <h2>Vos droits</h2>
+    <h2>Article 5 — Destinataires et sous-traitants</h2>
     <p>
-      Conformément au RGPD, vous disposez d'un droit d'accès, de rectification,
-      d'effacement et d'opposition. Contact :
-      {{contactEmail}}
+      Les données peuvent être communiquées aux prestataires techniques strictement nécessaires
+      (hébergement, messagerie, CRM) dans le cadre de contrats conformes à l'article 28 du RGPD.
+      Aucun transfert hors Union européenne n'est effectué sans garanties appropriées.
     </p>
 
-    <p><em>Document généré par JuriVite — à adapter à vos traitements réels.</em></p>
+    <h2>Article 6 — Vos droits</h2>
+    <p>
+      Conformément aux articles 15 à 22 du RGPD, vous disposez des droits d'accès, de
+      rectification, d'effacement, de limitation, d'opposition et de portabilité. Pour les
+      exercer : <strong>{{contactEmail}}</strong>.
+    </p>
+    <p>
+      Vous pouvez introduire une réclamation auprès de la CNIL (www.cnil.fr).
+    </p>
+
+    <h2>Article 7 — Sécurité</h2>
+    <p>
+      {{companyName}} met en œuvre des mesures techniques et organisationnelles appropriées pour
+      protéger vos données contre la destruction, la perte, l'altération ou l'accès non autorisé.
+    </p>
+
+    <h2>Article 8 — Cookies</h2>
+    <p>
+      Le site peut utiliser des cookies nécessaires à son fonctionnement et, le cas échéant, des
+      cookies de mesure d'audience soumis à votre consentement via le bandeau prévu à cet effet.
+    </p>
+
+    <p class="legal-notice">
+      Politique générée via JuriVite — à aligner sur vos traitements réels (registre, DPA, cookies).
+    </p>
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
 </html>

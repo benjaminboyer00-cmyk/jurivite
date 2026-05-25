@@ -2,39 +2,174 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Contrat de prestation — {{companyName}}</title>
-    <style>
-      body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
-      h1 { font-size: 18pt; }
-      h2 { font-size: 13pt; margin-top: 1.5em; }
-    </style>
+    <title>Contrat de prestation de services — {{companyName}}</title>
+    <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
-    <h1>Contrat de prestation de services</h1>
+    <h1>Contrat de Prestation de Services</h1>
 
-    <h2>Entre les parties</h2>
+    <p class="meta-block">Document établi le {{dateDuJour}}</p>
+
+    <div class="parties-block">
+      <strong>ENTRE LES SOUSSIGNÉS :</strong>
+      <p>
+        La structure <strong>{{companyName}}</strong>, {{legalForm}}
+        {{#if isSociete}}{{#if hasShareCapital}}au capital social de {{shareCapital}} euros{{/if}}{{#if hasRcs}}, immatriculée au Registre du Commerce et des Sociétés de {{rcsCity}}{{/if}}{{/if}},
+        dont le siège social est situé {{address}}, immatriculée sous le numéro SIRET {{siret}},
+        joignable à l'adresse {{email}} — {{phone}},
+        {{#if isSociete}}représentée par son dirigeant légal, dûment habilité aux fins des présentes,{{/if}}
+        <br />Ci-après dénommée <strong>« le Prestataire »</strong>,
+        <br />D'une part,
+      </p>
+    </div>
+
+    <div class="parties-block">
+      <strong>ET :</strong>
+      <p>
+        <strong>{{clientName}}</strong>, domicilié ou établi au {{clientAddress}},
+        <br />Ci-après dénommé <strong>« le Client »</strong>,
+        <br />D'autre part,
+      </p>
+    </div>
+
+    <p>Il a été exposé et convenu ce qui suit :</p>
+
+    <h2>Article 1 — Objet et périmètre de la mission</h2>
     <p>
-      <strong>Prestataire :</strong> {{companyName}} ({{legalForm}}), SIRET {{siret}},
-      {{address}}, {{email}}, {{phone}}<br />
-      <strong>Client :</strong> {{clientName}}, {{clientAddress}}
+      Le Prestataire s'engage à réaliser pour le compte exclusif du Client les prestations
+      intellectuelles et/ou techniques suivantes :
+    </p>
+    <p><em>{{serviceDescription}}</em></p>
+    <p>
+      Les livrables, le périmètre fonctionnel et les éventuelles exclusions figurent dans
+      la description ci-dessus. Toute demande hors périmètre fera l'objet d'un avenant ou
+      d'un devis complémentaire accepté par écrit par les Parties.
     </p>
 
-    <h2>Objet</h2>
-    <p>{{serviceDescription}}</p>
+    <h2>Article 2 — Délais et modalités d'exécution</h2>
+    <p>
+      Sauf stipulation contraire, les délais de réalisation et de livraison sont fixés au :
+      <strong>{{deliveryDate}}</strong>.
+    </p>
+    <p>
+      Le Client s'engage à fournir dans les délais utiles l'ensemble des éléments, accès,
+      validations et informations nécessaires à la bonne exécution de la mission. Tout retard
+      imputable au Client pourra entraîner un report proportionnel des délais d'exécution
+      sans que la responsabilité du Prestataire ne puisse être engagée.
+    </p>
 
-    <h2>Prix</h2>
-    <p>{{price}}</p>
+    <h2>Article 3 — Prix et conditions financières</h2>
+    <p>
+      En contrepartie des prestations réalisées, le Client versera au Prestataire la somme
+      totale de <strong>{{price}}</strong>, selon les modalités ci-après.
+    </p>
+    {{#if tvaMentionArticle293B}}
+    <p class="tva-mention">
+      TVA non applicable, article 293 B du Code général des impôts (franchise en base de TVA).
+    </p>
+    {{else}}
+    {{#if hasVatNumber}}
+    <p>Numéro de TVA intracommunautaire du Prestataire : {{vatNumber}}.</p>
+    {{/if}}
+    <p>Les montants s'entendent hors taxes ; la TVA en vigueur au jour de la facturation sera ajoutée le cas échéant.</p>
+    {{/if}}
+    <p><strong>Modalités de règlement :</strong> {{paymentTerms}}.</p>
+    <p>
+      En cas de retard de paiement, des pénalités de retard seront exigibles au taux légal en
+      vigueur, ainsi qu'une indemnité forfaitaire de 40 euros pour frais de recouvrement
+      (article L.441-10 du Code de commerce), sans préjudice de tout autre dommage-intérêt.
+    </p>
 
-    <h2>Paiement</h2>
-    <p>{{paymentTerms}}</p>
+    <h2>Article 4 — Obligations du Prestataire — Obligation de moyens</h2>
+    <p>
+      Le Prestataire exécute sa mission conformément aux règles de l'art et aux standards
+      professionnels de son secteur. Il est soumis à une <strong>obligation de moyens</strong>
+      et non de résultat, sauf engagement exprès et écrit contraire.
+    </p>
+    <p>
+      Le Prestataire informera le Client de tout événement susceptible d'affecter le déroulement
+      de la mission dans des délais raisonnables.
+    </p>
 
-    <h2>Livraison</h2>
-    <p>{{deliveryDate}}</p>
+    <h2>Article 5 — Obligations du Client</h2>
+    <p>Le Client s'engage notamment à :</p>
+    <ul class="clause-list">
+      <li>fournir des informations exactes et complètes ;</li>
+      <li>valider les livrables dans un délai raisonnable ;</li>
+      <li>régler les sommes dues aux échéances convenues ;</li>
+      <li>ne pas détourner les livrables d'un usage illicite ou contraire aux lois en vigueur.</li>
+    </ul>
 
-    <h2>Signature</h2>
-    <p>Fait en deux exemplaires.</p>
-    <p>Prestataire : _________________ &nbsp;&nbsp; Client : _________________</p>
+    <h2>Article 6 — Propriété intellectuelle</h2>
+    <p>
+      Sous réserve du paiement intégral des sommes dues, le Prestataire cède au Client les droits
+      patrimoniaux d'exploitation des livrables spécifiquement créés dans le cadre du présent
+      contrat, pour le territoire et la durée légale, dans les limites du périmètre défini à
+      l'article 1. Les outils, méthodes, savoir-faire et éléments préexistants du Prestataire
+      demeurent sa propriété exclusive.
+    </p>
 
-    <p><em>Document généré par JuriVite.</em></p>
+    <h2>Article 7 — Confidentialité</h2>
+    <p>
+      Chaque Partie s'engage à conserver strictement confidentiels les informations, documents
+      et données de l'autre Partie dont elle aurait connaissance à l'occasion du contrat,
+      pendant toute sa durée et cinq (5) ans après son terme, sauf obligation légale ou
+      décision de justice contraire.
+    </p>
+
+    <h2>Article 8 — Responsabilité</h2>
+    <p>
+      La responsabilité du Prestataire, toutes causes confondues, est limitée au montant total
+      HT effectivement perçu au titre du présent contrat, sauf faute lourde, dol ou dommages
+      corporels. Le Prestataire ne saurait être tenu responsable des dommages indirects
+      (perte de chiffre d'affaires, perte de données, perte d'image).
+    </p>
+
+    <h2>Article 9 — Résiliation</h2>
+    <p>
+      En cas de manquement grave non réparé dans un délai de quinze (15) jours suivant mise en
+      demeure écrite, l'autre Partie pourra résilier le contrat de plein droit. En cas de
+      résiliation anticipée à l'initiative du Client sans faute du Prestataire, les prestations
+      déjà réalisées et les frais engagés resteront dus au prorata.
+    </p>
+
+    <h2>Article 10 — Force majeure</h2>
+    <p>
+      Aucune Partie ne sera responsable d'un retard ou d'une inexécution due à un événement de
+      force majeure au sens de l'article 1218 du Code civil.
+    </p>
+
+    <h2>Article 11 — Droit applicable et juridiction</h2>
+    <p>Le présent contrat est soumis au droit français.</p>
+    <p>
+      À défaut de résolution amiable dans un délai de trente (30) jours, tout litige relatif à
+      l'interprétation ou à l'exécution du présent contrat sera porté devant les tribunaux
+      compétents du ressort du siège social du Prestataire, sauf disposition légale impérative
+      contraire.
+    </p>
+
+    <p>Fait en deux (2) exemplaires originaux.</p>
+
+    <div class="signature-block">
+      <div class="signature-box">
+        <strong>Pour le Prestataire</strong><br />
+        {{companyName}}<br />
+        Fait à ____________________, le {{dateDuJourCourt}}<br /><br />
+        <em>Nom et qualité du signataire</em><br /><br />
+        <em>Signature précédée de la mention « Lu et approuvé »</em>
+      </div>
+      <div class="signature-box">
+        <strong>Pour le Client</strong><br />
+        {{clientName}}<br />
+        Fait à ____________________, le {{dateDuJourCourt}}<br /><br />
+        <em>Signature précédée de la mention « Lu et approuvé »</em>
+      </div>
+    </div>
+
+    <p class="legal-notice">
+      Modèle structuré généré via JuriVite — document à adapter à votre situation et à faire
+      relire par un professionnel du droit en cas de mission à fort enjeu financier ou réglementé.
+    </p>
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
 </html>

@@ -88,8 +88,8 @@ export default function HomePage() {
             Générateurs de documents juridiques
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Les 5 documents à plus fort ROI pour indépendants : ceux qui évitent
-            amendes CNIL, litiges clients et impayés.
+            Les 10 documents essentiels pour indépendants et TPE : CGV, RGPD,
+            contrats, facturation, NDA et conventions de stage.
           </p>
         </header>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

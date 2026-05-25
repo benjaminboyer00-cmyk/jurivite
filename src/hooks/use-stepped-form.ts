@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import type { ZodType } from "zod";
 
+import { validateCompanyLegalFields } from "@/lib/schemas/company";
+
 type FormStep = { id: string };
 
 export function useSteppedForm<T extends FieldValues>({
@@ -34,6 +36,17 @@ export function useSteppedForm<T extends FieldValues>({
       });
       return false;
     }
+
+    if (stepId === "company") {
+      const companyError = validateCompanyLegalFields(
+        form.getValues() as Record<string, unknown>,
+      );
+      if (companyError) {
+        form.setError("shareCapital" as Path<T>, { message: companyError });
+        return false;
+      }
+    }
+
     return true;
   }
 

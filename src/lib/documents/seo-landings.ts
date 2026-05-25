@@ -1,4 +1,4 @@
-import type { DocumentSlug } from "@/lib/documents/registry";
+import { documentSlugs, type DocumentSlug } from "@/lib/documents/registry";
 
 export type SeoFaq = { question: string; answer: string };
 
@@ -246,8 +246,5 @@ export function isSeoLandingSlug(slug: string): boolean {
 }
 
 export function getAllGenerateSlugs(): string[] {
-  return [
-    ...(["cgv", "mentions-legales", "politique-confidentialite", "contrat-prestation", "devis"] as const),
-    ...seoLandingSlugs,
-  ];
+  return [...documentSlugs, ...seoLandingSlugs];
 }

@@ -2,42 +2,75 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Devis {{quoteNumber}} — {{companyName}}</title>
-    <style>
-      body { font-family: Arial, sans-serif; font-size: 11pt; margin: 2cm; }
-      h1 { font-size: 20pt; }
-      table { width: 100%; border-collapse: collapse; margin-top: 1em; }
-      th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    </style>
+    <title>Devis n° {{quoteNumber}} — {{companyName}}</title>
+    <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
-    <h1>DEVIS N° {{quoteNumber}}</h1>
-    <p>Date : {{quoteDate}} — Validité : {{validityDays}} jours</p>
+    <h1>Devis n° {{quoteNumber}}</h1>
+
+    <p class="meta-block">
+      Date d'émission : <strong>{{quoteDate}}</strong> — Validité : <strong>{{validityDays}} jours</strong><br />
+      Document établi le {{dateDuJour}}
+    </p>
 
     <h2>Émetteur</h2>
     <p>
-      {{companyName}} — {{legalForm}}<br />
-      SIRET {{siret}} — {{address}}<br />
-      {{email}} — {{phone}}
+      <strong>{{companyName}}</strong> — {{legalForm}}<br />
+      {{address}}<br />
+      SIRET : {{siret}} — {{email}} — {{phone}}
+      {{#if isSociete}}{{#if hasShareCapital}}<br />Capital social : {{shareCapital}} €{{/if}}{{#if hasRcs}} — RCS {{rcsCity}}{{/if}}{{/if}}
     </p>
 
-    <h2>Client</h2>
-    <p>{{clientName}}{{#if clientEmail}} — {{clientEmail}}{{/if}}</p>
+    <h2>Destinataire</h2>
+    <p>
+      <strong>{{clientName}}</strong>
+      {{#if clientEmail}}<br />{{clientEmail}}{{/if}}
+    </p>
 
-    <table>
+    <h2>Détail de la prestation</h2>
+    <table class="data-table">
       <thead>
-        <tr><th>Prestation</th><th>Montant HT</th><th>TVA</th><th>TTC</th></tr>
+        <tr>
+          <th>Désignation</th>
+          <th>Montant HT</th>
+          <th>TVA</th>
+          <th>Montant TTC</th>
+        </tr>
       </thead>
       <tbody>
         <tr>
           <td>{{serviceDescription}}</td>
-          <td>{{amountExclVat}} €</td>
+          <td>{{amountHtFormatted}} €</td>
           <td>{{vatRate}} %</td>
           <td>{{amountTtc}} €</td>
         </tr>
       </tbody>
     </table>
 
-    <p><em>Devis non contractuel jusqu'à signature. Document généré par JuriVite.</em></p>
+    {{#if tvaMentionArticle293B}}
+    <p class="tva-mention">TVA non applicable, art. 293 B du CGI.</p>
+    {{/if}}
+
+    <h2>Conditions</h2>
+    <p>
+      Le présent devis est établi à titre informatif et commercial. Il ne devient contractuel
+      qu'après signature (manuscrite ou électronique) et, le cas échéant, versement de l'acompte
+      convenu. Passé le délai de validité, les tarifs et disponibilités peuvent être révisés.
+    </p>
+
+    <div class="signature-block">
+      <div class="signature-box">
+        <strong>Le Prestataire</strong><br />
+        {{companyName}}<br /><br />
+        Signature :
+      </div>
+      <div class="signature-box">
+        <strong>Le Client</strong><br />
+        « Bon pour accord » — Date :<br /><br />
+        Signature :
+      </div>
+    </div>
+
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
 </html>

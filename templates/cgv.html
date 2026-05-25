@@ -3,67 +3,103 @@
   <head>
     <meta charset="UTF-8" />
     <title>Conditions Générales de Vente — {{companyName}}</title>
-    <style>
-      body {
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        font-size: 11pt;
-        line-height: 1.5;
-        color: #111;
-        margin: 2cm;
-      }
-      h1 {
-        font-size: 18pt;
-        margin-bottom: 0.5em;
-      }
-      h2 {
-        font-size: 13pt;
-        margin-top: 1.5em;
-      }
-      .meta {
-        color: #444;
-        font-size: 10pt;
-        margin-bottom: 2em;
-      }
-    </style>
+    <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
     <h1>Conditions Générales de Vente</h1>
-    <p class="meta">
-      {{companyName}} — {{legalForm}}<br />
-      SIRET : {{siret}}<br />
-      {{address}}<br />
-      Contact : {{email}} · {{phone}}
+
+    <p class="meta-block">
+      <strong>{{companyName}}</strong> — {{legalForm}}<br />
+      Siège : {{address}} — SIRET : {{siret}}<br />
+      Contact : {{email}} — {{phone}}
+      {{#if isSociete}}{{#if hasShareCapital}}<br />Capital social : {{shareCapital}} €{{/if}}{{#if hasRcs}} — RCS {{rcsCity}}{{/if}}{{/if}}
+      {{#if hasVatNumber}}<br />TVA : {{vatNumber}}{{/if}}
+      <br />Version en vigueur au {{dateDuJour}}
     </p>
 
-    <h2>Article 1 — Objet</h2>
+    <h2>Article 1 — Champ d'application et opposabilité</h2>
     <p>
-      Les présentes Conditions Générales de Vente régissent les prestations
-      proposées par {{companyName}}, à savoir : {{activityDescription}}
+      Les présentes Conditions Générales de Vente (ci-après « CGV ») régissent l'ensemble des
+      ventes de prestations et/ou produits proposés par {{companyName}} (ci-après « le Vendeur »)
+      à ses clients professionnels ou consommateurs (ci-après « le Client »).
+    </p>
+    <p>
+      Toute commande implique l'adhésion entière et sans réserve du Client aux présentes CGV,
+      qui prévalent sur tout document du Client, sauf accord écrit et préalable du Vendeur.
     </p>
 
-    <h2>Article 2 — Délais</h2>
-    <p>{{deliveryDelay}}</p>
+    <h2>Article 2 — Activité et description des prestations</h2>
+    <p>Le Vendeur exerce l'activité suivante :</p>
+    <p><em>{{activityDescription}}</em></p>
 
-    <h2>Article 3 — Prix et paiement</h2>
+    <h2>Article 3 — Devis, commande et acceptation</h2>
+    <p>
+      Sauf vente en ligne avec paiement immédiat, un devis détaillé peut être adressé au Client.
+      La commande devient ferme après acceptation écrite du devis (signature, e-mail ou
+      validation électronique) et, le cas échéant, réception d'un acompte.
+    </p>
+
+    <h2>Article 4 — Prix et modalités de paiement</h2>
+    {{#if tvaMentionArticle293B}}
+    <p class="tva-mention">
+      Les prix s'entendent en euros hors taxe. TVA non applicable, article 293 B du Code général
+      des impôts.
+    </p>
+    {{else}}
+    <p>Les prix sont indiqués en euros hors taxes ; la TVA applicable sera facturée en sus.</p>
+    {{/if}}
     <p>{{paymentTerms}}</p>
-
-    <h2>Article 4 — Droit de rétractation</h2>
     <p>
-      Pour les consommateurs, délai de rétractation de
-      {{withdrawalPeriodDays}} jours conformément au Code de la consommation,
-      sous réserve des exceptions légales applicables.
+      Tout retard de paiement entraîne l'exigibilité d'intérêts de retard au taux légal et d'une
+      indemnité forfaitaire de recouvrement de 40 euros (article L.441-10 du Code de commerce).
     </p>
 
-    <h2>Article 5 — Responsabilité</h2>
+    <h2>Article 5 — Délais d'exécution</h2>
+    <p>{{deliveryDelay}}</p>
     <p>
-      La responsabilité de {{companyName}} est limitée au montant des sommes
-      effectivement perçues au titre de la prestation concernée, sauf faute
-      lourde ou dolosive.
+      Les délais sont donnés à titre indicatif sauf engagement exprès et écrit. Un retard
+      raisonnable ne pourra donner lieu à annulation, pénalité ou dommages-intérêts.
     </p>
 
-    <p class="meta">
-      Document généré par JuriVite — à faire relire par un professionnel du droit
-      si votre activité le nécessite.
+    <h2>Article 6 — Droit de rétractation (consommateurs)</h2>
+    <p>
+      Lorsque le Client est un consommateur au sens du Code de la consommation, il dispose d'un
+      délai de rétractation de <strong>{{withdrawalPeriodDays}} jours</strong> à compter de la
+      conclusion du contrat pour les prestations de services, sous réserve des exceptions légales
+      (prestation exécutée avant la fin du délai avec accord exprès, contenu numérique, etc.).
     </p>
+
+    <h2>Article 7 — Garanties et responsabilité</h2>
+    <p>
+      Le Vendeur est tenu à une obligation de moyens dans l'exécution de ses prestations. Sa
+      responsabilité est limitée, toutes causes confondues, au montant HT effectivement perçu au
+      titre de la commande litigieuse, sauf faute lourde, dol ou dommage corporel.
+    </p>
+
+    <h2>Article 8 — Propriété intellectuelle</h2>
+    <p>
+      Sauf cession expresse, les livrables restent la propriété du Vendeur jusqu'au paiement
+      intégral. Les éléments fournis par le Client demeurent sa propriété ; le Vendeur dispose
+      d'une licence d'utilisation limitée à l'exécution de la mission.
+    </p>
+
+    <h2>Article 9 — Données personnelles</h2>
+    <p>
+      Les données collectées sont traitées conformément au RGPD. Le Client dispose des droits
+      d'accès, rectification, effacement et opposition en contactant {{email}}.
+    </p>
+
+    <h2>Article 10 — Médiation et litiges</h2>
+    <p>
+      En cas de litige de consommation, le Client peut recourir gratuitement à un médiateur de
+      la consommation conformément aux articles L.612-1 et suivants du Code de la consommation.
+    </p>
+    <p>Les présentes CGV sont soumises au droit français. Compétence des tribunaux français.</p>
+
+    <p class="legal-notice">
+      CGV générées via JuriVite — à personnaliser selon votre activité et à valider par un
+      professionnel du droit si vous opérez en B2C réglementé ou à fort volume.
+    </p>
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
 </html>

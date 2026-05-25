@@ -75,7 +75,11 @@ export function PolitiqueConfidentialiteForm() {
       generateError={generateError}
     >
       {currentStep.id === "company" && (
-        <CompanyFields register={register} errors={formState.errors} />
+        <CompanyFields
+          register={register}
+          errors={formState.errors}
+          legalForm={values.legalForm}
+        />
       )}
 
       {currentStep.id === "rgpd" && (

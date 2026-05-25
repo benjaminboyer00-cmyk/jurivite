@@ -54,7 +54,7 @@ const tiers = [
     price: "0 €",
     description: "Tester et valider vos modèles",
     features: [
-      "5 types de documents",
+      "10 types de documents juridiques",
       "Formulaires guidés",
       "PDF avec filigrane",
       "Sans carte bancaire",

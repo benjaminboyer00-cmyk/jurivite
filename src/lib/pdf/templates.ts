@@ -1,6 +1,11 @@
+import fs from "fs";
 import path from "path";
 
 import type { DocumentSlug } from "@/lib/documents/registry";
+import {
+  enrichLegalContext,
+  enrichSlugSpecificData,
+} from "@/lib/pdf/legal";
 
 const TEMPLATE_FILES: Record<DocumentSlug, string> = {
   cgv: "cgv.html",
@@ -8,29 +13,37 @@ const TEMPLATE_FILES: Record<DocumentSlug, string> = {
   "politique-confidentialite": "politique-confidentialite.html",
   "contrat-prestation": "contrat-prestation.html",
   devis: "devis.html",
+  facture: "facture.html",
+  "cession-droits-auteur": "cession-droits-auteur.html",
+  "conditions-utilisation": "conditions-utilisation.html",
+  "accord-confidentialite": "accord-confidentialite.html",
+  "convention-stage": "convention-stage.html",
 };
+
+let legalStylesCache: string | null = null;
 
 export function getTemplatePath(slug: DocumentSlug): string {
   const file = TEMPLATE_FILES[slug];
   return path.join(process.cwd(), "templates", file);
 }
 
+export function loadTemplateSource(slug: DocumentSlug): string {
+  const raw = fs.readFileSync(getTemplatePath(slug), "utf8");
+
+  if (!legalStylesCache) {
+    legalStylesCache = fs.readFileSync(
+      path.join(process.cwd(), "templates/partials/legal-styles.html"),
+      "utf8",
+    );
+  }
+
+  return raw.replace("<!-- LEGAL_STYLES -->", legalStylesCache);
+}
+
 export function enrichTemplateData(
   slug: DocumentSlug,
   data: Record<string, unknown>,
 ): Record<string, unknown> {
-  const enriched = { ...data };
-
-  if (slug === "devis") {
-    const amount = Number(data.amountExclVat) || 0;
-    const vat = Number(data.vatRate) || 0;
-    enriched.amountTtc = (amount * (1 + vat / 100)).toFixed(2);
-  }
-
-  if (slug === "politique-confidentialite") {
-    const dpo = String(data.dpoEmail ?? "").trim();
-    enriched.contactEmail = dpo || data.email;
-  }
-
-  return enriched;
+  const withLegal = enrichLegalContext(data);
+  return enrichSlugSpecificData(slug, withLegal);
 }

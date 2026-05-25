@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contrat de cession de droits d'auteur — {{workTitle}}</title>
+    <style><!-- LEGAL_STYLES --></style>
+  </head>
+  <body>
+    <h1>Contrat de Cession de Droits d'Auteur</h1>
+    <p class="meta-block">Établi le {{dateDuJour}} — Œuvre : <strong>{{workTitle}}</strong></p>
+
+    <div class="parties-block">
+      <strong>ENTRE :</strong>
+      <p>
+        <strong>{{companyName}}</strong>, {{legalForm}}, {{address}}, SIRET {{siret}},
+        ci-après « <strong>le Cédant</strong> »,
+      </p>
+      <strong>ET :</strong>
+      <p>
+        <strong>{{clientName}}</strong>, {{clientAddress}},
+        ci-après « <strong>le Cessionnaire</strong> ».
+      </p>
+    </div>
+
+    <h2>Article 1 — Objet de la cession</h2>
+    <p>
+      Le Cédant, auteur ou titulaire des droits sur l'œuvre désignée ci-dessus, cède au
+      Cessionnaire les droits patrimoniaux suivants, dans les limites définies aux articles
+      suivants :
+    </p>
+    <p><em>{{workDescription}}</em></p>
+
+    <h2>Article 2 — Étendue des droits cédés</h2>
+    <p>
+      La présente cession porte sur les droits de reproduction et de représentation, pour les
+      supports et usages suivants : <strong>{{exploitationMedia}}</strong>, sur le territoire :
+      <strong>{{territory}}</strong>, pour la durée : <strong>{{duration}}</strong>.
+    </p>
+
+    <h2>Article 3 — Rémunération</h2>
+    <p>
+      En contrepartie de cette cession, le Cessionnaire versera au Cédant la somme de :
+      <strong>{{assignmentPrice}}</strong>, selon les modalités : {{paymentTerms}}.
+    </p>
+    {{#if tvaMentionArticle293B}}
+    <p class="tva-mention">TVA non applicable, art. 293 B du CGI.</p>
+    {{/if}}
+
+    <h2>Article 4 — Garanties du Cédant</h2>
+    <p>
+      Le Cédant garantit être l'auteur ou titulaire des droits cédés et que l'œuvre est originale.
+      Il garantit le Cessionnaire contre toute action en contrefaçon fondée sur la paternité de
+      l'œuvre, sous réserve des éléments fournis par le Cessionnaire.
+    </p>
+
+    <h2>Article 5 — Droits moraux</h2>
+    <p>
+      Conformément à l'article L.121-7 du Code de la propriété intellectuelle, le Cédant conserve
+      son droit au respect de son nom et de son œuvre ; le Cessionnaire s'engage à mentionner
+      la paternité lorsque cela est raisonnablement possible.
+    </p>
+
+    <h2>Article 6 — Droit applicable</h2>
+    <p>Contrat soumis au droit français. Tribunaux compétents du ressort du domicile du Cédant.</p>
+
+    <div class="signature-block">
+      <div class="signature-box"><strong>Le Cédant</strong><br />{{companyName}}<br /><br />Signature :</div>
+      <div class="signature-box"><strong>Le Cessionnaire</strong><br />{{clientName}}<br /><br />Signature :</div>
+    </div>
+
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
+  </body>
+</html>

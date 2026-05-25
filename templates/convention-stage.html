@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Convention de stage — {{traineeName}}</title>
+    <style><!-- LEGAL_STYLES --></style>
+  </head>
+  <body>
+    <h1>Convention de Stage</h1>
+    <p class="meta-block">
+      Période : du <strong>{{startDate}}</strong> au <strong>{{endDate}}</strong><br />
+      Volume hebdomadaire : <strong>{{weeklyHours}} heures</strong>
+    </p>
+
+    <h2>Article 1 — Organisme d'accueil</h2>
+    <p>
+      <strong>{{companyName}}</strong>, {{legalForm}}, {{address}}, SIRET {{siret}},
+      représentée par <strong>{{tutorName}}</strong> (tuteur de stage), {{email}} — {{phone}}.
+    </p>
+
+    <h2>Article 2 — Stagiaire et établissement</h2>
+    <p>
+      <strong>{{traineeName}}</strong>, demeurant {{traineeAddress}}, étudiant(e) de
+      <strong>{{schoolName}}</strong>.
+    </p>
+
+    <h2>Article 3 — Objet du stage</h2>
+    <p><em>{{missionDescription}}</em></p>
+
+    <h2>Article 4 — Encadrement</h2>
+    <p>
+      Le stagiaire est placé sous la responsabilité de {{tutorName}}, qui veille à l'accueil,
+      l'encadrement pédagogique et l'évaluation des activités conformément à la convention
+      tripartite signée avec l'établissement d'enseignement.
+    </p>
+
+    <h2>Article 5 — Gratification</h2>
+    {{#if hasGratification}}
+    <p>
+      Une gratification minimale est versée : <strong>{{gratificationAmount}}</strong>, conformément
+      aux articles L.124-6 et suivants du Code de l'éducation lorsque la durée du stage excède
+      deux mois consécutifs.
+    </p>
+    {{else}}
+    <p>
+      Le stage n'ouvre pas droit à gratification lorsque sa durée est inférieure ou égale à deux
+      mois consécutifs, sauf disposition plus favorable de l'organisme.
+    </p>
+    {{/if}}
+
+    <h2>Article 6 — Assurance et protection</h2>
+    <p>
+      L'organisme d'accueil et l'établissement d'enseignement s'assurent que le stagiaire bénéficie
+      de la couverture sociale requise (accident du travail, responsabilité civile) selon la
+      réglementation en vigueur.
+    </p>
+
+    <h2>Article 7 — Confidentialité</h2>
+    <p>
+      Le stagiaire s'engage à respecter la confidentialité des informations auxquelles il pourrait
+      avoir accès pendant le stage.
+    </p>
+
+    <h2>Article 8 — Fin de stage</h2>
+    <p>
+      À l'issue du stage, une attestation et, le cas échéant, une évaluation seront remises au
+      stagiaire et transmises à l'établissement.
+    </p>
+
+    <div class="signature-block">
+      <div class="signature-box">
+        <strong>L'organisme d'accueil</strong><br />
+        {{companyName}}<br /><br />
+        Le tuteur : {{tutorName}}
+      </div>
+      <div class="signature-box">
+        <strong>Le stagiaire</strong><br />
+        {{traineeName}}<br /><br />
+        Signature :
+      </div>
+    </div>
+
+    <p class="legal-notice">
+      Convention type — doit être complétée par la convention tripartite de l'établissement
+      (école, université) conformément à l'article L.124-1 du Code de l'éducation.
+    </p>
+    <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
+  </body>
+</html>

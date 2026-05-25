@@ -1,5 +1,5 @@
 const stats = [
-  { value: "5", label: "Documents juridiques" },
+  { value: "10", label: "Documents juridiques" },
   { value: "5 min", label: "Temps moyen" },
   { value: "0 €", label: "Pour commencer" },
 ] as const;

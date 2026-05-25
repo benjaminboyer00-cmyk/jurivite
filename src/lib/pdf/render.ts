@@ -3,7 +3,7 @@ import Handlebars from "handlebars";
 
 import {
   enrichTemplateData,
-  getTemplatePath,
+  loadTemplateSource,
 } from "@/lib/pdf/templates";
 import type { DocumentSlug } from "@/lib/documents/registry";
 
@@ -29,8 +29,7 @@ export async function renderDocumentHtml(
   data: Record<string, unknown>,
   withWatermark: boolean,
 ): Promise<string> {
-  const templatePath = getTemplatePath(slug);
-  const source = await fs.readFile(templatePath, "utf-8");
+  const source = loadTemplateSource(slug);
   const compile = Handlebars.compile(source);
   const enriched = enrichTemplateData(slug, data);
   let html = compile(enriched);
