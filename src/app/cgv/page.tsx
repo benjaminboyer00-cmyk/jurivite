@@ -78,9 +78,40 @@ export default function CgvPage() {
         <h2 className="text-xl font-semibold">Article 4 — Droit de rétractation</h2>
         <p className="mt-3">
           Pour les consommateurs, un délai de rétractation de 14 jours peut
-          s&apos;appliquer conformément au Code de la consommation, sous réserve des
-          exceptions légales (prestation numérique commencée avec accord exprès,
-          etc.). Pour exercer ce droit : {l.email}.
+          s&apos;appliquer conformément au Code de la consommation. Pour les
+          contenus numériques fournis immédiatement, vous acceptez expressément le
+          début d&apos;exécution avant la fin du délai et renoncez à votre droit de
+          rétractation lors du paiement (case à cocher Stripe). Pour exercer un
+          droit encore ouvert : {l.email}.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold">Article 4 bis — Résiliation</h2>
+        <p className="mt-3">
+          Abonnement sans engagement : résiliation à tout moment depuis le{" "}
+          <a href="/dashboard" className="text-primary underline">
+            portail client Stripe
+          </a>{" "}
+          (lien « Gérer mon abonnement ») ou par e-mail à {l.email}. L&apos;accès Pro
+          ou Business reste actif jusqu&apos;à la fin de la période payée.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold">Article 4 ter — Médiation</h2>
+        <p className="mt-3">
+          En cas de litige non résolu avec {l.companyName}, les consommateurs
+          peuvent saisir gratuitement {l.mediatorName} :{" "}
+          <a
+            href={l.mediatorUrl}
+            className="text-primary underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {l.mediatorUrl}
+          </a>{" "}
+          ({l.mediatorContact}).
         </p>
       </section>
 
@@ -101,6 +132,10 @@ export default function CgvPage() {
           Les traitements de données sont décrits dans la{" "}
           <a href="/confidentialite" className="text-primary underline">
             politique de confidentialité
+          </a>
+          . L&apos;usage du service est aussi régi par les{" "}
+          <a href="/cgu" className="text-primary underline">
+            CGU
           </a>
           .
         </p>

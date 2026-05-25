@@ -37,6 +37,13 @@ type CreateMetadataOptions = {
   absoluteTitle?: boolean;
 };
 
+const defaultOgImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: `${siteConfig.name} — ${siteConfig.tagline}`,
+} as const;
+
 export function createMetadata({
   title,
   description,
@@ -71,11 +78,13 @@ export function createMetadata({
       siteName: siteConfig.name,
       title: fullTitle,
       description,
+      images: [defaultOgImage],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
+      images: [defaultOgImage.url],
     },
     robots: noIndex
       ? { index: false, follow: false }

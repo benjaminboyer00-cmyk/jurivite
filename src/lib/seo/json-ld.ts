@@ -25,14 +25,6 @@ export function websiteJsonLd() {
     url: siteConfig.url,
     description: siteConfig.description,
     inLanguage: "fr-FR",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/generate/cgv?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
@@ -109,6 +101,7 @@ export function productOffersJsonLd() {
     "@type": "Product",
     name: "JuriVite — Générateur de documents juridiques",
     description: siteConfig.description,
+    url: `${siteConfig.url}/tarifs`,
     brand: { "@type": "Brand", name: siteConfig.name },
     offers: [
       {

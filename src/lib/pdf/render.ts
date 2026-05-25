@@ -1,10 +1,5 @@
-import fs from "fs/promises";
-import Handlebars from "handlebars";
-
-import {
-  enrichTemplateData,
-  loadTemplateSource,
-} from "@/lib/pdf/templates";
+import { getCompiledTemplate } from "@/lib/pdf/template-cache";
+import { enrichTemplateData } from "@/lib/pdf/templates";
 import type { DocumentSlug } from "@/lib/documents/registry";
 
 const WATERMARK_STYLE = `
@@ -29,10 +24,8 @@ export async function renderDocumentHtml(
   data: Record<string, unknown>,
   withWatermark: boolean,
 ): Promise<string> {
-  const source = loadTemplateSource(slug);
-  const compile = Handlebars.compile(source);
   const enriched = enrichTemplateData(slug, data);
-  let html = compile(enriched);
+  let html = getCompiledTemplate(slug)(enriched);
 
   if (withWatermark) {
     const watermarkBlock = `

@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, FileDown, Loader2 } from "lucide-react";
+
+import { LegalAcceptanceCheckbox } from "@/components/legal/legal-disclaimer";
 
 import { StepIndicator } from "@/components/forms/step-indicator";
 import { Alert } from "@/components/ui/alert";
@@ -44,6 +47,7 @@ export function FormShell({
 }: FormShellProps) {
   const currentStep = steps[stepIndex];
   const isReview = currentStep.id === "review";
+  const [legalAccepted, setLegalAccepted] = useState(false);
 
   return (
     <div className="space-y-6 pb-24 sm:pb-0">
@@ -56,7 +60,15 @@ export function FormShell({
             {currentStep.description}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-5 pt-6">{children}</CardContent>
+        <CardContent className="space-y-5 pt-6">
+          {children}
+          {isReview ? (
+            <LegalAcceptanceCheckbox
+              checked={legalAccepted}
+              onChange={setLegalAccepted}
+            />
+          ) : null}
+        </CardContent>
       </Card>
 
       {generateError ? (
@@ -97,7 +109,7 @@ export function FormShell({
             <Button
               type="button"
               onClick={onGenerate}
-              disabled={isGenerating}
+              disabled={isGenerating || !legalAccepted}
               className="w-full sm:w-auto"
               size="lg"
             >

@@ -5,7 +5,10 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { documents, users } from "@/db/schema";
 import { isDocumentSlug } from "@/lib/documents/registry";
+import { captureServerError } from "@/lib/observability/sentry";
+import { sanitizePdfPayload } from "@/lib/pdf/sanitize-payload";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
+import { hasNoWatermark } from "@/lib/plans";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -37,20 +40,25 @@ export async function POST(_request: Request, context: RouteContext) {
   });
 
   const plan = user?.plan ?? "free";
-  const withWatermark = plan !== "pro" && plan !== "business";
+  const withWatermark = !hasNoWatermark(plan);
 
-  const pdfBuffer = await generatePdfBuffer(
-    doc.slug,
-    doc.formData as Record<string, unknown>,
-    withWatermark,
-  );
+  try {
+    const pdfBuffer = await generatePdfBuffer(
+      doc.slug,
+      sanitizePdfPayload(doc.formData as Record<string, unknown>),
+      withWatermark,
+    );
 
-  return new NextResponse(new Uint8Array(pdfBuffer), {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="${doc.fileName}"`,
     },
-  });
+    });
+  } catch (error) {
+    captureServerError(error, { route: "document-download", documentId: id });
+    return NextResponse.json({ error: "Erreur PDF" }, { status: 500 });
+  }
 }
 
 export const runtime = "nodejs";

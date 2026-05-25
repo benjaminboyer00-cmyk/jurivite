@@ -2,19 +2,31 @@
 
 > Générateur de documents juridiques en ligne pour freelances, auto-entrepreneurs et TPE en France.
 
-JuriVite permet de générer en PDF : CGV, mentions légales, politique de confidentialité RGPD, contrat de prestation de services et devis conforme.
+JuriVite permet de générer en PDF : CGV, mentions légales, politique de confidentialité RGPD, contrat de prestation, devis, facture, cession de droits d'auteur, CGU, NDA et convention de stage.
 
 ## Pages principales
 
 - Accueil: /
+- Catalogue générateurs: /generate
 - Tarifs: /tarifs
-- CGV: /generate/cgv
-- Mentions légales: /generate/mentions-legales
-- Politique RGPD: /generate/politique-confidentialite
-- Contrat prestation: /generate/contrat-prestation
-- Devis: /generate/devis
+- Mentions légales (site): /mentions-legales
+- Confidentialité (site): /confidentialite
+- CGV (site): /cgv
 
-## Guides SEO
+## 10 générateurs
+
+- /generate/cgv
+- /generate/mentions-legales
+- /generate/politique-confidentialite
+- /generate/contrat-prestation
+- /generate/devis
+- /generate/facture
+- /generate/cession-droits-auteur
+- /generate/conditions-utilisation
+- /generate/accord-confidentialite
+- /generate/convention-stage
+
+## Guides SEO (14)
 
 - /generate/cgv-auto-entrepreneur
 - /generate/cgv-freelance
@@ -24,9 +36,20 @@ JuriVite permet de générer en PDF : CGV, mentions légales, politique de confi
 - /generate/contrat-freelance
 - /generate/devis-freelance
 - /generate/devis-auto-entrepreneur
+- /generate/facture-freelance
+- /generate/facture-auto-entrepreneur
+- /generate/cession-droits-auteur-freelance
+- /generate/cgu-saas
+- /generate/nda-freelance
+- /generate/convention-stage-entreprise
 
 ## Tarification
 
 - Gratuit: PDF avec filigrane
 - Pro: 9 EUR/mois, 20 PDF sans filigrane
 - Business: 30 EUR/mois, illimité + API REST
+
+## API
+
+- Health: /api/health
+- Sitemap: /sitemap.xml

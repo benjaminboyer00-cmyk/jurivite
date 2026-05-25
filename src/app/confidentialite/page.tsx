@@ -9,7 +9,7 @@ import { juriviteLegal } from "@/lib/legal/jurivite-site";
 export const metadata: Metadata = legalPageMetadata({
   title: "Politique de confidentialité",
   description:
-    "Politique RGPD de JuriVite : compte, paiements Stripe, génération PDF, cookies.",
+    "Politique RGPD de JuriVite : compte, paiements Stripe, génération PDF, cookies et sous-traitants.",
   path: "/confidentialite",
 });
 
@@ -27,7 +27,12 @@ export default function ConfidentialitePage() {
         <h2 className="text-xl font-semibold">Responsable du traitement</h2>
         <p className="mt-3">
           {l.companyName}, {l.legalForm}, {l.address}, SIRET {l.siret}.
-          Contact données personnelles : {l.email}.
+          <br />
+          Contact données personnelles :{" "}
+          <a href={`mailto:${l.privacyEmail}`} className="text-primary underline">
+            {l.privacyEmail}
+          </a>
+          .
         </p>
       </section>
 
@@ -35,70 +40,137 @@ export default function ConfidentialitePage() {
         <h2 className="text-xl font-semibold">Données collectées</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
-            <strong>Compte</strong> : adresse e-mail, nom (connexion Google ou lien
-            magique Resend), identifiant technique.
+            <strong>Compte</strong> : adresse e-mail, nom (Google OAuth ou lien
+            magique Resend), identifiant technique, plan d&apos;abonnement.
           </li>
           <li>
             <strong>Génération PDF</strong> : données saisies dans les formulaires
-            (raison sociale, SIRET, coordonnées clients, etc.) pour produire le
-            document et, si vous êtes connecté, l&apos;historique.
+            (raison sociale, SIRET, coordonnées, contenu métier) pour produire le
+            document ; historique si vous êtes connecté.
           </li>
           <li>
-            <strong>Paiement</strong> : données traitées par Stripe (nous ne
-            stockons pas vos numéros de carte).
+            <strong>Paiement</strong> : Stripe traite les données de carte et de
+            facturation — nous ne stockons pas vos numéros de carte.
           </li>
           <li>
-            <strong>Technique</strong> : logs serveur, cookies strictement
-            nécessaires à la session et à la sécurité.
+            <strong>Technique</strong> : logs serveur, adresse IP, cookies de
+            session (voir section Cookies).
+          </li>
+          <li>
+            <strong>API Business</strong> : clés API (empreinte hashée), logs
+            d&apos;usage.
           </li>
         </ul>
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Finalités</h2>
+        <h2 className="text-xl font-semibold">Finalités et bases légales</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
-          <li>Fourniture du service de génération de documents</li>
-          <li>Gestion des abonnements et facturation</li>
-          <li>Support client et sécurité du site</li>
-          <li>Respect des obligations légales (comptabilité, lutte contre la fraude)</li>
+          <li>
+            <strong>Fourniture du service</strong> (génération PDF, compte,
+            historique) — exécution du contrat / mesures précontractuelles.
+          </li>
+          <li>
+            <strong>Abonnements et facturation</strong> — contrat et obligations
+            comptables.
+          </li>
+          <li>
+            <strong>Support et sécurité</strong> — intérêt légitime (fraude,
+            disponibilité).
+          </li>
+          <li>
+            <strong>Observabilité</strong> (erreurs Sentry, si activé) — intérêt
+            légitime, données limitées et pseudonymisées lorsque possible.
+          </li>
         </ul>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold">Durée de conservation</h2>
-        <p className="mt-3">
-          Données de compte : durée de la relation contractuelle puis 3 ans pour les
-          preuves commerciales. Documents générés (historique) : jusqu&apos;à
-          suppression du compte ou demande d&apos;effacement. Données de facturation
-          Stripe : selon politique Stripe et obligations comptables (10 ans pour les
-          pièces comptables le cas échéant).
-        </p>
+        <ul className="mt-3 list-disc space-y-2 pl-6">
+          <li>Compte : durée de la relation + 3 ans pour les preuves commerciales.</li>
+          <li>
+            Documents générés (historique) : jusqu&apos;à suppression du compte ou
+            demande d&apos;effacement.
+          </li>
+          <li>
+            Données Stripe / facturation : selon obligations légales (jusqu&apos;à
+            10 ans pour les pièces comptables le cas échéant).
+          </li>
+          <li>Logs techniques : durée limitée (quelques semaines à quelques mois).</li>
+        </ul>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold">Sous-traitants</h2>
-        <p className="mt-3">
-          Prestataires pouvant traiter vos données : hébergeur du site, Stripe
-          (paiement), Resend (e-mails transactionnels), Google (OAuth optionnel),
-          base de données PostgreSQL hébergée chez votre fournisseur d&apos;infrastructure.
-          Des contrats conformes à l&apos;article 28 du RGPD sont conclus lorsque requis.
-        </p>
+        <ul className="mt-3 list-disc space-y-2 pl-6">
+          <li>
+            <strong>Hébergeur</strong> : {l.hostingProvider} — {l.hostingAddress}
+          </li>
+          <li>
+            <strong>Stripe</strong> (paiement) — États-Unis / UE selon produit,
+            clauses contractuelles types.
+          </li>
+          <li>
+            <strong>Resend</strong> (e-mails de connexion) — selon leurs DPA.
+          </li>
+          <li>
+            <strong>Google</strong> (OAuth optionnel) — politique Google.
+          </li>
+          <li>
+            <strong>Sentry</strong> (monitoring d&apos;erreurs, si DSN configuré) —
+            hébergement selon configuration du projet Sentry.
+          </li>
+          <li>
+            <strong>PostgreSQL</strong> : base hébergée chez le fournisseur
+            d&apos;infrastructure du site.
+          </li>
+        </ul>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold">Vos droits</h2>
         <p className="mt-3">
           Accès, rectification, effacement, limitation, opposition, portabilité :
-          contactez {l.email}. Réclamation possible auprès de la CNIL (www.cnil.fr).
+          écrivez à {l.privacyEmail}. Vous pouvez{" "}
+          <strong>supprimer votre compte</strong> depuis le tableau de bord
+          (section « Données personnelles »). Réclamation auprès de la CNIL :{" "}
+          <a
+            href="https://www.cnil.fr"
+            className="text-primary underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            www.cnil.fr
+          </a>
+          .
         </p>
       </section>
 
       <section>
         <h2 className="text-xl font-semibold">Cookies</h2>
         <p className="mt-3">
-          Cookies de session et d&apos;authentification nécessaires au fonctionnement.
-          Si des outils de mesure d&apos;audience sont ajoutés, un bandeau de
-          consentement sera mis en place.
+          <strong>Cookies essentiels</strong> : session NextAuth (
+          <code className="text-xs">authjs.session-token</code> ou équivalent),
+          nécessaires à la connexion — pas de consentement requis.
+        </p>
+        <p className="mt-3">
+          <strong>Cookies / traceurs techniques</strong> : si Sentry est activé en
+          production, des données techniques peuvent être collectées pour la
+          stabilité du service (voir bandeau cookies à l&apos;arrivée sur le site).
+        </p>
+        <p className="mt-3">
+          Pas de publicité ciblée ni de réseaux sociaux tiers au chargement des
+          pages à ce jour.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold">Transferts hors UE</h2>
+        <p className="mt-3">
+          Certains sous-traitants (Stripe, Resend, Google, Sentry) peuvent traiter
+          des données hors Union européenne avec des garanties contractuelles (CCT)
+          ou décisions d&apos;adéquation lorsque applicable.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
           Dernière mise à jour : {l.lastUpdated}.

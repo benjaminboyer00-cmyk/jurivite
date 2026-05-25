@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Copy, Key, Plus } from "lucide-react";
 
@@ -81,7 +82,12 @@ export function ApiKeyPanel({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
         <CardDescription>
           Intégrez JuriVite dans vos outils. Endpoint :{" "}
           <code className="text-xs">POST /api/v1/generate-pdf</code> avec{" "}
-          <code className="text-xs">Authorization: Bearer votre_clé</code>
+          <code className="text-xs">Authorization: Bearer votre_clé</code>.
+          Usage soumis aux{" "}
+          <Link href="/cgu" className="text-primary underline">
+            CGU
+          </Link>
+          .
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

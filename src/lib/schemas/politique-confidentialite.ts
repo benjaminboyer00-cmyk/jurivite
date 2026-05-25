@@ -16,7 +16,10 @@ export const rgpdDetailsSchema = z.object({
     .string()
     .min(5, "Indiquez la durée de conservation")
     .max(500),
-  dpoEmail: z.string().max(120),
+  dpoEmail: z.union([
+    z.literal(""),
+    z.email("E-mail DPO / contact données invalide"),
+  ]),
 });
 
 export const politiqueConfidentialiteFormSchema =

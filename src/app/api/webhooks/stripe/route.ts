@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import type { Plan } from "@/lib/plans";
 import { planFromStripePriceId } from "@/lib/plans";
+import { captureServerError } from "@/lib/observability/sentry";
 import { stripe } from "@/lib/stripe";
 
 async function resolvePlanFromSubscription(
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
-    console.error("[stripe webhook]", err);
+    captureServerError(err, { route: "stripe-webhook-verify" });
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
   }
 

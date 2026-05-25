@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Loader2, Mail } from "lucide-react";
@@ -116,6 +117,18 @@ export function LoginForm({
             </Button>
           </form>
         )}
+
+        <p className="text-center text-xs text-muted-foreground">
+          En vous connectant, vous acceptez nos{" "}
+          <Link href="/cgu" className="text-primary underline">
+            CGU
+          </Link>{" "}
+          et notre{" "}
+          <Link href="/confidentialite" className="text-primary underline">
+            politique de confidentialité
+          </Link>
+          .
+        </p>
       </CardContent>
     </Card>
   );

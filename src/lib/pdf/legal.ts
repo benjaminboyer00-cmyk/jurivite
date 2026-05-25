@@ -1,5 +1,6 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
 import { classifyLegalForm } from "@/lib/legal/forms";
+import { juriviteLegal } from "@/lib/legal/jurivite-site";
 
 export function safeFilePart(value: unknown, maxLength = 48): string {
   const raw = String(value ?? "").trim();
@@ -111,6 +112,15 @@ export function enrichSlugSpecificData(
     enriched.hasGratification = Boolean(
       String(data.gratificationAmount ?? "").trim(),
     );
+  }
+
+  if (slug === "cgv") {
+    enriched.mediatorName =
+      String(data.mediatorName ?? "").trim() || juriviteLegal.mediatorName;
+    enriched.mediatorUrl =
+      String(data.mediatorUrl ?? "").trim() || juriviteLegal.mediatorUrl;
+    enriched.mediatorContact =
+      String(data.mediatorContact ?? "").trim() || juriviteLegal.mediatorContact;
   }
 
   return enriched;

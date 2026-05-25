@@ -30,6 +30,29 @@ export const siretSchema = z
           code: "custom",
           message: `Le SIRET doit contenir 14 chiffres (${digits.length} détectés après nettoyage)`,
         });
+        return;
+      }
+      if (!isValidSiretLuhn(digits)) {
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "Clé de contrôle SIRET invalide — vérifiez le numéro sur annuaire-entreprises.data.gouv.fr",
+        });
       }
     }),
   );
+
+/** Validation Luhn (norme SIREN/SIRET française) */
+export function isValidSiretLuhn(siret: string): boolean {
+  if (!/^\d{14}$/.test(siret)) return false;
+  let sum = 0;
+  for (let i = 0; i < 14; i++) {
+    let digit = parseInt(siret[i]!, 10);
+    if ((i + 1) % 2 === 0) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+  }
+  return sum % 10 === 0;
+}

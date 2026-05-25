@@ -36,7 +36,7 @@ export function SiteFooter() {
           <nav aria-label="Guides SEO">
             <p className="text-sm font-semibold">Guides populaires</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              {seoLandingPages.slice(0, 5).map((landing) => (
+              {seoLandingPages.map((landing) => (
                 <li key={landing.slug}>
                   <Link
                     href={`/generate/${landing.slug}`}
@@ -63,8 +63,13 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/cgu" className="hover:text-foreground">
+                  CGU (service)
+                </Link>
+              </li>
+              <li>
                 <Link href="/cgv" className="hover:text-foreground">
-                  CGV
+                  CGV (abonnements)
                 </Link>
               </li>
             </ul>
@@ -84,7 +89,7 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/#documents" className="hover:text-foreground">
+                <Link href="/generate" className="hover:text-foreground">
                   Tous les générateurs
                 </Link>
               </li>
@@ -92,9 +97,16 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <p className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground">
-          © {year} {siteConfig.name}. Modèles à personnaliser — ne remplace pas
-          un conseil juridique.
+        <p className="mt-10 border-t pt-6 text-center text-xs leading-relaxed text-muted-foreground">
+          © {year} {siteConfig.name}. Documents générés = modèles structurés, non
+          un conseil juridique. Vous êtes responsable du contenu publié.{" "}
+          <Link href="/cgu" className="text-primary hover:underline">
+            CGU
+          </Link>
+          {" · "}
+          <Link href="/mentions-legales" className="text-primary hover:underline">
+            Mentions légales
+          </Link>
         </p>
       </div>
     </footer>

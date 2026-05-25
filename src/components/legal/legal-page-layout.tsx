@@ -74,6 +74,10 @@ export function LegalPageLayout({
               Confidentialité
             </Link>
             {" · "}
+            <Link href="/cgu" className="text-primary hover:underline">
+              CGU
+            </Link>
+            {" · "}
             <Link href="/cgv" className="text-primary hover:underline">
               CGV
             </Link>

@@ -178,6 +178,19 @@ export default async function TarifsPage() {
         </p>
       </section>
 
+      <p className="mt-10 text-center text-xs text-muted-foreground">
+        Prix TTC. Abonnement sans engagement — résiliation via le portail Stripe.
+        Voir les{" "}
+        <a href="/cgv" className="text-primary underline">
+          CGV
+        </a>{" "}
+        et les{" "}
+        <a href="/cgu" className="text-primary underline">
+          CGU
+        </a>
+        . Les documents générés restent des modèles, non un conseil juridique.
+      </p>
+
       <section className="mt-12">
         <h2 className="text-xl font-bold">FAQ tarifs</h2>
         <dl className="mt-6 space-y-4">

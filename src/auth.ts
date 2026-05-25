@@ -57,7 +57,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   callbacks: {
     authorized({ auth, request }) {
-      if (request.nextUrl.pathname.startsWith("/dashboard")) {
+      const path = request.nextUrl.pathname;
+      if (path.startsWith("/dashboard") || path.startsWith("/admin")) {
         return !!auth;
       }
       return true;

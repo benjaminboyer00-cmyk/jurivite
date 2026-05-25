@@ -5,10 +5,15 @@ import { FileText } from "lucide-react";
 
 import { CheckoutButton } from "@/components/auth/checkout-button";
 import { DocumentDownloadButton } from "@/components/auth/document-download-button";
+import { AccountPrivacyPanel } from "@/components/dashboard/account-privacy-panel";
 import { ApiKeyPanel } from "@/components/dashboard/api-key-panel";
 import { Alert } from "@/components/ui/alert";
 import { ProgressBar } from "@/components/ui/progress-bar";
+import { eq } from "drizzle-orm";
+
 import { auth, signOut } from "@/auth";
+import { db } from "@/db";
+import { users } from "@/db/schema";
 import { listApiKeys } from "@/lib/db/api-keys";
 import { countMonthlyPdfGenerations } from "@/lib/db/usage";
 import { getUserDocuments } from "@/lib/db/documents";
@@ -49,6 +54,12 @@ export default async function DashboardPage({
   const docs = await getUserDocuments(session.user.id);
   const usedThisMonth = await countMonthlyPdfGenerations(session.user.id);
   const limit = PLAN_LIMITS[plan].pdfPerMonth;
+
+  const dbUser = db
+    ? await db.query.users.findFirst({
+        where: eq(users.id, session.user.id),
+      })
+    : null;
 
   const apiKeys =
     plan === "business"
@@ -212,6 +223,10 @@ export default async function DashboardPage({
           </ul>
         )}
       </section>
+
+      <AccountPrivacyPanel
+        hasStripeCustomer={Boolean(dbUser?.stripeCustomerId)}
+      />
 
       <p className="mt-8 text-center text-sm text-muted-foreground">
         <Link href="/tarifs" className="hover:text-foreground">

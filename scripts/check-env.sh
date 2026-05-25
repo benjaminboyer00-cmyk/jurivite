@@ -43,9 +43,12 @@ check "AUTH_URL / NEXTAUTH_URL" "${AUTH_URL:-$NEXTAUTH_URL}" required || MISSING
 check "DATABASE_URL" "$DATABASE_URL" optional
 check "STRIPE_SECRET_KEY" "$STRIPE_SECRET_KEY" optional
 check "STRIPE_WEBHOOK_SECRET" "$STRIPE_WEBHOOK_SECRET" optional
-check "STRIPE_PRICE_ID" "$STRIPE_PRICE_ID" optional
+check "STRIPE_PRICE_ID_PRO" "${STRIPE_PRICE_ID_PRO:-$STRIPE_PRICE_ID}" optional
+check "STRIPE_PRICE_ID_BUSINESS" "$STRIPE_PRICE_ID_BUSINESS" optional
+check "NEXT_PUBLIC_SITE_URL" "$NEXT_PUBLIC_SITE_URL" optional
 check "RESEND_API_KEY" "$RESEND_API_KEY" optional
 check "GOOGLE_CLIENT_ID" "$GOOGLE_CLIENT_ID" optional
+check "JURIVITE_HOSTING_PROVIDER" "$JURIVITE_HOSTING_PROVIDER" optional
 
 echo ""
 if git check-ignore -q .env.local 2>/dev/null; then

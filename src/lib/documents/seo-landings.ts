@@ -68,6 +68,14 @@ export const seoLandingPages: SeoLandingPage[] = [
         heading: "Pourquoi un freelance a besoin de CGV",
         body: "Sans CGV, chaque mission repose sur des échanges informels. En cas de retard de paiement ou de désaccord sur le périmètre, vous manquez de cadre contractuel. Les CGV fixent les règles avant la signature.",
       },
+      {
+        heading: "Clauses essentielles pour consultants et créatifs",
+        body: "Délais de livraison, modalités de paiement (acompte, solde), propriété intellectuelle des livrables, limitation de responsabilité et droit de rétractation B2C si vous vendez en ligne. JuriVite structure ces points en articles lisibles.",
+      },
+      {
+        heading: "CGV + contrat de prestation : le duo gagnant",
+        body: "Les CGV encadrent votre relation commerciale globale ; le contrat de prestation précise une mission (périmètre, prix, planning). Publiez les CGV sur votre site et joignez un contrat signé pour chaque projet important.",
+      },
     ],
     faqs: [
       {
@@ -95,6 +103,10 @@ export const seoLandingPages: SeoLandingPage[] = [
       {
         heading: "Mentions légales : qui est concerné ?",
         body: "Toute personne physique ou morale qui édite un site web en France : freelance, agence, e-commerce, blog monétisé, portfolio professionnel.",
+      },
+      {
+        heading: "Contenu obligatoire LCEN",
+        body: "Identité de l'éditeur (nom, adresse, SIRET), directeur de publication, coordonnées, hébergeur (nom et adresse). JuriVite génère une page complète à publier dans le footer.",
       },
     ],
     faqs: [
@@ -230,6 +242,166 @@ export const seoLandingPages: SeoLandingPage[] = [
         question: "Quelles mentions sur un devis micro-entreprise ?",
         answer:
           "Identité complète, SIRET, description de la prestation, prix HT, TVA ou franchise, durée de validité, date et numéro de devis.",
+      },
+    ],
+  },
+  {
+    slug: "facture-freelance",
+    documentSlug: "facture",
+    metaTitle: "Facture freelance conforme — modèle PDF avec SIRET et TVA",
+    metaDescription:
+      "Générez une facture freelance : numéro, SIRET, HT/TTC, échéance, pénalités de retard. PDF professionnel pour consultants et indépendants.",
+    h1: "Facture freelance",
+    intro:
+      "Facturez vos missions avec toutes les mentions obligatoires. Export PDF immédiat après validation du formulaire.",
+    seoKeywords: ["facture freelance", "modèle facture indépendant", "facture consultant pdf"],
+    seoBlocks: [
+      {
+        heading: "Mentions obligatoires sur une facture freelance",
+        body: "Identité complète, SIRET, numéro de facture unique, date, description de la prestation, montants HT et TTC, TVA ou mention art. 293 B, conditions de paiement et pénalités de retard.",
+      },
+      {
+        heading: "Facture après devis : garder la cohérence",
+        body: "Reprenez les mêmes montants et la même description que sur le devis accepté. JuriVite propose aussi un générateur de devis pour enchaîner devis → facture sans erreur.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Numérotation des factures freelance : règles ?",
+        answer:
+          "Chronologique et sans rupture (ex. 2026-001, 2026-002). Conservez une trace de chaque facture émise pour la comptabilité et en cas de contrôle.",
+      },
+    ],
+  },
+  {
+    slug: "facture-auto-entrepreneur",
+    documentSlug: "facture",
+    metaTitle: "Facture auto-entrepreneur — générateur mentions obligatoires",
+    metaDescription:
+      "Facture micro-entreprise PDF : franchise TVA art. 293 B, SIRET, prestation, échéance. Modèle conforme pour auto-entrepreneurs.",
+    h1: "Facture auto-entrepreneur",
+    intro:
+      "Modèle adapté aux micro-entrepreneurs : franchise en base, coordonnées et bloc légal préremplis selon votre statut.",
+    seoKeywords: ["facture auto-entrepreneur", "facture micro-entreprise", "facture ae pdf"],
+    seoBlocks: [
+      {
+        heading: "Facture auto-entrepreneur et franchise TVA",
+        body: "Si vous êtes en franchise de base, la mention « TVA non applicable, art. 293 B du CGI » doit figurer clairement. Indiquez le montant TTC équivalent au HT.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Une facture AE peut-elle être envoyée sans logiciel comptable ?",
+        answer:
+          "Oui, un PDF conforme suffit pour de nombreux clients. Archivez chaque facture et déclarez le CA sur le site URSSAF dans les délais.",
+      },
+    ],
+  },
+  {
+    slug: "cession-droits-auteur-freelance",
+    documentSlug: "cession-droits-auteur",
+    metaTitle: "Cession de droits d'auteur freelance — contrat PDF créatif",
+    metaDescription:
+      "Contrat de cession droits d'auteur : œuvre, territoire, durée, rémunération. Pour designers, photographes, développeurs et agences.",
+    h1: "Cession de droits d'auteur freelance",
+    intro:
+      "Sécurisez la transmission de vos créations (logo, code, photo, vidéo) avec un contrat structuré prêt à signer.",
+    seoKeywords: [
+      "cession droits auteur freelance",
+      "contrat cession création",
+      "cession droits designer",
+    ],
+    seoBlocks: [
+      {
+        heading: "Pourquoi céder les droits par écrit",
+        body: "Sans contrat, le client n'acquiert pas forcément tous les droits d'exploitation. La cession précise l'œuvre, les droits cédés (reproduction, représentation), le territoire et la rémunération.",
+      },
+      {
+        heading: "Droits moraux et garanties",
+        body: "L'auteur conserve des droits moraux (paternité, respect de l'œuvre). Le contrat peut prévoir des garanties d'originalité et de non-contrefaçon — clauses incluses dans le modèle JuriVite.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Cession totale ou licence d'utilisation ?",
+        answer:
+          "La cession transfère les droits patrimoniaux définis au contrat. Une simple licence laisse l'auteur propriétaire avec des droits d'usage limités — adaptez selon votre négociation.",
+      },
+    ],
+  },
+  {
+    slug: "cgu-saas",
+    documentSlug: "conditions-utilisation",
+    metaTitle: "CGU SaaS — conditions générales d'utilisation application",
+    metaDescription:
+      "Générez des CGU pour SaaS, API ou application web : usage, PI, responsabilité, données. PDF pour startups et éditeurs logiciels.",
+    h1: "CGU SaaS et application web",
+    intro:
+      "Encadrez l'usage de votre service en ligne : comptes, contenus utilisateurs, limitation de responsabilité et propriété intellectuelle.",
+    seoKeywords: ["cgu saas", "conditions utilisation application", "cgu logiciel"],
+    seoBlocks: [
+      {
+        heading: "CGU vs politique de confidentialité pour un SaaS",
+        body: "Les CGU définissent les règles d'usage du service. La politique RGPD décrit les traitements de données personnelles. Les deux documents se complètent et doivent être accessibles depuis le footer.",
+      },
+    ],
+    faqs: [
+      {
+        question: "CGU obligatoires pour une app gratuite ?",
+        answer:
+          "Dès qu'un utilisateur crée un compte ou accepte des conditions, des CGU claires limitent votre responsabilité et précisent les droits sur le contenu.",
+      },
+    ],
+  },
+  {
+    slug: "nda-freelance",
+    documentSlug: "accord-confidentialite",
+    metaTitle: "NDA freelance — accord de confidentialité PDF",
+    metaDescription:
+      "Modèle NDA (accord de confidentialité) pour freelances et startups : périmètre, durée, exceptions. PDF prêt à signer.",
+    h1: "NDA freelance",
+    intro:
+      "Protégez les informations échangées avant une mission ou un partenariat avec un accord de confidentialité bilatéral.",
+    seoKeywords: ["nda freelance", "accord confidentialité modèle", "nda français pdf"],
+    seoBlocks: [
+      {
+        heading: "Quand signer un NDA en freelance",
+        body: "Avant d'accéder aux données stratégiques d'un client, lors d'un audit, d'une due diligence ou d'une mission en avant-projet. Le NDA encadre ce qui est confidentiel et la durée des obligations.",
+      },
+    ],
+    faqs: [
+      {
+        question: "NDA unilatéral ou bilatéral ?",
+        answer:
+          "Le modèle JuriVite est bilatéral (les deux parties s'engagent). Pour une disclosure sens unique, adaptez les parties au formulaire.",
+      },
+    ],
+  },
+  {
+    slug: "convention-stage-entreprise",
+    documentSlug: "convention-stage",
+    metaTitle: "Convention de stage entreprise — modèle PDF 2026",
+    metaDescription:
+      "Convention de stage : organisme d'accueil, stagiaire, école, mission, tuteur, gratification. PDF pour TPE et PME.",
+    h1: "Convention de stage en entreprise",
+    intro:
+      "Formalisez l'accueil d'un stagiaire avec les trois parties (entreprise, établissement, stagiaire) et les clauses obligatoires.",
+    seoKeywords: [
+      "convention de stage entreprise",
+      "modèle convention stage pdf",
+      "convention stage pme",
+    ],
+    seoBlocks: [
+      {
+        heading: "Trois parties signataires",
+        body: "L'organisme d'accueil, l'établissement d'enseignement et le stagiaire. La convention décrit la mission, la durée, le tuteur, la gratification éventuelle et l'assurance.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Gratification de stage obligatoire ?",
+        answer:
+          "Au-delà de 2 mois consécutifs ou non, une gratification minimale est due (montant légal à jour). Le générateur intègre le bloc dédié.",
       },
     ],
   },

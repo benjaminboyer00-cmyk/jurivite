@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { documentForms } from "@/lib/documents/forms";
 import { getAllGenerateSlugs } from "@/lib/documents/seo-landings";
+import { getRelatedDocuments } from "@/lib/documents/related-documents";
 import { resolveGeneratePage, isValidGenerateSlug } from "@/lib/documents/resolve-page";
 import { createMetadata } from "@/lib/seo";
 import {
@@ -19,6 +20,10 @@ import {
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+/** Pages pré-générées en build — pas de recompilation à chaque requête en prod */
+export const dynamic = "force-static";
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return getAllGenerateSlugs().map((slug) => ({ slug }));
@@ -50,6 +55,7 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
   if (!page) notFound();
 
   const FormComponent = documentForms[page.documentSlug];
+  const relatedLinks = getRelatedDocuments(page.documentSlug, page.path);
 
   const jsonLd = [
     softwareApplicationJsonLd({
@@ -150,17 +156,14 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
 
         <section className="rounded-lg border bg-muted/30 p-6">
           <h2 className="font-semibold">Documents associés</h2>
-          <ul className="mt-3 flex flex-wrap gap-3 text-sm">
-            <li>
-              <Link href={page.doc.href} className="text-primary hover:underline">
-                {page.doc.title}
-              </Link>
-            </li>
-            <li>
-              <Link href="/tarifs" className="text-primary hover:underline">
-                Tarifs JuriVite
-              </Link>
-            </li>
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            {relatedLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-primary hover:underline">
+                  {link.title}
+                </Link>
+              </li>
+            ))}
           </ul>
         </section>
       </article>

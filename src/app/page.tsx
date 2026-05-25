@@ -24,9 +24,9 @@ const features = [
   },
   {
     icon: Shield,
-    title: "Conforme & structuré",
+    title: "Structuré & professionnel",
     description:
-      "Modèles pensés pour freelances, auto-entrepreneurs et TPE en France.",
+      "Modèles pensés pour freelances, auto-entrepreneurs et TPE — à personnaliser selon votre activité.",
   },
   {
     icon: CheckCircle2,
@@ -55,7 +55,7 @@ export default function HomePage() {
           </p>
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-[2.75rem] lg:leading-[1.1]">
             CGV, mentions légales, RGPD —{" "}
-            <span className="text-primary">PDF conformes en 5 minutes</span>
+            <span className="text-primary">PDF structurés en 5 minutes</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             JuriVite aide les freelances, auto-entrepreneurs et petites

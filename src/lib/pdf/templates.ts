@@ -21,6 +21,7 @@ const TEMPLATE_FILES: Record<DocumentSlug, string> = {
 };
 
 let legalStylesCache: string | null = null;
+const templateSourceCache = new Map<DocumentSlug, string>();
 
 export function getTemplatePath(slug: DocumentSlug): string {
   const file = TEMPLATE_FILES[slug];
@@ -28,6 +29,9 @@ export function getTemplatePath(slug: DocumentSlug): string {
 }
 
 export function loadTemplateSource(slug: DocumentSlug): string {
+  const cached = templateSourceCache.get(slug);
+  if (cached) return cached;
+
   const raw = fs.readFileSync(getTemplatePath(slug), "utf8");
 
   if (!legalStylesCache) {
@@ -37,7 +41,9 @@ export function loadTemplateSource(slug: DocumentSlug): string {
     );
   }
 
-  return raw.replace("<!-- LEGAL_STYLES -->", legalStylesCache);
+  const merged = raw.replace("<!-- LEGAL_STYLES -->", legalStylesCache);
+  templateSourceCache.set(slug, merged);
+  return merged;
 }
 
 export function enrichTemplateData(

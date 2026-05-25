@@ -15,6 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${siteConfig.url}/generate`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${siteConfig.url}/tarifs`,
       lastModified: now,
       changeFrequency: "monthly",
@@ -31,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "yearly",
       priority: 0.5,
+    },
+    {
+      url: `${siteConfig.url}/cgu`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.55,
     },
     {
       url: `${siteConfig.url}/cgv`,

@@ -11,6 +11,9 @@ import { siteConfig } from "@/lib/seo";
 
 const bodySchema = z.object({
   plan: z.enum(["pro", "business"]),
+  acceptedCgv: z.literal(true, {
+    error: "Acceptation des CGV requise",
+  }),
 });
 
 export async function POST(request: Request) {
@@ -28,7 +31,13 @@ export async function POST(request: Request) {
 
   const json = await request.json().catch(() => ({}));
   const parsed = bodySchema.safeParse(json);
-  const plan = parsed.success ? parsed.data.plan : "pro";
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Acceptation des CGV et CGU requise" },
+      { status: 400 },
+    );
+  }
+  const plan = parsed.data.plan;
 
   const priceId = stripePriceIdForPlan(plan);
   if (!priceId) {
@@ -68,7 +77,12 @@ export async function POST(request: Request) {
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${siteConfig.url}/dashboard?checkout=success&plan=${plan}`,
     cancel_url: `${siteConfig.url}/tarifs?checkout=cancel`,
-    metadata: { userId: session.user.id, plan },
+    metadata: { userId: session.user.id, plan, acceptedCgv: "true" },
+    custom_text: {
+      terms_of_service_acceptance: {
+        message: `J'accepte les Conditions Générales de Vente de JuriVite (${siteConfig.url}/cgv).`,
+      },
+    },
   });
 
   return NextResponse.json({ url: checkoutSession.url });

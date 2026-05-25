@@ -12,8 +12,10 @@ import {
   isDocumentSlug,
   type DocumentSlug,
 } from "@/lib/documents/registry";
+import { captureServerError } from "@/lib/observability/sentry";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
 import { buildDocumentFileName } from "@/lib/pdf/legal";
+import { sanitizePdfPayload } from "@/lib/pdf/sanitize-payload";
 import type { Plan } from "@/lib/plans";
 import { hasNoWatermark } from "@/lib/plans";
 import { validatePdfPayload } from "@/lib/schemas/pdf-payloads";
@@ -24,6 +26,8 @@ export type GenerateDocumentInput = {
   data: Record<string, unknown>;
   userId?: string;
   plan?: Plan;
+  /** Ne pas créer une nouvelle ligne en base (admin, retéléchargement) */
+  skipPersist?: boolean;
 };
 
 export type GenerateDocumentResult =
@@ -72,11 +76,28 @@ export async function generateDocument(
   }
 
   const withWatermark = !hasNoWatermark(plan);
-  const pdfBuffer = await generatePdfBuffer(
-    slug as DocumentSlug,
-    validated.data,
-    withWatermark,
-  );
+  const sanitizedData = sanitizePdfPayload(validated.data);
+
+  let pdfBuffer: Buffer;
+  try {
+    pdfBuffer = await generatePdfBuffer(
+      slug as DocumentSlug,
+      sanitizedData,
+      withWatermark,
+    );
+  } catch (error) {
+    captureServerError(error, {
+      slug,
+      userId,
+      plan,
+      withWatermark,
+    });
+    return {
+      ok: false,
+      status: 500,
+      error: "La génération PDF a échoué. Réessayez ou contactez le support.",
+    };
+  }
 
   const docMeta = getDocumentBySlug(slug)!;
   const fileName = buildDocumentFileName(
@@ -84,7 +105,7 @@ export async function generateDocument(
     validated.data,
   );
 
-  if (userId && db) {
+  if (userId && db && !input.skipPersist) {
     const companyParse = companySchema.safeParse(validated.data);
     let companyId: string | undefined;
 
@@ -95,7 +116,7 @@ export async function generateDocument(
     await saveGeneratedDocument({
       userId,
       slug: slug as DocumentSlug,
-      formData: validated.data,
+      formData: sanitizedData,
       fileName,
       hasWatermark: withWatermark,
       companyId,

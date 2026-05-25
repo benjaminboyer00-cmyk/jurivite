@@ -4,7 +4,7 @@ import {
   LegalPageLayout,
   legalPageMetadata,
 } from "@/components/legal/legal-page-layout";
-import { juriviteLegal } from "@/lib/legal/jurivite-site";
+import { isHostingConfigured, juriviteLegal } from "@/lib/legal/jurivite-site";
 
 export const metadata: Metadata = legalPageMetadata({
   title: "Mentions légales",
@@ -52,9 +52,13 @@ export default function MentionsLegalesPage() {
           <br />
           {l.hostingAddress}
         </p>
-        <p className="mt-3 text-sm text-muted-foreground">
-          À mettre à jour au déploiement sur votre VPS (Coolify, OVH, Hetzner…).
-        </p>
+        {!isHostingConfigured() && (
+          <p className="mt-3 text-sm text-amber-700 dark:text-amber-400">
+            Définissez <code className="text-xs">JURIVITE_HOSTING_PROVIDER</code> et{" "}
+            <code className="text-xs">JURIVITE_HOSTING_ADDRESS</code> dans les variables
+            d&apos;environnement du VPS (voir PRODUCTION.md).
+          </p>
+        )}
       </section>
 
       <section>

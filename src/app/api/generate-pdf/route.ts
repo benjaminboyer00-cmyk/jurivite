@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { auth } from "@/auth";
+import { captureServerError } from "@/lib/observability/sentry";
 import { generateDocument } from "@/lib/pdf/document-service";
 
 const bodySchema = z.object({
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("[generate-pdf]", error);
+    captureServerError(error, { route: "generate-pdf" });
     return NextResponse.json(
       { error: "Erreur lors de la génération PDF." },
       { status: 500 },
