@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { Scale } from "lucide-react";
 
+import { auth } from "@/auth";
 import { ButtonLink } from "@/components/ui/button-link";
 import { siteConfig } from "@/lib/seo";
 
 const navLinks = [
   { href: "/#documents", label: "Documents" },
-  { href: "/generate/mentions-legales", label: "Mentions légales" },
-  { href: "/generate/politique-confidentialite", label: "RGPD" },
+  { href: "/tarifs", label: "Tarifs" },
 ] as const;
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const session = await auth();
+
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -35,6 +37,21 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          {session?.user ? (
+            <Link
+              href="/dashboard"
+              className="transition-colors hover:text-foreground"
+            >
+              Tableau de bord
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="transition-colors hover:text-foreground"
+            >
+              Connexion
+            </Link>
+          )}
         </nav>
 
         <ButtonLink href="/#documents" size="sm">

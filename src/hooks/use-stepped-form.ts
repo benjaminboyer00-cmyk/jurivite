@@ -17,6 +17,7 @@ export function useSteppedForm<T extends FieldValues>({
 }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
   const currentStep = steps[stepIndex];
 
   async function validateStep(stepId: string): Promise<boolean> {
@@ -46,14 +47,20 @@ export function useSteppedForm<T extends FieldValues>({
     setStepIndex((i) => Math.max(i - 1, 0));
   }
 
-  async function handleGenerate(message: string) {
+  async function handleGenerate(onGenerate: () => Promise<void>) {
     const valid = await form.trigger();
     if (!valid) return;
 
     setIsGenerating(true);
+    setGenerateError(null);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      alert(message);
+      await onGenerate();
+    } catch (error) {
+      setGenerateError(
+        error instanceof Error
+          ? error.message
+          : "Erreur lors de la génération",
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -63,6 +70,7 @@ export function useSteppedForm<T extends FieldValues>({
     stepIndex,
     currentStep,
     isGenerating,
+    generateError,
     goNext,
     goBack,
     handleGenerate,

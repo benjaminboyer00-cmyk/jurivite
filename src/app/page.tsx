@@ -53,7 +53,11 @@ export default function HomePage() {
             </ButtonLink>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Gratuit avec filigrane · Pro 9 €/mo sans filigrane (bientôt)
+            Gratuit avec filigrane ·{" "}
+            <a href="/tarifs" className="text-primary hover:underline">
+              Pro 9 €/mo
+            </a>{" "}
+            sans filigrane
           </p>
         </div>
       </section>

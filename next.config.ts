@@ -12,6 +12,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["puppeteer", "@puppeteer/browsers"],
   poweredByHeader: false,
   async headers() {
     return [

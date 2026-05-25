@@ -12,6 +12,7 @@ import {
 } from "@/components/forms/shared/form-shell";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
 import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
 import {
@@ -39,8 +40,17 @@ export function PolitiqueConfidentialiteForm() {
     mode: "onBlur",
   });
 
-  const { stepIndex, currentStep, isGenerating, goNext, goBack, handleGenerate } =
-    useSteppedForm({
+  const generatePdf = useDocumentGenerate("politique-confidentialite");
+
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    goNext,
+    goBack,
+    handleGenerate,
+  } = useSteppedForm({
       form,
       steps: POLITIQUE_CONFIDENTIALITE_STEPS,
       stepSchemas: {
@@ -59,11 +69,10 @@ export function PolitiqueConfidentialiteForm() {
       onBack={goBack}
       onNext={goNext}
       onGenerate={() =>
-        handleGenerate(
-          "Génération PDF à venir (Puppeteer). Votre politique RGPD est prête.",
-        )
+        handleGenerate(() => generatePdf(form.getValues()))
       }
       isGenerating={isGenerating}
+      generateError={generateError}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} />

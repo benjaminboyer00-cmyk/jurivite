@@ -25,6 +25,7 @@ type FormShellProps = {
   onNext: () => void;
   onGenerate: () => void;
   isGenerating: boolean;
+  generateError?: string | null;
   children: React.ReactNode;
 };
 
@@ -35,6 +36,7 @@ export function FormShell({
   onNext,
   onGenerate,
   isGenerating,
+  generateError,
   children,
 }: FormShellProps) {
   const currentStep = steps[stepIndex];
@@ -60,6 +62,12 @@ export function FormShell({
         </CardHeader>
         <CardContent className="space-y-4">{children}</CardContent>
       </Card>
+
+      {generateError ? (
+        <p className="text-sm text-destructive" role="alert">
+          {generateError}
+        </p>
+      ) : null}
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
         <Button

@@ -12,6 +12,7 @@ import {
 } from "@/components/forms/shared/form-shell";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
 import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
 import {
@@ -37,8 +38,17 @@ export function CgvForm() {
     mode: "onBlur",
   });
 
-  const { stepIndex, currentStep, isGenerating, goNext, goBack, handleGenerate } =
-    useSteppedForm({
+  const generatePdf = useDocumentGenerate("cgv");
+
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    goNext,
+    goBack,
+    handleGenerate,
+  } = useSteppedForm({
       form,
       steps: CGV_FORM_STEPS,
       stepSchemas: {
@@ -57,11 +67,10 @@ export function CgvForm() {
       onBack={goBack}
       onNext={goNext}
       onGenerate={() =>
-        handleGenerate(
-          "Génération PDF à venir (Puppeteer). Vos données CGV sont prêtes.",
-        )
+        handleGenerate(() => generatePdf(form.getValues()))
       }
       isGenerating={isGenerating}
+      generateError={generateError}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} />

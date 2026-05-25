@@ -1,59 +1,79 @@
 # JuriVite
 
-Générateur de documents juridiques pour freelances et TPE (CGV, mentions légales, contrats).
+Générateur de documents juridiques pour freelances et TPE — CGV, mentions légales, RGPD, contrats, devis.
 
 ## Prérequis
 
-- **Node.js 20+** (voir `.nvmrc`)
-- npm
+- Node.js 20+ (`fnm use`)
+- Docker (PostgreSQL local)
+- Comptes optionnels : Google Cloud (OAuth), Resend, Stripe
 
-Avec [fnm](https://github.com/Schniz/fnm) :
-
-```bash
-fnm use
-```
-
-## Démarrage local
+## Installation rapide
 
 ```bash
 cp .env.example .env.local
+# Éditez .env.local — AUTH_SECRET obligatoire :
+# openssl rand -base64 32
+
 npm install
+npm run db:up          # PostgreSQL sur localhost:5432
+npm run db:push        # Crée les tables Drizzle
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
+→ [http://localhost:3000](http://localhost:3000)
 
-- Accueil : `/`
-- **5 générateurs** (top ROI) :
-  - `/generate/cgv`
-  - `/generate/mentions-legales`
-  - `/generate/politique-confidentialite`
-  - `/generate/contrat-prestation`
-  - `/generate/devis`
+## Fonctionnalités
 
-## Stack (MVP)
+| Module | Route / Commande |
+|--------|------------------|
+| PDF Puppeteer | `POST /api/generate-pdf` |
+| Auth Google + Magic Link | `/api/auth/[...nextauth]`, `/login` |
+| Dashboard | `/dashboard` (historique + retéléchargement) |
+| Stripe Pro 9€/mo | `/api/checkout`, `/api/webhooks/stripe` |
+| SEO | `/generate/[slug]`, `/sitemap.xml`, `/robots.txt` |
 
-- Next.js 16 (App Router)
-- Tailwind CSS 4 + Shadcn/UI
-- React Hook Form + Zod
-- Templates HTML dans `templates/` (moteur PDF Puppeteer — à brancher)
+## PDF local
+
+Les formulaires appellent `/api/generate-pdf` qui :
+
+1. Valide les données (Zod)
+2. Compile le template Handlebars (`templates/*.html`)
+3. Génère le PDF via Puppeteer
+4. Applique un filigrane si plan `free`
+5. Sauvegarde en base si utilisateur connecté
+
+## Stripe en local
+
+```bash
+# Terminal 1
+npm run dev
+
+# Terminal 2 — après création du produit Pro dans Stripe Dashboard
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+Copiez le `whsec_...` dans `STRIPE_WEBHOOK_SECRET`.
+
+## Google OAuth local
+
+URL de redirection autorisée : `http://localhost:3000/api/auth/callback/google`
 
 ## Structure
 
 ```
 src/
-  app/              # Routes (landing, generate/cgv, SEO)
-  components/       # UI, formulaires, layout
-  lib/
-    documents/      # Registre des types de documents
-    schemas/        # Validation Zod
-    seo.ts          # Metadata & Open Graph
-templates/          # Modèles HTML pour PDF
+  app/api/          # PDF, auth, checkout, webhooks
+  auth.ts           # Auth.js config
+  db/               # Drizzle schema
+  lib/pdf/          # Handlebars + Puppeteer
+  lib/documents/    # Registre, contenu SEO
+templates/          # HTML Handlebars
 ```
 
-## Prochaines étapes
+## Scripts
 
-1. Moteur PDF (Puppeteer Core + injection template)
-2. Auth.js + PostgreSQL (Drizzle)
-3. Stripe (filigrane gratuit / Pro sans filigrane)
-4. Pages SEO programmatiques supplémentaires
+- `npm run dev` — développement
+- `npm run db:up` — lance PostgreSQL (Docker)
+- `npm run db:push` — synchronise le schéma
+- `npm run db:studio` — interface Drizzle Studio
