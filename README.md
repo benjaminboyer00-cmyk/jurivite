@@ -24,7 +24,12 @@ npm run dev
 Ouvrir [http://localhost:3000](http://localhost:3000).
 
 - Accueil : `/`
-- Générateur CGV : `/generate/cgv`
+- **5 générateurs** (top ROI) :
+  - `/generate/cgv`
+  - `/generate/mentions-legales`
+  - `/generate/politique-confidentialite`
+  - `/generate/contrat-prestation`
+  - `/generate/devis`
 
 ## Stack (MVP)
 
