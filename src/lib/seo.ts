@@ -7,9 +7,25 @@ export const siteConfig = {
   name: SITE_NAME,
   url: SITE_URL,
   description:
-    "Générateur de documents juridiques pour freelances et TPE : CGV, mentions légales, contrats. PDF conformes en quelques minutes.",
+    "Générateur de documents juridiques en ligne pour freelances, auto-entrepreneurs et TPE : CGV, mentions légales, RGPD, contrats, devis. PDF en 5 minutes.",
   locale: "fr_FR",
+  tagline: "Documents juridiques conformes, générés en ligne",
 } as const;
+
+const DEFAULT_KEYWORDS = [
+  "documents juridiques",
+  "générateur documents juridiques",
+  "freelance",
+  "auto-entrepreneur",
+  "micro-entreprise",
+  "TPE",
+  "CGV",
+  "mentions légales",
+  "RGPD",
+  "contrat prestation",
+  "devis conforme",
+  "modèle juridique pdf",
+] as const;
 
 type CreateMetadataOptions = {
   title: string;
@@ -17,6 +33,8 @@ type CreateMetadataOptions = {
   path?: string;
   keywords?: string[];
   noIndex?: boolean;
+  /** Titre absolu (accueil) sans suffixe */
+  absoluteTitle?: boolean;
 };
 
 export function createMetadata({
@@ -25,26 +43,27 @@ export function createMetadata({
   path = "",
   keywords = [],
   noIndex = false,
+  absoluteTitle = false,
 }: CreateMetadataOptions): Metadata {
   const url = `${siteConfig.url}${path}`;
-  const fullTitle =
-    path === "" || path === "/"
-      ? `${title} | ${siteConfig.name}`
-      : `${title} | ${siteConfig.name}`;
+  const fullTitle = absoluteTitle
+    ? title
+    : `${title} | ${siteConfig.name}`;
 
   return {
     title: fullTitle,
     description,
-    keywords: [
-      "documents juridiques",
-      "freelance",
-      "auto-entrepreneur",
-      "CGV",
-      "mentions légales",
-      ...keywords,
-    ],
+    keywords: [...DEFAULT_KEYWORDS, ...keywords],
     metadataBase: new URL(siteConfig.url),
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: { "fr-FR": url },
+    },
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    creator: siteConfig.name,
+    publisher: siteConfig.name,
+    category: "business",
+    applicationName: siteConfig.name,
     openGraph: {
       type: "website",
       locale: siteConfig.locale,
@@ -60,6 +79,16 @@ export function createMetadata({
     },
     robots: noIndex
       ? { index: false, follow: false }
-      : { index: true, follow: true },
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
   };
 }

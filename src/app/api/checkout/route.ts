@@ -1,13 +1,19 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { stripePriceIdForPlan } from "@/lib/plans";
 import { stripe } from "@/lib/stripe";
 import { siteConfig } from "@/lib/seo";
 
-export async function POST() {
+const bodySchema = z.object({
+  plan: z.enum(["pro", "business"]),
+});
+
+export async function POST(request: Request) {
   if (!stripe || !db) {
     return NextResponse.json(
       { error: "Stripe ou base de données non configurés" },
@@ -20,10 +26,19 @@ export async function POST() {
     return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
   }
 
-  const priceId = process.env.STRIPE_PRICE_ID;
+  const json = await request.json().catch(() => ({}));
+  const parsed = bodySchema.safeParse(json);
+  const plan = parsed.success ? parsed.data.plan : "pro";
+
+  const priceId = stripePriceIdForPlan(plan);
   if (!priceId) {
     return NextResponse.json(
-      { error: "STRIPE_PRICE_ID manquant" },
+      {
+        error:
+          plan === "business"
+            ? "STRIPE_PRICE_ID_BUSINESS manquant"
+            : "STRIPE_PRICE_ID_PRO manquant",
+      },
       { status: 503 },
     );
   }
@@ -51,9 +66,9 @@ export async function POST() {
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${siteConfig.url}/dashboard?checkout=success`,
+    success_url: `${siteConfig.url}/dashboard?checkout=success&plan=${plan}`,
     cancel_url: `${siteConfig.url}/tarifs?checkout=cancel`,
-    metadata: { userId: session.user.id },
+    metadata: { userId: session.user.id, plan },
   });
 
   return NextResponse.json({ url: checkoutSession.url });

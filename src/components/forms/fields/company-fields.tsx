@@ -20,18 +20,19 @@ export function CompanyFields({ register, errors }: CompanyFieldsProps) {
         label="Nom commercial / Raison sociale"
         error={errors.companyName?.message}
       >
-        <Input {...reg("companyName")} placeholder="Ex. Studio Dupont" />
+        <Input {...reg("companyName")} className="h-10" placeholder="Ex. Studio Dupont" />
       </FormField>
       <FormField
         id="legalForm"
         label="Forme juridique"
         error={errors.legalForm?.message}
       >
-        <Input {...reg("legalForm")} placeholder="Micro-entreprise, SASU, EURL…" />
+        <Input {...reg("legalForm")} className="h-10" placeholder="Micro-entreprise, SASU, EURL…" />
       </FormField>
       <FormField id="siret" label="Numéro SIRET" error={errors.siret?.message}>
         <Input
           {...reg("siret")}
+          className="h-10"
           inputMode="numeric"
           placeholder="14 chiffres"
         />
@@ -39,6 +40,7 @@ export function CompanyFields({ register, errors }: CompanyFieldsProps) {
       <FormField id="address" label="Adresse du siège" error={errors.address?.message}>
         <Input
           {...reg("address")}
+          className="h-10"
           placeholder="Numéro, rue, code postal, ville"
         />
       </FormField>
@@ -46,11 +48,12 @@ export function CompanyFields({ register, errors }: CompanyFieldsProps) {
         <Input
           type="email"
           {...reg("email")}
+          className="h-10"
           placeholder="contact@monentreprise.fr"
         />
       </FormField>
       <FormField id="phone" label="Téléphone" error={errors.phone?.message}>
-        <Input type="tel" {...reg("phone")} placeholder="06 12 34 56 78" />
+        <Input type="tel" {...reg("phone")} className="h-10" placeholder="06 12 34 56 78" />
       </FormField>
     </>
   );

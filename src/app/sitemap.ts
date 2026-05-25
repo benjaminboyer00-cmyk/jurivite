@@ -1,30 +1,42 @@
 import type { MetadataRoute } from "next";
 
 import { documents } from "@/lib/documents/registry";
+import { seoLandingPages } from "@/lib/documents/seo-landings";
 import { siteConfig } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteConfig.url,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${siteConfig.url}/tarifs`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.85,
     },
   ];
 
   const documentPages: MetadataRoute.Sitemap = documents.map((doc) => ({
     url: `${siteConfig.url}${doc.href}`,
-    lastModified: new Date(),
+    lastModified: now,
     changeFrequency: "weekly" as const,
-    priority: 0.9,
+    priority: 0.95,
   }));
 
-  return [...staticPages, ...documentPages];
+  const landingPages: MetadataRoute.Sitemap = seoLandingPages.map(
+    (landing) => ({
+      url: `${siteConfig.url}/generate/${landing.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    }),
+  );
+
+  return [...staticPages, ...documentPages, ...landingPages];
 }

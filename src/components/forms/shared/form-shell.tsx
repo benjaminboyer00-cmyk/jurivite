@@ -1,7 +1,10 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, FileDown } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, FileDown, Loader2 } from "lucide-react";
 
+import { StepIndicator } from "@/components/forms/step-indicator";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 type FormStep = {
   id: string;
@@ -40,61 +43,73 @@ export function FormShell({
   children,
 }: FormShellProps) {
   const currentStep = steps[stepIndex];
-  const progress = ((stepIndex + 1) / steps.length) * 100;
   const isReview = currentStep.id === "review";
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>
-            Étape {stepIndex + 1} sur {steps.length}
-          </span>
-          <span>{Math.round(progress)} %</span>
-        </div>
-        <Progress value={progress} aria-label="Progression du formulaire" />
-      </div>
+    <div className="space-y-6 pb-24 sm:pb-0">
+      <StepIndicator steps={steps} currentIndex={stepIndex} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{currentStep.title}</CardTitle>
-          <CardDescription>{currentStep.description}</CardDescription>
+      <Card className="overflow-hidden border-border/80 shadow-sm">
+        <CardHeader className="border-b bg-muted/30">
+          <CardTitle className="text-xl">{currentStep.title}</CardTitle>
+          <CardDescription className="text-base">
+            {currentStep.description}
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">{children}</CardContent>
+        <CardContent className="space-y-5 pt-6">{children}</CardContent>
       </Card>
 
       {generateError ? (
-        <p className="text-sm text-destructive" role="alert">
+        <Alert variant="destructive" title="Erreur">
           {generateError}
-        </p>
+        </Alert>
       ) : null}
 
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onBack}
-          disabled={stepIndex === 0}
-        >
-          <ArrowLeft className="size-4" />
-          Retour
-        </Button>
-
-        {!isReview ? (
-          <Button type="button" onClick={onNext}>
-            Continuer
-            <ArrowRight className="size-4" />
-          </Button>
-        ) : (
+      {/* Barre d'actions sticky sur mobile */}
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-4 backdrop-blur-md sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none",
+        )}
+      >
+        <div className="mx-auto flex max-w-3xl flex-col-reverse gap-3 sm:flex-row sm:justify-between">
           <Button
             type="button"
-            onClick={onGenerate}
-            disabled={isGenerating}
+            variant="outline"
+            onClick={onBack}
+            disabled={stepIndex === 0 || isGenerating}
+            className="w-full sm:w-auto"
           >
-            <FileDown className="size-4" />
-            {isGenerating ? "Génération…" : "Générer le PDF"}
+            <ArrowLeft className="size-4" />
+            Retour
           </Button>
-        )}
+
+          {!isReview ? (
+            <Button
+              type="button"
+              onClick={onNext}
+              disabled={isGenerating}
+              className="w-full sm:w-auto"
+            >
+              Continuer
+              <ArrowRight className="size-4" />
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              onClick={onGenerate}
+              disabled={isGenerating}
+              className="w-full sm:w-auto"
+              size="lg"
+            >
+              {isGenerating ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <FileDown className="size-4" />
+              )}
+              {isGenerating ? "Génération en cours…" : "Télécharger le PDF"}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -102,10 +117,17 @@ export function FormShell({
 
 export function WatermarkNotice() {
   return (
-    <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
-      Version gratuite : le PDF inclura un filigrane JuriVite. Passez Pro pour
-      un document sans filigrane.
-    </p>
+    <Alert variant="warning" title="Version gratuite">
+      PDF avec filigrane JuriVite.{" "}
+      <Link href="/tarifs" className="font-medium text-primary underline-offset-4 hover:underline">
+        Pro 9 €/mo
+      </Link>{" "}
+      (20 PDF sans filigrane) ou{" "}
+      <Link href="/tarifs" className="font-medium text-primary underline-offset-4 hover:underline">
+        Business 30 €/mo
+      </Link>{" "}
+      (illimité + API).
+    </Alert>
   );
 }
 
@@ -117,9 +139,11 @@ export function ReviewBlock({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <h3 className="font-medium">{title}</h3>
-      <div className="mt-2 space-y-1 text-sm">{children}</div>
+    <div className="rounded-lg border bg-muted/20 p-4">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h3>
+      <div className="mt-3 space-y-1.5 text-sm">{children}</div>
     </div>
   );
 }

@@ -12,14 +12,14 @@ Générateur de documents juridiques pour freelances et TPE — CGV, mentions l�
 
 ```bash
 cp .env.example .env.local
-# Éditez .env.local — AUTH_SECRET obligatoire :
-# openssl rand -base64 32
-
+npm run check:env      # Vérifie les variables + que Git ignore .env.local
 npm install
-npm run db:up          # PostgreSQL sur localhost:5432
-npm run db:push        # Crée les tables Drizzle
+npm run db:up          # PostgreSQL Docker
+npm run db:push
 npm run dev
 ```
+
+**Checklist complète avant lancement :** voir [SETUP.md](./SETUP.md)
 
 → [http://localhost:3000](http://localhost:3000)
 

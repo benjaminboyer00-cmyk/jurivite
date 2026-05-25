@@ -1,0 +1,32 @@
+# JuriVite
+
+> Générateur de documents juridiques en ligne pour freelances, auto-entrepreneurs et TPE en France.
+
+JuriVite permet de générer en PDF : CGV, mentions légales, politique de confidentialité RGPD, contrat de prestation de services et devis conforme.
+
+## Pages principales
+
+- Accueil: /
+- Tarifs: /tarifs
+- CGV: /generate/cgv
+- Mentions légales: /generate/mentions-legales
+- Politique RGPD: /generate/politique-confidentialite
+- Contrat prestation: /generate/contrat-prestation
+- Devis: /generate/devis
+
+## Guides SEO
+
+- /generate/cgv-auto-entrepreneur
+- /generate/cgv-freelance
+- /generate/mentions-legales-site-web
+- /generate/mentions-legales-blog
+- /generate/politique-confidentialite-rgpd
+- /generate/contrat-freelance
+- /generate/devis-freelance
+- /generate/devis-auto-entrepreneur
+
+## Tarification
+
+- Gratuit: PDF avec filigrane
+- Pro: 9 EUR/mois, 20 PDF sans filigrane
+- Business: 30 EUR/mois, illimité + API REST

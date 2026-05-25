@@ -12,7 +12,8 @@
     "lint": "eslint",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:up": "docker compose up -d"
+    "db:up": "docker compose up -d",
+    "check:env": "bash scripts/check-env.sh"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

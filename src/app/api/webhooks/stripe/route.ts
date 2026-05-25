@@ -4,7 +4,30 @@ import type Stripe from "stripe";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import type { Plan } from "@/lib/plans";
+import { planFromStripePriceId } from "@/lib/plans";
 import { stripe } from "@/lib/stripe";
+
+async function resolvePlanFromSubscription(
+  subscription: Stripe.Subscription,
+): Promise<Plan> {
+  const isActive =
+    subscription.status === "active" ||
+    subscription.status === "trialing";
+
+  if (!isActive) return "free";
+
+  const priceId = subscription.items.data[0]?.price?.id;
+  if (priceId) {
+    const mapped = planFromStripePriceId(priceId);
+    if (mapped) return mapped;
+  }
+
+  const metaPlan = subscription.metadata?.plan as Plan | undefined;
+  if (metaPlan === "pro" || metaPlan === "business") return metaPlan;
+
+  return "pro";
+}
 
 export async function POST(request: Request) {
   if (!stripe || !db) {
@@ -33,12 +56,20 @@ export async function POST(request: Request) {
       const userId = session.metadata?.userId;
       const customerId = session.customer as string | null;
       const subscriptionId = session.subscription as string | null;
+      const metaPlan = session.metadata?.plan as Plan | undefined;
+
+      let plan: Plan = metaPlan === "business" ? "business" : "pro";
+
+      if (subscriptionId) {
+        const sub = await stripe.subscriptions.retrieve(subscriptionId);
+        plan = await resolvePlanFromSubscription(sub);
+      }
 
       if (userId) {
         await db
           .update(users)
           .set({
-            plan: "pro",
+            plan,
             stripeCustomerId: customerId ?? undefined,
             stripeSubscriptionId: subscriptionId ?? undefined,
           })
@@ -50,14 +81,12 @@ export async function POST(request: Request) {
     case "customer.subscription.updated": {
       const subscription = event.data.object as Stripe.Subscription;
       const customerId = subscription.customer as string;
-      const isActive =
-        subscription.status === "active" ||
-        subscription.status === "trialing";
+      const plan = await resolvePlanFromSubscription(subscription);
 
       await db
         .update(users)
         .set({
-          plan: isActive ? "pro" : "free",
+          plan,
           stripeSubscriptionId: subscription.id,
         })
         .where(eq(users.stripeCustomerId, customerId));

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { auth } from "@/auth";
+import { verifyApiKey } from "@/lib/db/api-keys";
 import { generateDocument } from "@/lib/pdf/document-service";
 
 const bodySchema = z.object({
@@ -10,6 +10,23 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  const token = authHeader?.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : null;
+
+  if (!token) {
+    return NextResponse.json(
+      { error: "Header Authorization: Bearer <clé_api> requis" },
+      { status: 401 },
+    );
+  }
+
+  const apiAuth = await verifyApiKey(token);
+  if (!apiAuth) {
+    return NextResponse.json({ error: "Clé API invalide" }, { status: 401 });
+  }
+
   try {
     const json = await request.json();
     const parsed = bodySchema.safeParse(json);
@@ -18,11 +35,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
     }
 
-    const session = await auth();
     const result = await generateDocument({
       slug: parsed.data.slug,
       data: parsed.data.data,
-      userId: session?.user?.id,
+      userId: apiAuth.userId,
+      plan: "business",
     });
 
     if (!result.ok) {
@@ -37,16 +54,12 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${result.fileName}"`,
-        "X-Document-Title": encodeURIComponent(result.title),
-        "X-Has-Watermark": result.withWatermark ? "1" : "0",
+        "X-Has-Watermark": "0",
       },
     });
   } catch (error) {
-    console.error("[generate-pdf]", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la génération PDF." },
-      { status: 500 },
-    );
+    console.error("[api/v1/generate-pdf]", error);
+    return NextResponse.json({ error: "Erreur génération PDF" }, { status: 500 });
   }
 }
 

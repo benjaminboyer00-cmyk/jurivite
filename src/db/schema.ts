@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
-export const planEnum = pgEnum("plan", ["free", "pro"]);
+export const planEnum = pgEnum("plan", ["free", "pro", "business"]);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -83,6 +83,20 @@ export const companies = pgTable("company", {
   updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 });
 
+export const apiKeys = pgTable("api_key", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull().default("Clé principale"),
+  keyHash: text("key_hash").notNull().unique(),
+  keyPrefix: text("key_prefix").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  lastUsedAt: timestamp("last_used_at", { mode: "date" }),
+});
+
 export const documents = pgTable("document", {
   id: text("id")
     .primaryKey()
@@ -106,6 +120,11 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   companies: many(companies),
   documents: many(documents),
+  apiKeys: many(apiKeys),
+}));
+
+export const apiKeysRelations = relations(apiKeys, ({ one }) => ({
+  user: one(users, { fields: [apiKeys.userId], references: [users.id] }),
 }));
 
 export const companiesRelations = relations(companies, ({ one, many }) => ({

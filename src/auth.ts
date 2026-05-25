@@ -31,9 +31,13 @@ if (process.env.RESEND_API_KEY) {
 
 const authSecret =
   process.env.AUTH_SECRET ??
+  process.env.NEXTAUTH_SECRET ??
   (process.env.NODE_ENV === "development"
     ? "dev-only-secret-change-in-env-local"
     : undefined);
+
+const authUrl =
+  process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: authSecret,

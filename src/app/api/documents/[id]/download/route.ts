@@ -36,8 +36,8 @@ export async function POST(_request: Request, context: RouteContext) {
     where: eq(users.id, session.user.id),
   });
 
-  const isPro = user?.plan === "pro";
-  const withWatermark = !isPro;
+  const plan = user?.plan ?? "free";
+  const withWatermark = plan !== "pro" && plan !== "business";
 
   const pdfBuffer = await generatePdfBuffer(
     doc.slug,

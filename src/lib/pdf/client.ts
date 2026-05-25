@@ -12,9 +12,12 @@ export async function downloadGeneratedPdf(
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    throw new Error(
-      (err as { error?: string }).error ?? "Échec de la génération du PDF",
-    );
+    const message =
+      (err as { error?: string }).error ?? "Échec de la génération du PDF";
+    if (response.status === 402) {
+      throw new Error(`${message} — voir /tarifs`);
+    }
+    throw new Error(message);
   }
 
   const blob = await response.blob();

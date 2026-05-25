@@ -1,11 +1,14 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
 
+export type SeoFaq = { question: string; answer: string };
+
 export type DocumentPageContent = {
   metaTitle: string;
   metaDescription: string;
   h1: string;
   intro: string;
   seoBlocks: { heading: string; body: string }[];
+  faqs: SeoFaq[];
 };
 
 export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
@@ -32,6 +35,24 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
       {
         heading: "Modèle CGV : point de départ, pas un avis juridique",
         body: "JuriVite accélère la rédaction pour les indépendants. Si vous exercez une activité réglementée (santé, finance, formation certifiante), faites relire vos CGV par un avocat ou un expert-comptable. Le coût d'une relecture est inférieur à celui d'un litige.",
+      },
+      {
+        heading: "CGV et Shopify / WooCommerce",
+        body: "Vous pouvez publier le PDF généré sur une page dédiée et lier vos CGV depuis le checkout. JuriVite ne se connecte pas à votre boutique : vous gardez le contrôle du texte affiché.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Combien de temps pour créer ses CGV avec JuriVite ?",
+        answer: "Environ 5 minutes : trois étapes de formulaire puis téléchargement PDF immédiat.",
+      },
+      {
+        question: "Les CGV générées sont-elles valables juridiquement ?",
+        answer: "Ce sont des modèles structurés à personnaliser. Pour une activité à risque, faites valider par un professionnel du droit.",
+      },
+      {
+        question: "Puis-je générer des CGV gratuitement ?",
+        answer: "Oui en version gratuite avec filigrane. Le plan Pro (9 €/mois) permet 20 PDF sans filigrane par mois.",
       },
     ],
   },
@@ -60,6 +81,16 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
         body: "Un lien visible sur toutes les pages, en général dans le pied de page. Évitez de les cacher derrière trop de clics. Pour un site one-page, une ancre #mentions-legales suffit si le contenu est complet.",
       },
     ],
+    faqs: [
+      {
+        question: "Qui doit avoir des mentions légales en France ?",
+        answer: "Tout éditeur de site web professionnel : freelance, TPE, association avec activité commerciale, e-commerce.",
+      },
+      {
+        question: "Où trouver l'adresse de mon hébergeur ?",
+        answer: "Dans votre espace client OVH, o2switch, Vercel, etc. — section mentions légales ou contact support.",
+      },
+    ],
   },
   "politique-confidentialite": {
     metaTitle: "Politique de confidentialité RGPD — générateur en ligne",
@@ -84,6 +115,16 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
       {
         heading: "Droits des personnes à mentionner",
         body: "Accès, rectification, effacement, limitation, opposition, portabilité, réclamation CNIL. JuriVite intègre ces mentions et un contact DPO ou responsable de traitement selon vos informations.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Politique de confidentialité et bandeau cookies : même document ?",
+        answer: "Non. La politique décrit les traitements ; le bandeau cookies demande le consentement. Les deux sont complémentaires.",
+      },
+      {
+        question: "Faut-il une politique RGPD pour un formulaire seul ?",
+        answer: "Oui, dès qu'un visiteur vous transmet nom, e-mail ou message, vous traitez des données personnelles.",
       },
     ],
   },
@@ -112,6 +153,16 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
         body: "« On verra au fil de l'eau » ouvre la porte aux scope creep et aux litiges. Un PDF signé (ou un e-mail d'acceptation explicite du contrat) crée une preuve en cas de contentieux.",
       },
     ],
+    faqs: [
+      {
+        question: "Contrat de prestation ou devis en premier ?",
+        answer: "Devis pour proposer un prix, puis contrat signé avant de démarrer la mission.",
+      },
+      {
+        question: "Le contrat JuriVite couvre-t-il la propriété intellectuelle ?",
+        answer: "Le modèle de base couvre mission et paiement. Pour cession de droits d'auteur, prévoyez une clause dédiée ou un document spécifique.",
+      },
+    ],
   },
   devis: {
     metaTitle: "Devis conforme freelance — générateur gratuit",
@@ -136,6 +187,16 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
       {
         heading: "Franchise en base de TVA",
         body: "Si vous êtes en franchise (article 293 B du CGI), indiquez-le et mettez le taux TVA à 0 % dans le formulaire. Le TTC sera alors égal au HT. Vérifiez votre statut avec votre expert-comptable.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Un devis engage-t-il juridiquement ?",
+        answer: "Un devis accepté par le client peut constituer un accord. Le contrat de prestation renforce encore la sécurité juridique.",
+      },
+      {
+        question: "Quelle durée de validité pour un devis ?",
+        answer: "Souvent 30 jours — au-delà, précisez que les tarifs peuvent être révisés.",
       },
     ],
   },

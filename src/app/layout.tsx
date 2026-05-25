@@ -19,9 +19,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = createMetadata({
-  title: "Documents juridiques en 5 minutes",
+  title:
+    "JuriVite — Générateur CGV, mentions légales & documents juridiques PDF",
   description: siteConfig.description,
   path: "/",
+  absoluteTitle: true,
+  keywords: [
+    "générateur cgv",
+    "générateur mentions légales",
+    "documents juridiques pdf",
+    "rgpd modèle",
+  ],
 });
 
 export default function RootLayout({
