@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { LEGAL_FORM_OPTIONS } from "@/lib/legal/forms";
 import { classifyLegalForm } from "@/lib/legal/forms";
 import type { CompanyFields } from "@/lib/schemas/company";
+import { normalizeSiretInput } from "@/lib/schemas/siret";
 
 type CompanyFieldsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,12 +100,22 @@ export function CompanyFields({
         </FormField>
       )}
 
-      <FormField id="siret" label="Numéro SIRET" error={errors.siret?.message}>
+      <FormField
+        id="siret"
+        label="Numéro SIRET"
+        hint="14 chiffres — espaces et tirets acceptés (ex. 123 456 789 00012)"
+        error={errors.siret?.message}
+      >
         <Input
-          {...reg("siret")}
+          {...reg("siret", {
+            setValueAs: (value) => normalizeSiretInput(value),
+          })}
           className="h-10"
+          type="text"
           inputMode="numeric"
-          placeholder="14 chiffres"
+          autoComplete="off"
+          maxLength={20}
+          placeholder="12345678900012"
         />
       </FormField>
       <FormField id="address" label="Adresse du siège" error={errors.address?.message}>

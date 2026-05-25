@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { classifyLegalForm } from "@/lib/legal/forms";
+import { siretSchema } from "@/lib/schemas/siret";
 
 export const companySchema = z.object({
   companyName: z
@@ -11,9 +12,7 @@ export const companySchema = z.object({
     .string()
     .min(2, "La forme juridique est requise")
     .max(80),
-  siret: z
-    .string()
-    .regex(/^\d{14}$/, "Le SIRET doit contenir 14 chiffres"),
+  siret: siretSchema,
   address: z
     .string()
     .min(10, "L'adresse complète est requise")
