@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contrat de prestation — {{companyName}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
+      h1 { font-size: 18pt; }
+      h2 { font-size: 13pt; margin-top: 1.5em; }
+    </style>
+  </head>
+  <body>
+    <h1>Contrat de prestation de services</h1>
+
+    <h2>Entre les parties</h2>
+    <p>
+      <strong>Prestataire :</strong> {{companyName}} ({{legalForm}}), SIRET {{siret}},
+      {{address}}, {{email}}, {{phone}}<br />
+      <strong>Client :</strong> {{clientName}}, {{clientAddress}}
+    </p>
+
+    <h2>Objet</h2>
+    <p>{{serviceDescription}}</p>
+
+    <h2>Prix</h2>
+    <p>{{price}}</p>
+
+    <h2>Paiement</h2>
+    <p>{{paymentTerms}}</p>
+
+    <h2>Livraison</h2>
+    <p>{{deliveryDate}}</p>
+
+    <h2>Signature</h2>
+    <p>Fait en deux exemplaires.</p>
+    <p>Prestataire : _________________ &nbsp;&nbsp; Client : _________________</p>
+
+    <p><em>Document généré par JuriVite.</em></p>
+  </body>
+</html>

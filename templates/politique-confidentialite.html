@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Politique de confidentialité — {{companyName}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; margin: 2cm; }
+      h1 { font-size: 18pt; }
+      h2 { font-size: 13pt; margin-top: 1.5em; }
+    </style>
+  </head>
+  <body>
+    <h1>Politique de confidentialité</h1>
+    <p>Site concerné : {{websiteUrl}}</p>
+
+    <h2>Responsable du traitement</h2>
+    <p>
+      {{companyName}} — {{legalForm}}<br />
+      {{address}} — {{email}} — {{phone}}
+    </p>
+
+    <h2>Données collectées</h2>
+    <p>{{dataCollected}}</p>
+
+    <h2>Finalités</h2>
+    <p>{{processingPurpose}}</p>
+
+    <h2>Durée de conservation</h2>
+    <p>{{retentionPeriod}}</p>
+
+    <h2>Vos droits</h2>
+    <p>
+      Conformément au RGPD, vous disposez d'un droit d'accès, de rectification,
+      d'effacement et d'opposition. Contact :
+      {{dpoEmail}} (ou {{email}} si vide)
+    </p>
+
+    <p><em>Document généré par JuriVite — à adapter à vos traitements réels.</em></p>
+  </body>
+</html>

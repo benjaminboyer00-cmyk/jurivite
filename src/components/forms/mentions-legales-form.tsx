@@ -1,0 +1,144 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import { CompanyFields } from "@/components/forms/fields/company-fields";
+import { FormField } from "@/components/forms/fields/form-field";
+import {
+  FormShell,
+  ReviewBlock,
+  WatermarkNotice,
+} from "@/components/forms/shared/form-shell";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { useSteppedForm } from "@/hooks/use-stepped-form";
+import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
+import {
+  MENTIONS_LEGALES_STEPS,
+  mentionsLegalesFormSchema,
+  mentionsLegalesSiteSchema,
+  type MentionsLegalesFormValues,
+} from "@/lib/schemas/mentions-legales";
+
+const defaultValues: MentionsLegalesFormValues = {
+  ...companyDefaultValues,
+  websiteUrl: "https://",
+  siteName: "",
+  directorName: "",
+  hostingProvider: "OVH",
+  hostingAddress: "",
+};
+
+export function MentionsLegalesForm() {
+  const form = useForm<MentionsLegalesFormValues>({
+    resolver: zodResolver(mentionsLegalesFormSchema),
+    defaultValues,
+    mode: "onBlur",
+  });
+
+  const { stepIndex, currentStep, isGenerating, goNext, goBack, handleGenerate } =
+    useSteppedForm({
+      form,
+      steps: MENTIONS_LEGALES_STEPS,
+      stepSchemas: {
+        company: companySchema,
+        site: mentionsLegalesSiteSchema,
+      },
+    });
+
+  const values = form.watch();
+  const { register, formState } = form;
+
+  return (
+    <FormShell
+      steps={MENTIONS_LEGALES_STEPS}
+      stepIndex={stepIndex}
+      onBack={goBack}
+      onNext={goNext}
+      onGenerate={() =>
+        handleGenerate(
+          "Génération PDF à venir (Puppeteer). Vos mentions légales sont prêtes.",
+        )
+      }
+      isGenerating={isGenerating}
+    >
+      {currentStep.id === "company" && (
+        <CompanyFields register={register} errors={formState.errors} />
+      )}
+
+      {currentStep.id === "site" && (
+        <>
+          <FormField
+            id="websiteUrl"
+            label="URL du site"
+            error={formState.errors.websiteUrl?.message}
+          >
+            <Input
+              type="url"
+              {...register("websiteUrl")}
+              placeholder="https://monsite.fr"
+            />
+          </FormField>
+          <FormField
+            id="siteName"
+            label="Nom du site"
+            error={formState.errors.siteName?.message}
+          >
+            <Input {...register("siteName")} placeholder="Mon Portfolio" />
+          </FormField>
+          <FormField
+            id="directorName"
+            label="Directeur de publication"
+            error={formState.errors.directorName?.message}
+          >
+            <Input {...register("directorName")} placeholder="Prénom Nom" />
+          </FormField>
+          <FormField
+            id="hostingProvider"
+            label="Hébergeur"
+            error={formState.errors.hostingProvider?.message}
+          >
+            <Input {...register("hostingProvider")} placeholder="OVH, Vercel…" />
+          </FormField>
+          <FormField
+            id="hostingAddress"
+            label="Adresse de l'hébergeur"
+            error={formState.errors.hostingAddress?.message}
+          >
+            <Input
+              {...register("hostingAddress")}
+              placeholder="2 rue Kellermann, 59100 Roubaix"
+            />
+          </FormField>
+        </>
+      )}
+
+      {currentStep.id === "review" && (
+        <div className="space-y-4">
+          <ReviewBlock title="Entreprise">
+            <p>{values.companyName} — {values.legalForm}</p>
+            <p className="text-muted-foreground">SIRET {values.siret}</p>
+            <p className="text-muted-foreground">{values.address}</p>
+            <p className="text-muted-foreground">
+              {values.email} · {values.phone}
+            </p>
+          </ReviewBlock>
+          <Separator />
+          <ReviewBlock title="Site web">
+            <p>{values.siteName}</p>
+            <p className="text-muted-foreground">{values.websiteUrl}</p>
+            <p className="text-muted-foreground">
+              Directeur : {values.directorName}
+            </p>
+            <p className="text-muted-foreground">
+              Hébergeur : {values.hostingProvider}
+            </p>
+            <p className="text-muted-foreground">{values.hostingAddress}</p>
+          </ReviewBlock>
+          <WatermarkNotice />
+        </div>
+      )}
+    </FormShell>
+  );
+}

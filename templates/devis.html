@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Devis {{quoteNumber}} — {{companyName}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 11pt; margin: 2cm; }
+      h1 { font-size: 20pt; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+      th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+  </head>
+  <body>
+    <h1>DEVIS N° {{quoteNumber}}</h1>
+    <p>Date : {{quoteDate}} — Validité : {{validityDays}} jours</p>
+
+    <h2>Émetteur</h2>
+    <p>
+      {{companyName}} — {{legalForm}}<br />
+      SIRET {{siret}} — {{address}}<br />
+      {{email}} — {{phone}}
+    </p>
+
+    <h2>Client</h2>
+    <p>{{clientName}}{{#if clientEmail}} — {{clientEmail}}{{/if}}</p>
+
+    <table>
+      <thead>
+        <tr><th>Prestation</th><th>Montant HT</th><th>TVA</th><th>TTC</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{serviceDescription}}</td>
+          <td>{{amountExclVat}} €</td>
+          <td>{{vatRate}} %</td>
+          <td>{{amountTtc}} €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Devis non contractuel jusqu'à signature. Document généré par JuriVite.</em></p>
+  </body>
+</html>
