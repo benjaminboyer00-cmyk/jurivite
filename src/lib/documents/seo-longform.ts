@@ -14,12 +14,12 @@ export type DocumentPageContent = {
 export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
   cgv: {
     metaTitle:
-      "Générateur de CGV pour freelance, auto-entrepreneur et TPE — PDF en ligne",
+      "Sécurisez votre activité de freelance — CGV conformes pour indépendants et TPE",
     metaDescription:
-      "Créez vos Conditions Générales de Vente conformes en quelques minutes : prix, délais, rétractation, TVA micro ou société. Modèle PDF structuré pour freelances et petites entreprises.",
-    h1: "Générateur de CGV professionnel",
+      "Conditions Générales de Vente adaptées à votre statut : prix, délais, rétractation, TVA micro ou société. Conformité, sérénité et cadre contractuel clair pour freelances et petites entreprises.",
+    h1: "Sécurisez votre activité de freelance",
     intro:
-      "Les Conditions Générales de Vente encadrent chaque vente de prestation ou de produit : elles protègent votre activité et rassurent vos clients. Avec JuriVite, vous remplissez un formulaire guidé adapté à votre statut juridique et vous téléchargez un PDF prêt à publier. Fini les modèles génériques copiés-collés qui ne correspondent pas à votre réalité.",
+      "Les Conditions Générales de Vente encadrent chaque vente et vous protègent en cas de litige, de retard de paiement ou de désaccord sur le périmètre. JuriVite vous guide pour être conforme et rassurer vos clients — sans jargon ni paperasse interminable. Fini les modèles génériques copiés-collés qui ne correspondent pas à votre réalité.",
     seoBlocks: [
       {
         heading: "Qu'est-ce que des CGV et à qui s'adressent-elles ?",
