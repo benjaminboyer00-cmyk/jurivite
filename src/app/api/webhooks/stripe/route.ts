@@ -12,6 +12,10 @@ import {
   resolveUserIdFromCheckoutSession,
 } from "@/lib/stripe/sync-user-plan";
 import { stripe } from "@/lib/stripe";
+import {
+  StripeWebhookVerificationError,
+  verifyStripeWebhookEvent,
+} from "@/lib/stripe/verify-webhook";
 
 export async function POST(request: Request) {
   if (!stripe || !db) {
@@ -28,10 +32,18 @@ export async function POST(request: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    event = verifyStripeWebhookEvent(
+      stripe,
+      body,
+      signature,
+      webhookSecret,
+    );
   } catch (err) {
-    captureServerError(err, { route: "stripe-webhook-verify" });
-    return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
+    if (err instanceof StripeWebhookVerificationError) {
+      captureServerError(err, { route: "stripe-webhook-verify" });
+      return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
+    }
+    throw err;
   }
 
   console.info(`[stripe webhook] ${event.type} (${event.id})`);

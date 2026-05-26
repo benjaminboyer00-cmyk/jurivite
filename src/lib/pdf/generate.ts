@@ -15,6 +15,13 @@ function ensureTemplatesReady(): void {
   }
 }
 
+/**
+ * Pipeline PDF sécurisé :
+ * 1. sanitizePdfPayload (Zod + champs)
+ * 2. Handlebars (échappement {{ }})
+ * 3. sanitizePdfHtml (DOMPurify)
+ * 4. Puppeteer : JS off, requêtes externes bloquées, timeout, page fermée en finally
+ */
 export async function generatePdfBuffer(
   slug: DocumentSlug,
   data: Record<string, unknown>,

@@ -4,8 +4,11 @@ import type { NextRequest } from "next/server";
 import { auth } from "@/auth";
 import { enforceRateLimit } from "@/lib/security/apply-rate-limit";
 import { RATE_LIMITS } from "@/lib/security/rate-limit";
+import { applyProductionSecurityHeaders } from "@/lib/security/security-headers";
 
-function applyApiRateLimits(request: NextRequest): NextResponse | null {
+async function applyApiRateLimits(
+  request: NextRequest,
+): Promise<NextResponse | null> {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/api/auth/register") {
@@ -35,9 +38,9 @@ function applyApiRateLimits(request: NextRequest): NextResponse | null {
   return null;
 }
 
-export default auth((req) => {
-  const rateLimited = applyApiRateLimits(req);
-  if (rateLimited) return rateLimited;
+export default auth(async (req) => {
+  const rateLimited = await applyApiRateLimits(req);
+  if (rateLimited) return applyProductionSecurityHeaders(rateLimited);
 
   const isLoggedIn = !!req.auth;
   const { pathname, search } = req.nextUrl;
@@ -48,10 +51,12 @@ export default auth((req) => {
   ) {
     const loginUrl = new URL("/login", req.nextUrl.origin);
     loginUrl.searchParams.set("callbackUrl", pathname + search);
-    return NextResponse.redirect(loginUrl);
+    return applyProductionSecurityHeaders(
+      NextResponse.redirect(loginUrl),
+    );
   }
 
-  return NextResponse.next();
+  return applyProductionSecurityHeaders(NextResponse.next());
 });
 
 export const config = {

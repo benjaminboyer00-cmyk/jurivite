@@ -33,7 +33,10 @@ const FIELD_MAX_LENGTH: Record<string, number> = {
 
 const TRUNCATION_SUFFIX = " [… texte tronqué pour mise en page PDF]";
 
-/** Supprime HTML, scripts, caractères de contrôle dangereux */
+/**
+ * Supprime HTML, scripts, caractères de contrôle dangereux (champs formulaire).
+ * Dernière barrière HTML complète : `sanitizePdfHtml()` dans `generate.ts` avant Puppeteer.
+ */
 export function sanitizeTextInput(value: unknown, fieldKey?: string): string {
   let text = String(value ?? "");
 

@@ -14,7 +14,9 @@
     "db:studio": "drizzle-kit studio",
     "db:up": "docker compose up -d",
     "check:env": "bash scripts/check-env.sh",
-    "stripe:listen": "bash scripts/stripe-webhook-dev.sh"
+    "stripe:listen": "bash scripts/stripe-webhook-dev.sh",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
@@ -22,6 +24,8 @@
     "@hookform/resolvers": "^5.4.0",
     "@react-email/components": "^1.0.12",
     "@sentry/nextjs": "^10.53.1",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -50,10 +54,12 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.7",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.7"
   }
 }

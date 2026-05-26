@@ -52,11 +52,30 @@ npm run dev
 
 Les formulaires appellent `/api/generate-pdf` qui :
 
-1. Valide les données (Zod)
-2. Compile le template Handlebars (`templates/*.html`)
-3. Génère le PDF via Puppeteer
-4. Applique un filigrane si plan `free`
-5. Sauvegarde en base si utilisateur connecté
+1. Valide les données (Zod par slug + `validatePdfPayload`)
+2. Nettoie les champs (`sanitizePdfPayload`)
+3. Compile le template Handlebars (`templates/*.html`, échappement `{{ }}`)
+4. Sanitize le HTML final (`isomorphic-dompurify` dans `generate.ts`)
+5. Génère le PDF via Puppeteer (JS désactivé, requêtes externes bloquées, timeout 45 s)
+6. Applique un filigrane si plan `free`
+7. Sauvegarde en base si utilisateur connecté
+
+## Sécurité
+
+| Mesure | Implémentation |
+|--------|----------------|
+| Validation API | Zod sur routes sensibles + enum des 10 slugs PDF |
+| HTML → PDF | DOMPurify + Puppeteer durci (`src/lib/pdf/generate.ts`) |
+| Rate limiting | Middleware — mémoire ou **Upstash** si `UPSTASH_REDIS_REST_*` |
+| Webhook Stripe | `verifyStripeWebhookEvent()` → `constructEvent` obligatoire |
+| En-têtes HTTP | CSP, X-Frame-Options, HSTS en production (`middleware` + `next.config.ts`) |
+| Tests | `npm test` (Vitest) — rate limit, sanitization, payloads, webhook |
+
+**Puppeteer :** ne définissez `PDF_CHROME_NO_SANDBOX=1` que dans un conteneur isolé (utilisateur non-root). Jamais sur un VPS classique sans isolation.
+
+```bash
+npm test
+```
 
 ## Stripe en local
 
@@ -68,7 +87,7 @@ npm run dev
 stripe listen --forward-to localhost:3000/api/webhooks/stripe
 ```
 
-Copiez le `whsec_...` dans `STRIPE_WEBHOOK_SECRET`.
+Copiez le `whsec_...` dans `STRIPE_WEBHOOK_SECRET`. Le handler vérifie chaque requête avec `stripe.webhooks.constructEvent` (voir `src/lib/stripe/verify-webhook.ts`).
 
 ## Google OAuth local
 
@@ -92,3 +111,4 @@ templates/          # HTML Handlebars
 - `npm run db:up` — lance PostgreSQL (Docker)
 - `npm run db:push` — synchronise le schéma
 - `npm run db:studio` — interface Drizzle Studio
+- `npm test` — tests unitaires (sécurité, PDF, Stripe)
