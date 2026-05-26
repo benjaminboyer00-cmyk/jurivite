@@ -50,17 +50,17 @@ export function FormShell({
   const [legalAccepted, setLegalAccepted] = useState(false);
 
   return (
-    <div className="space-y-6 pb-24 sm:pb-0">
+    <div className="space-y-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] sm:pb-0">
       <StepIndicator steps={steps} currentIndex={stepIndex} />
 
       <Card className="overflow-hidden border-border/80 shadow-sm">
-        <CardHeader className="border-b bg-muted/30">
-          <CardTitle className="text-xl">{currentStep.title}</CardTitle>
-          <CardDescription className="text-base">
+        <CardHeader className="border-b bg-muted/30 px-4 sm:px-6">
+          <CardTitle className="text-lg sm:text-xl">{currentStep.title}</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
             {currentStep.description}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-5 pt-6">
+        <CardContent className="space-y-5 px-4 pt-6 sm:px-6">
           {children}
           {isReview ? (
             <LegalAcceptanceCheckbox
@@ -80,7 +80,7 @@ export function FormShell({
       {/* Barre d'actions sticky sur mobile */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-4 backdrop-blur-md sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none",
+          "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 px-4 pt-3 backdrop-blur-md safe-bottom sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none",
         )}
       >
         <div className="mx-auto flex max-w-3xl flex-col-reverse gap-3 sm:flex-row sm:justify-between">
@@ -89,7 +89,7 @@ export function FormShell({
             variant="outline"
             onClick={onBack}
             disabled={stepIndex === 0 || isGenerating}
-            className="w-full sm:w-auto"
+            className="h-11 w-full sm:h-9 sm:w-auto"
           >
             <ArrowLeft className="size-4" />
             Retour
@@ -100,7 +100,7 @@ export function FormShell({
               type="button"
               onClick={onNext}
               disabled={isGenerating}
-              className="w-full sm:w-auto"
+              className="h-11 w-full sm:h-9 sm:w-auto"
             >
               Continuer
               <ArrowRight className="size-4" />
@@ -110,7 +110,7 @@ export function FormShell({
               type="button"
               onClick={onGenerate}
               disabled={isGenerating || !legalAccepted}
-              className="w-full sm:w-auto"
+              className="h-11 w-full sm:h-10 sm:w-auto"
               size="lg"
             >
               {isGenerating ? (

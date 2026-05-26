@@ -27,7 +27,7 @@ export default function GenerateIndexPage() {
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <div className="page-container max-w-4xl py-10">
+      <div className="page-container max-w-4xl py-8 sm:py-10">
         <header className="mb-10 border-b pb-8">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Générateurs de documents juridiques

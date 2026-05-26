@@ -10,6 +10,7 @@ import {
   ReviewBlock,
   WatermarkNotice,
 } from "@/components/forms/shared/form-shell";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
@@ -124,6 +125,7 @@ export function CgvForm() {
 
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="cgv" />
           <ReviewBlock title="Entreprise">
             <p>{values.companyName}</p>
             <p className="text-muted-foreground">{values.legalForm}</p>

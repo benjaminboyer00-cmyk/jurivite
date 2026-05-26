@@ -17,7 +17,10 @@ import { auth, signOut } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { listApiKeys } from "@/lib/db/api-keys";
-import { countMonthlyPdfGenerations } from "@/lib/db/usage";
+import {
+  countMonthlyPdfGenerations,
+  countMonthlyPdfWithoutWatermark,
+} from "@/lib/db/usage";
 import { getUserDocuments } from "@/lib/db/documents";
 import { PLAN_LIMITS, type Plan } from "@/lib/plans";
 import { Badge } from "@/components/ui/badge";
@@ -54,8 +57,13 @@ export default async function DashboardPage({
   const params = await searchParams;
   const plan = session.user.plan;
   const docs = await getUserDocuments(session.user.id);
-  const usedThisMonth = await countMonthlyPdfGenerations(session.user.id);
+  const usedThisMonthAll = await countMonthlyPdfGenerations(session.user.id);
+  const usedThisMonthClean = await countMonthlyPdfWithoutWatermark(
+    session.user.id,
+  );
   const limit = PLAN_LIMITS[plan].pdfPerMonth;
+  const usedThisMonth =
+    plan === "pro" ? usedThisMonthClean : usedThisMonthAll;
 
   const dbUser = db
     ? await db.query.users.findFirst({
@@ -73,7 +81,7 @@ export default async function DashboardPage({
       : [];
 
   return (
-    <div className="page-container max-w-4xl py-10 sm:py-14">
+    <div className="page-container max-w-4xl py-8 sm:py-14">
       <Suspense fallback={null}>
         <SessionPlanSync />
       </Suspense>
@@ -85,12 +93,14 @@ export default async function DashboardPage({
         </Alert>
       )}
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Tableau de bord</h1>
-          <p className="mt-1 text-muted-foreground">{session.user.email}</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Tableau de bord</h1>
+          <p className="mt-1 truncate text-sm text-muted-foreground sm:text-base">
+            {session.user.email}
+          </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <ButtonLink href="/dashboard/compte" variant="outline" size="sm">
             Mon compte
           </ButtonLink>
@@ -178,9 +188,9 @@ export default async function DashboardPage({
       {plan === "business" && <ApiKeyPanel initialKeys={apiKeys} />}
 
       <section className="mt-10">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Mes documents</h2>
-          <ButtonLink href="/#documents" size="sm" variant="outline">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-lg font-semibold sm:text-xl">Mes documents</h2>
+          <ButtonLink href="/#documents" size="sm" variant="outline" className="w-full sm:w-auto">
             Nouveau document
           </ButtonLink>
         </div>

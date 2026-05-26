@@ -3,8 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { BillingPaymentFields } from "@/components/forms/fields/billing-payment-fields";
 import { CompanyFields } from "@/components/forms/fields/company-fields";
 import { FormField, TextArea } from "@/components/forms/fields/form-field";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import {
   FormShell,
   ReviewBlock,
@@ -14,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
+import { billingPaymentDefaults } from "@/lib/schemas/billing-payment";
 import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
 import {
   DEVIS_STEPS,
@@ -24,6 +27,8 @@ import {
 
 const defaultValues: DevisFormValues = {
   ...companyDefaultValues,
+  ...billingPaymentDefaults,
+  paymentTerms: "Acompte de 30 % à la commande, solde à la livraison.",
   clientName: "",
   clientEmail: "",
   quoteNumber: "DEV-001",
@@ -167,11 +172,21 @@ export function DevisForm() {
               />
             </FormField>
           </div>
+          <BillingPaymentFields register={register} errors={formState.errors} />
+          <FormField
+            id="paymentTerms"
+            label="Conditions de paiement (optionnel)"
+            hint="Affichées sur le devis si renseignées — utile pour l'acompte"
+            error={formState.errors.paymentTerms?.message}
+          >
+            <TextArea id="paymentTerms" {...register("paymentTerms")} />
+          </FormField>
         </>
       )}
 
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="devis" />
           <ReviewBlock title="Devis">
             <p>
               N° {values.quoteNumber} — {values.quoteDate}

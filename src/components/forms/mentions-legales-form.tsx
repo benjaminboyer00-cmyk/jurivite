@@ -10,6 +10,7 @@ import {
   ReviewBlock,
   WatermarkNotice,
 } from "@/components/forms/shared/form-shell";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
@@ -109,19 +110,24 @@ export function MentionsLegalesForm() {
           </FormField>
           <FormField
             id="hostingProvider"
-            label="Hébergeur"
+            label="Hébergeur *"
+            hint="Nom commercial du prestataire qui héberge votre site (LCEN)"
             error={formState.errors.hostingProvider?.message}
           >
-            <Input {...register("hostingProvider")} placeholder="OVH, Vercel…" />
+            <Input
+              {...register("hostingProvider")}
+              placeholder="OVHcloud, Hetzner, Vercel, o2switch…"
+            />
           </FormField>
           <FormField
             id="hostingAddress"
-            label="Adresse de l'hébergeur"
+            label="Adresse postale de l'hébergeur *"
+            hint="Adresse figurant sur le contrat ou les mentions légales du prestataire"
             error={formState.errors.hostingAddress?.message}
           >
             <Input
               {...register("hostingAddress")}
-              placeholder="2 rue Kellermann, 59100 Roubaix"
+              placeholder="2 rue Kellermann, 59100 Roubaix, France"
             />
           </FormField>
         </>
@@ -129,6 +135,7 @@ export function MentionsLegalesForm() {
 
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="mentions-legales" />
           <ReviewBlock title="Entreprise">
             <p>{values.companyName} — {values.legalForm}</p>
             <p className="text-muted-foreground">SIRET {values.siret}</p>

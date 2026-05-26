@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import { CompanyFields } from "@/components/forms/fields/company-fields";
 import { FormField, TextArea } from "@/components/forms/fields/form-field";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import {
   FormShell,
   ReviewBlock,
@@ -25,6 +26,8 @@ import {
 const defaultValues: PolitiqueConfidentialiteFormValues = {
   ...companyDefaultValues,
   websiteUrl: "https://",
+  hostingProvider: "",
+  hostingAddress: "",
   dataCollected:
     "Nom, e-mail, message via formulaire de contact. Cookies analytics (Google Analytics).",
   processingPurpose:
@@ -92,6 +95,24 @@ export function PolitiqueConfidentialiteForm() {
             <Input type="url" {...register("websiteUrl")} />
           </FormField>
           <FormField
+            id="hostingProvider"
+            label="Hébergeur du site *"
+            hint="Sous-traitant RGPD — nom commercial (OVH, Hetzner, Vercel…)"
+            error={formState.errors.hostingProvider?.message}
+          >
+            <Input {...register("hostingProvider")} placeholder="OVHcloud" />
+          </FormField>
+          <FormField
+            id="hostingAddress"
+            label="Adresse de l'hébergeur *"
+            error={formState.errors.hostingAddress?.message}
+          >
+            <Input
+              {...register("hostingAddress")}
+              placeholder="2 rue Kellermann, 59100 Roubaix, France"
+            />
+          </FormField>
+          <FormField
             id="dataCollected"
             label="Données collectées"
             error={formState.errors.dataCollected?.message}
@@ -132,6 +153,7 @@ export function PolitiqueConfidentialiteForm() {
 
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="politique-confidentialite" />
           <ReviewBlock title="Responsable">
             <p>{values.companyName}</p>
             <p className="text-muted-foreground">{values.email}</p>
@@ -139,6 +161,9 @@ export function PolitiqueConfidentialiteForm() {
           <Separator />
           <ReviewBlock title="Traitement">
             <p className="text-muted-foreground">{values.websiteUrl}</p>
+            <p className="text-muted-foreground">
+              Hébergeur : {values.hostingProvider} — {values.hostingAddress}
+            </p>
             <p className="mt-2 whitespace-pre-wrap">{values.dataCollected}</p>
             <p className="mt-2 text-muted-foreground">
               {values.processingPurpose}

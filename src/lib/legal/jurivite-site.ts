@@ -41,8 +41,8 @@ export function isHostingConfigured(): boolean {
 
 /** Texte court — formulaires et bannières */
 export const LEGAL_MODEL_DISCLAIMER =
-  "Modèle structuré généré par JuriVite : ne remplace pas un conseil juridique. Vous restez responsable du contenu publié et de sa conformité à votre activité.";
+  "Modèle structuré généré par JuriVite : ne remplace pas un conseil juridique. Faites relire une CGV B2C et votre politique RGPD si vous collectez des données clients. Vous restez responsable du contenu publié.";
 
 /** Pied de page PDF — tous les documents */
 export const PDF_LEGAL_NOTICE =
-  "Document généré via JuriVite (modèle structuré). Ne constitue pas un conseil juridique. À adapter à votre situation ; faites relire par un professionnel du droit si nécessaire (B2C, secteur réglementé, montants élevés).";
+  "Document généré via JuriVite (modèle structuré). Ne constitue pas un conseil juridique. À adapter à votre situation ; faites relire par un professionnel du droit (CGV B2C, RGPD, conventions de stage, montants élevés).";

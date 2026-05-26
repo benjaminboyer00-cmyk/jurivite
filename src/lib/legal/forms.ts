@@ -9,6 +9,7 @@ export const LEGAL_FORM_OPTIONS = [
   "SASU",
   "SA",
   "Association loi 1901",
+  "Profession libérale (SEL / EI)",
   "Autre",
 ] as const;
 
@@ -23,8 +24,13 @@ export type LegalClassification = {
   isSociete: boolean;
   isAssociation: boolean;
   isProfessionLiberale: boolean;
+  /** Franchise en base art. 293 B du CGI (micro, AE, ou EI en franchise) */
   tvaMentionArticle293B: boolean;
   requiresShareCapital: boolean;
+  /** RCS obligatoire (sociétés commerciales, pas associations) */
+  requiresRcs: boolean;
+  /** Libellé du responsable de publication (mentions légales) */
+  publicationRoleLabel: string;
 };
 
 function normalizeForm(value: string): string {
@@ -33,6 +39,26 @@ function normalizeForm(value: string): string {
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .trim();
+}
+
+/**
+ * Détermine si la mention TVA art. 293 B s'applique.
+ * L'EI peut être en franchise ou assujettie : le champ `franchiseTva` tranche.
+ */
+export function usesFranchiseTva(
+  classification: Pick<
+    LegalClassification,
+    "isMicroEntreprise" | "isAutoEntrepreneur" | "isEntrepriseIndividuelle"
+  >,
+  franchiseTvaExplicit?: boolean | string,
+): boolean {
+  if (franchiseTvaExplicit === true || franchiseTvaExplicit === "true") {
+    return true;
+  }
+  if (franchiseTvaExplicit === false || franchiseTvaExplicit === "false") {
+    return false;
+  }
+  return classification.isMicroEntreprise || classification.isAutoEntrepreneur;
 }
 
 export function classifyLegalForm(legalForm: string): LegalClassification {
@@ -54,10 +80,16 @@ export function classifyLegalForm(legalForm: string): LegalClassification {
     legalFormNormalized.includes("association") ||
     legalFormNormalized.includes("loi 1901");
 
+  const isProfessionLiberale =
+    legalFormNormalized.includes("liberal") ||
+    legalFormNormalized.includes("libérale") ||
+    legalFormNormalized.includes("sel");
+
   const isSociete =
     !isMicroEntreprise &&
     !isAutoEntrepreneur &&
     !isAssociation &&
+    !isProfessionLiberale &&
     (legalFormNormalized.includes("sarl") ||
       legalFormNormalized.includes("sas") ||
       legalFormNormalized.includes("eurl") ||
@@ -66,11 +98,17 @@ export function classifyLegalForm(legalForm: string): LegalClassification {
       legalFormNormalized.includes("snc") ||
       /\bsasu\b/.test(legalFormNormalized));
 
-  const isProfessionLiberale =
-    legalFormNormalized.includes("liberal") ||
-    legalFormNormalized.includes("libérale");
+  const tvaMentionArticle293B =
+    isMicroEntreprise || isAutoEntrepreneur;
 
-  const tvaMentionArticle293B = isMicroEntreprise || isAutoEntrepreneur;
+  let publicationRoleLabel = "représentant légal de l'éditeur";
+  if (isAssociation) {
+    publicationRoleLabel = "président(e) ou responsable de l'association";
+  } else if (isMicroEntreprise || isAutoEntrepreneur || isEntrepriseIndividuelle) {
+    publicationRoleLabel = "entrepreneur / gérant";
+  } else if (isSociete) {
+    publicationRoleLabel = "représentant légal (gérant, président, etc.)";
+  }
 
   return {
     legalForm,
@@ -83,5 +121,7 @@ export function classifyLegalForm(legalForm: string): LegalClassification {
     isProfessionLiberale,
     tvaMentionArticle293B,
     requiresShareCapital: isSociete,
+    requiresRcs: isSociete,
+    publicationRoleLabel,
   };
 }

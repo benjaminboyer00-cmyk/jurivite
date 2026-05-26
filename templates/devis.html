@@ -17,7 +17,7 @@
     <p>
       <strong>{{companyName}}</strong> — {{legalForm}}<br />
       {{address}}<br />
-      SIRET : {{siret}} — {{email}} — {{phone}}
+      SIRET : {{siret}}{{#if siren}} — SIREN : {{siren}}{{/if}} — {{email}} — {{phone}}
       {{#if isSociete}}{{#if hasShareCapital}}<br />Capital social : {{shareCapital}} €{{/if}}{{#if hasRcs}} — RCS {{rcsCity}}{{/if}}{{/if}}
     </p>
 
@@ -41,7 +41,7 @@
         <tr>
           <td>{{serviceDescription}}</td>
           <td>{{amountHtFormatted}} €</td>
-          <td>{{vatRate}} %</td>
+          <td>{{#if showVatBreakdown}}{{vatRate}} %{{else}}—{{/if}}</td>
           <td>{{amountTtc}} €</td>
         </tr>
       </tbody>
@@ -57,6 +57,18 @@
       qu'après signature (manuscrite ou électronique) et, le cas échéant, versement de l'acompte
       convenu. Passé le délai de validité, les tarifs et disponibilités peuvent être révisés.
     </p>
+
+    {{#if hasIban}}
+    <h2>Modalités de paiement</h2>
+    <p>
+      <strong>Virement bancaire</strong><br />
+      {{#if bankAccountHolder}}Titulaire : {{bankAccountHolder}}<br />{{/if}}
+      IBAN : <strong>{{ibanFormatted}}</strong>{{#if hasBic}}<br />BIC : {{bic}}{{/if}}
+    </p>
+    {{/if}}
+    {{#if paymentTerms}}
+    <p style="white-space: pre-line">{{paymentTerms}}</p>
+    {{/if}}
 
     <div class="signature-block">
       <div class="signature-box">

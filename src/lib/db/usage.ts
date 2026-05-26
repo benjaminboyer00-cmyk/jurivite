@@ -10,20 +10,38 @@ function startOfCurrentMonth(): Date {
   return new Date(now.getFullYear(), now.getMonth(), 1);
 }
 
+/** PDF enregistrés ce mois (tous statuts filigrane). */
 export async function countMonthlyPdfGenerations(
   userId: string,
 ): Promise<number> {
+  return countMonthlyPdfGenerationsFiltered(userId, {});
+}
+
+/** PDF sans filigrane ce mois — base du quota Pro (20/mois). */
+export async function countMonthlyPdfWithoutWatermark(
+  userId: string,
+): Promise<number> {
+  return countMonthlyPdfGenerationsFiltered(userId, { withoutWatermarkOnly: true });
+}
+
+async function countMonthlyPdfGenerationsFiltered(
+  userId: string,
+  options: { withoutWatermarkOnly?: boolean },
+): Promise<number> {
   if (!db) return 0;
+
+  const conditions = [
+    eq(documents.userId, userId),
+    gte(documents.createdAt, startOfCurrentMonth()),
+  ];
+  if (options.withoutWatermarkOnly) {
+    conditions.push(eq(documents.hasWatermark, 0));
+  }
 
   const [row] = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(documents)
-    .where(
-      and(
-        eq(documents.userId, userId),
-        gte(documents.createdAt, startOfCurrentMonth()),
-      ),
-    );
+    .where(and(...conditions));
 
   return row?.count ?? 0;
 }
@@ -38,7 +56,7 @@ export async function canGeneratePdf(
     return { allowed: true, used: 0, limit: null };
   }
 
-  const used = await countMonthlyPdfGenerations(userId);
+  const used = await countMonthlyPdfWithoutWatermark(userId);
 
   if (used >= limit) {
     return {

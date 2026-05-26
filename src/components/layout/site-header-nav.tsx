@@ -21,17 +21,17 @@ export function SiteHeaderNav({ isLoggedIn }: SiteHeaderNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-md supports-[padding:max(0px)]:pt-[env(safe-area-inset-top)]">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:h-16 sm:gap-3 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-semibold tracking-tight transition-opacity hover:opacity-80"
+          className="flex min-w-0 items-center gap-2 font-semibold tracking-tight transition-opacity hover:opacity-80 sm:gap-2.5"
           onClick={() => setMobileOpen(false)}
         >
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
             <Scale className="size-4 text-primary" aria-hidden />
           </span>
-          <span>{siteConfig.name}</span>
+          <span className="truncate">{siteConfig.name}</span>
         </Link>
 
         <nav
@@ -66,7 +66,7 @@ export function SiteHeaderNav({ isLoggedIn }: SiteHeaderNavProps) {
 
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg border md:hidden"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-lg border md:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
@@ -103,7 +103,7 @@ export function SiteHeaderNav({ isLoggedIn }: SiteHeaderNavProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-lg px-3 py-3 text-sm font-medium transition-colors hover:bg-muted"
+                className="rounded-lg px-3 py-3.5 text-sm font-medium transition-colors hover:bg-muted"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}

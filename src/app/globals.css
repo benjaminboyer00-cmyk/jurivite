@@ -123,9 +123,11 @@
   }
   html {
     @apply scroll-smooth font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
-    @apply min-h-screen bg-background text-foreground antialiased;
+    @apply min-h-screen overflow-x-clip bg-background text-foreground antialiased;
     background-image:
       radial-gradient(
         ellipse 80% 50% at 50% -20%,
@@ -136,13 +138,41 @@
   ::selection {
     background: oklch(0.55 0.12 264 / 0.2);
   }
+  /* Cibles tactiles confortables sur téléphone */
+  @media (max-width: 639px) {
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea {
+      @apply min-h-11 text-base;
+    }
+  }
 }
 
 @layer utilities {
   .page-container {
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
   }
   .section-padding {
-    @apply py-16 sm:py-20;
+    @apply py-12 sm:py-16 md:py-20;
+  }
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  }
+  .legal-prose h2 {
+    @apply mt-8 text-xl font-semibold tracking-tight sm:text-2xl;
+  }
+  .legal-prose h3 {
+    @apply mt-6 text-lg font-semibold;
+  }
+  .legal-prose ul {
+    @apply list-disc space-y-2 pl-5;
+  }
+  .legal-prose a {
+    @apply break-words text-primary underline-offset-4 hover:underline;
+  }
+  .legal-prose code {
+    @apply break-all rounded bg-muted px-1 py-0.5 text-sm;
   }
 }

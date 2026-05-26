@@ -40,7 +40,7 @@ export function LegalPageLayout({
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <article className="page-container max-w-3xl py-12 sm:py-16">
+      <article className="page-container max-w-3xl py-10 sm:py-16">
         <nav
           className="mb-8 text-sm text-muted-foreground"
           aria-label="Fil d'Ariane"
@@ -64,7 +64,7 @@ export function LegalPageLayout({
         </div>
 
         <footer className="mt-12 border-t pt-8 text-sm text-muted-foreground">
-          <p>
+          <p className="flex flex-wrap gap-x-2 gap-y-1">
             Voir aussi :{" "}
             <Link href="/mentions-legales" className="text-primary hover:underline">
               Mentions légales

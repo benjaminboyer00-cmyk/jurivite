@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { LEGAL_FORM_OPTIONS } from "@/lib/legal/forms";
 import { classifyLegalForm } from "@/lib/legal/forms";
 import type { CompanyFields } from "@/lib/schemas/company";
+import { normalizeRna } from "@/lib/schemas/rna";
 import { normalizeSiretInput } from "@/lib/schemas/siret";
 
 type CompanyFieldsProps = {
@@ -22,9 +23,9 @@ export function CompanyFields({
   legalForm = "",
 }: CompanyFieldsProps) {
   const reg = register as UseFormRegister<CompanyFields>;
-  const { isSociete, tvaMentionArticle293B } = classifyLegalForm(
-    legalForm ?? "",
-  );
+  const classification = classifyLegalForm(legalForm ?? "");
+  const { isSociete, isAssociation, isEntrepriseIndividuelle, tvaMentionArticle293B } =
+    classification;
 
   return (
     <>
@@ -86,10 +87,48 @@ export function CompanyFields({
         </>
       )}
 
+      {(isEntrepriseIndividuelle || classification.isProfessionLiberale) && (
+        <FormField
+          id="franchiseTva"
+          label="Régime TVA"
+          hint="Micro/AE : franchise en base par défaut. EI : cochez si vous êtes en franchise (art. 293 B), sinon renseignez le n° de TVA."
+        >
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="size-4 rounded border-input"
+              {...reg("franchiseTva", {
+                setValueAs: (v) => v === true || v === "true" || v === "on",
+              })}
+            />
+            Franchise en base de TVA — art. 293 B du CGI
+          </label>
+        </FormField>
+      )}
+
+      {isAssociation && (
+        <FormField
+          id="rnaNumber"
+          label="N° RNA (association) *"
+          hint="Répertoire national des associations — obligatoire (format W + 9 chiffres, ex. W751234567)"
+          error={errors.rnaNumber?.message}
+        >
+          <Input
+            {...reg("rnaNumber", {
+              setValueAs: (v) => (v ? normalizeRna(String(v)) : ""),
+            })}
+            className="h-10 font-mono uppercase"
+            placeholder="W751234567"
+            maxLength={10}
+          />
+        </FormField>
+      )}
+
       {!tvaMentionArticle293B && (
         <FormField
           id="vatNumber"
-          label="N° de TVA intracommunautaire (optionnel)"
+          label="N° de TVA intracommunautaire"
+          hint="Obligatoire si vous êtes assujetti à la TVA (hors franchise 293 B)"
           error={errors.vatNumber?.message}
         >
           <Input

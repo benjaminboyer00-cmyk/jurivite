@@ -14,14 +14,15 @@
       Le site {{websiteUrl}} est édité par :<br />
       <strong>{{companyName}}</strong>, {{legalForm}},
       {{#if isSociete}}{{#if hasShareCapital}}au capital de {{shareCapital}} euros, {{/if}}{{#if hasRcs}}RCS {{rcsCity}}, {{/if}}{{/if}}
-      dont le siège est situé {{address}}, immatriculée sous le numéro SIRET {{siret}}.<br />
+      dont le siège est situé {{address}}, immatriculée sous le numéro SIRET {{siret}}{{#if siren}} (SIREN {{siren}}){{/if}}.<br />
+      {{#if hasRna}}RNA : {{rnaNumber}}<br />{{/if}}
       Contact : {{email}} — {{phone}}
     </p>
 
     <h2>Article 2 — Directeur de publication</h2>
     <p>
       Le directeur de la publication est : <strong>{{directorName}}</strong>, en qualité de
-      représentant légal de l'éditeur.
+      {{publicationRoleLabel}}.
     </p>
 
     <h2>Article 3 — Hébergement</h2>

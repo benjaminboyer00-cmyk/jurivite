@@ -39,7 +39,8 @@ export function LegalAcceptanceCheckbox({
       />
       <span>
         Je confirme avoir relu mes informations et comprendre que ce PDF est un{" "}
-        <strong>modèle</strong>, non un avis juridique. J&apos;accepte les{" "}
+        <strong>modèle</strong>, non un avis juridique (relecture CGV B2C / RGPD recommandée
+        selon mon activité). J&apos;accepte les{" "}
         <Link href="/cgu" className="text-primary underline" target="_blank">
           CGU
         </Link>{" "}

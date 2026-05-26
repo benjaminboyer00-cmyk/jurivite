@@ -10,7 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <p className="font-semibold">{siteConfig.name}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

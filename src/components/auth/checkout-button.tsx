@@ -43,12 +43,12 @@ export function CheckoutButton({
 
   return (
     <div className="space-y-3">
-      <label className="flex cursor-pointer gap-2 text-left text-xs leading-relaxed text-muted-foreground">
+      <label className="flex cursor-pointer gap-3 text-left text-xs leading-relaxed text-muted-foreground">
         <input
           type="checkbox"
           checked={acceptedCgv}
           onChange={(e) => setAcceptedCgv(e.target.checked)}
-          className="mt-0.5 size-3.5 shrink-0 rounded"
+          className="mt-0.5 size-4 shrink-0 rounded"
         />
         <span>
           J&apos;accepte les{" "}
@@ -68,7 +68,7 @@ export function CheckoutButton({
         onClick={handleCheckout}
         disabled={loading || !acceptedCgv}
         variant={plan === "business" ? "default" : "default"}
-        className="w-full"
+        className="h-11 w-full sm:h-9"
       >
         {loading ? "Redirection Stripe…" : (label ?? defaultLabel)}
       </Button>

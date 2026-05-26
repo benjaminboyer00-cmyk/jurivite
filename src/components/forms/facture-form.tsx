@@ -3,8 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { BillingPaymentFields } from "@/components/forms/fields/billing-payment-fields";
 import { CompanyFields } from "@/components/forms/fields/company-fields";
 import { FormField, TextArea } from "@/components/forms/fields/form-field";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import {
   FormShell,
   ReviewBlock,
@@ -13,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
+import { billingPaymentDefaults } from "@/lib/schemas/billing-payment";
 import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
 import {
   FACTURE_STEPS,
@@ -23,6 +26,7 @@ import {
 
 const defaultValues: FactureFormValues = {
   ...companyDefaultValues,
+  ...billingPaymentDefaults,
   clientName: "",
   clientAddress: "",
   invoiceNumber: `FAC-${new Date().getFullYear()}-001`,
@@ -31,7 +35,7 @@ const defaultValues: FactureFormValues = {
   serviceDescription: "",
   amountExclVat: 0,
   vatRate: 20,
-  paymentTerms: "Paiement par virement sous 30 jours à réception de facture.",
+  paymentTerms: "Échéance : 30 jours à réception de facture.",
 };
 
 export function FactureForm() {
@@ -95,17 +99,31 @@ export function FactureForm() {
               <Input className="h-10" type="number" {...register("vatRate", { valueAsNumber: true })} />
             </FormField>
           </div>
-          <FormField id="paymentTerms" label="Conditions de paiement" error={formState.errors.paymentTerms?.message}>
+          <BillingPaymentFields
+            register={register}
+            errors={formState.errors}
+            ibanRequired
+          />
+          <FormField
+            id="paymentTerms"
+            label="Délai et conditions complémentaires"
+            hint="Ex. échéance, acompte, pénalités convenues — l'IBAN figure automatiquement sur le PDF"
+            error={formState.errors.paymentTerms?.message}
+          >
             <TextArea id="paymentTerms" {...register("paymentTerms")} />
           </FormField>
         </>
       )}
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="facture" />
           <ReviewBlock title="Facture">
             <p>N° {values.invoiceNumber} — émise le {values.invoiceDate}</p>
             <p>Client : {values.clientName}</p>
             <p className="font-medium">{values.amountExclVat} € HT · TVA {values.vatRate} %</p>
+            {values.iban ? (
+              <p className="mt-2 text-muted-foreground">IBAN renseigné — affiché sur le PDF</p>
+            ) : null}
           </ReviewBlock>
           <WatermarkNotice />
         </div>

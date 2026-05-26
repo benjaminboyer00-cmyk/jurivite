@@ -17,7 +17,7 @@
     <p>
       <strong>{{companyName}}</strong> — {{legalForm}}<br />
       {{address}}<br />
-      SIRET : {{siret}} — {{email}} — {{phone}}
+      SIRET : {{siret}}{{#if siren}} — SIREN : {{siren}}{{/if}} — {{email}} — {{phone}}
       {{#if isSociete}}{{#if hasShareCapital}}<br />Capital : {{shareCapital}} €{{/if}}{{#if hasRcs}} — RCS {{rcsCity}}{{/if}}{{/if}}
       {{#if hasVatNumber}}<br />N° TVA : {{vatNumber}}{{/if}}
     </p>
@@ -44,12 +44,14 @@
           <td>{{amountHtFormatted}} €</td>
           <td>{{amountHtFormatted}} €</td>
         </tr>
+        {{#if showVatBreakdown}}
         <tr>
           <td colspan="3" style="text-align:right">TVA ({{vatRate}} %)</td>
           <td>{{vatAmountFormatted}} €</td>
         </tr>
+        {{/if}}
         <tr class="totals-row">
-          <td colspan="3" style="text-align:right">Total TTC</td>
+          <td colspan="3" style="text-align:right">{{#if showVatBreakdown}}Total TTC{{else}}Total (TTC){{/if}}</td>
           <td>{{amountTtc}} €</td>
         </tr>
       </tbody>
@@ -59,8 +61,8 @@
     <p class="tva-mention">TVA non applicable, article 293 B du CGI.</p>
     {{/if}}
 
-    <h2>Conditions de règlement</h2>
-    <p>{{paymentTerms}}</p>
+    <h2>Modalités de paiement</h2>
+    <p style="white-space: pre-line">{{paymentTermsFormatted}}</p>
     <p>
       En cas de retard, application des pénalités légales et de l'indemnité forfaitaire de
       recouvrement de 40 € (art. L.441-10 C. com.).

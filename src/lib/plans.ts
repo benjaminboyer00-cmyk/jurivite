@@ -1,4 +1,8 @@
+import { juriviteLegal } from "@/lib/legal/jurivite-site";
+
 export type Plan = "free" | "pro" | "business";
+
+export const DOCUMENT_CATALOG_SIZE = 10;
 
 export const PLAN_LIMITS = {
   free: {
@@ -54,3 +58,25 @@ export function stripePriceIdForPlan(plan: "pro" | "business"): string | undefin
   if (plan === "business") return process.env.STRIPE_PRICE_ID_BUSINESS;
   return process.env.STRIPE_PRICE_ID_PRO ?? process.env.STRIPE_PRICE_ID;
 }
+
+/** Libellés tarifs — alignés sur PLAN_LIMITS et le code d’application. */
+export const PLAN_MARKETING_FEATURES: Record<Plan, readonly string[]> = {
+  free: [
+    `${DOCUMENT_CATALOG_SIZE} types de documents juridiques`,
+    "Formulaires guidés",
+    "PDF avec filigrane",
+    "Sans carte bancaire",
+  ],
+  pro: [
+    `Catalogue complet (${DOCUMENT_CATALOG_SIZE} documents)`,
+    "20 PDF / mois sans filigrane",
+    "Historique & retéléchargement",
+    `Support e-mail : ${juriviteLegal.email}`,
+  ],
+  business: [
+    "Tout le plan Pro inclus",
+    "PDF illimités sans filigrane",
+    "Clé API REST (POST /api/v1/generate-pdf)",
+    "Automatisation (CRM, ERP…)",
+  ],
+};

@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PLAN_LIMITS } from "@/lib/plans";
+import { PLAN_MARKETING_FEATURES } from "@/lib/plans";
 import { createMetadata } from "@/lib/seo";
 import { faqPageJsonLd, productOffersJsonLd } from "@/lib/seo/json-ld";
 
@@ -53,12 +53,7 @@ const tiers = [
     title: "Gratuit",
     price: "0 €",
     description: "Tester et valider vos modèles",
-    features: [
-      "10 types de documents juridiques",
-      "Formulaires guidés",
-      "PDF avec filigrane",
-      "Sans carte bancaire",
-    ],
+    features: PLAN_MARKETING_FEATURES.free,
     cta: "outline" as const,
     href: "/#documents",
     ctaLabel: "Commencer gratuitement",
@@ -68,12 +63,7 @@ const tiers = [
     title: "Pro",
     price: "9 €",
     description: "Freelances & indépendants",
-    features: [
-      "20 PDF / mois sans filigrane",
-      "Historique & retéléchargement",
-      "CGV, RGPD, contrats, devis",
-      "Support e-mail",
-    ],
+    features: PLAN_MARKETING_FEATURES.pro,
     highlight: true,
     plan: "pro" as const,
     ctaLabel: "S'abonner Pro",
@@ -83,12 +73,7 @@ const tiers = [
     title: "Business",
     price: "30 €",
     description: "Entreprises & intégrations",
-    features: [
-      "PDF illimités sans filigrane",
-      "Clé API REST",
-      "Automatisation (CRM, ERP…)",
-      "Même catalogue de documents",
-    ],
+    features: PLAN_MARKETING_FEATURES.business,
     plan: "business" as const,
     ctaLabel: "S'abonner Business",
   },
@@ -102,14 +87,14 @@ export default async function TarifsPage() {
       <JsonLdScript data={[productOffersJsonLd(), faqPageJsonLd([...tarifsFaqs])]} />
       <div className="page-container section-padding">
       <header className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Tarifs</h1>
-        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">Tarifs</h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
           Commencez gratuitement, passez Pro pour 20 PDF/mois sans filigrane, ou
           Business pour l&apos;illimité et l&apos;API.
         </p>
       </header>
 
-      <div className="mt-12 grid gap-8 lg:grid-cols-3 lg:items-stretch">
+      <div className="mt-10 grid gap-6 sm:mt-12 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
         {tiers.map((tier) => (
           <Card
             key={tier.id}
@@ -169,10 +154,12 @@ export default async function TarifsPage() {
 
       <section className="mt-16 rounded-xl border bg-muted/30 p-6 text-sm sm:p-8">
         <h2 className="text-lg font-semibold">API Business</h2>
-        <p className="mt-2 text-muted-foreground">
-          <code className="rounded bg-muted px-1">POST /api/v1/generate-pdf</code>{" "}
+        <p className="mt-2 break-words text-muted-foreground">
+          <code className="break-all rounded bg-muted px-1 text-xs sm:text-sm">
+            POST /api/v1/generate-pdf
+          </code>{" "}
           — corps JSON identique au formulaire web. En-tête :{" "}
-          <code className="rounded bg-muted px-1">
+          <code className="break-all rounded bg-muted px-1 text-xs sm:text-sm">
             Authorization: Bearer jv_live_…
           </code>
         </p>

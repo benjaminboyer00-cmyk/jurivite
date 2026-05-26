@@ -4,6 +4,14 @@ import { companySchema } from "@/lib/schemas/company";
 
 export const rgpdDetailsSchema = z.object({
   websiteUrl: z.url("URL du site invalide"),
+  hostingProvider: z
+    .string()
+    .min(2, "Nom de l'hébergeur requis (sous-traitant RGPD)")
+    .max(120),
+  hostingAddress: z
+    .string()
+    .min(10, "Adresse postale de l'hébergeur requise")
+    .max(300),
   dataCollected: z
     .string()
     .min(20, "Listez les données collectées (formulaire, cookies…)")

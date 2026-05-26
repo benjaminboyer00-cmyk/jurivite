@@ -43,10 +43,10 @@ export default function RootLayout({
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans">
+      <body className="flex min-h-full flex-col font-sans supports-[padding:max(0px)]:pb-[env(safe-area-inset-bottom)]">
         <AuthSessionProvider>
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 min-w-0">{children}</main>
           <SiteFooter />
           <CookieBanner />
         </AuthSessionProvider>

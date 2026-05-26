@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { companySchema } from "@/lib/schemas/company";
+import { billingPaymentOptionalSchema } from "@/lib/schemas/billing-payment";
 
 export const devisDetailsSchema = z.object({
   clientName: z.string().min(2, "Nom du client requis").max(120),
@@ -23,7 +24,12 @@ export const devisDetailsSchema = z.object({
     .number()
     .min(0)
     .max(100),
-});
+  paymentTerms: z
+    .string()
+    .max(1000)
+    .optional()
+    .or(z.literal("")),
+}).merge(billingPaymentOptionalSchema);
 
 export const devisFormSchema = companySchema.merge(devisDetailsSchema);
 

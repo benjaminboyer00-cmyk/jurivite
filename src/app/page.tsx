@@ -49,25 +49,25 @@ export default function HomePage() {
       <JsonLdScript data={jsonLd} />
 
       <section className="relative overflow-hidden border-b bg-gradient-to-b from-primary/8 via-primary/3 to-background">
-        <div className="page-container py-16 sm:py-24">
-          <p className="mb-4 inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
+        <div className="page-container py-12 sm:py-16 md:py-24">
+          <p className="mb-4 inline-flex max-w-full flex-wrap items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary sm:text-sm">
             Générateur de documents juridiques en ligne
           </p>
-          <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-[2.75rem] lg:leading-[1.1]">
+          <h1 className="max-w-3xl text-[1.75rem] font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-[2.75rem] lg:leading-[1.1]">
             CGV, mentions légales, RGPD —{" "}
             <span className="text-primary">PDF structurés en 5 minutes</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg">
             JuriVite aide les freelances, auto-entrepreneurs et petites
             entreprises à générer les documents juridiques les plus recherchés
             sur Google. Évitez les amendes, sécurisez vos ventes et gagnez du
             temps sur la paperasse.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/generate/cgv" size="lg">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
+            <ButtonLink href="/generate/cgv" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
               Créer mes CGV gratuitement
             </ButtonLink>
-            <ButtonLink href="#documents" variant="outline" size="lg">
+            <ButtonLink href="#documents" variant="outline" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
               Voir tous les documents
             </ButtonLink>
           </div>

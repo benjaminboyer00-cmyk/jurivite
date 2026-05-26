@@ -96,9 +96,15 @@ export function ApiKeyPanel({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
             <p className="text-sm font-medium text-amber-950 dark:text-amber-100">
               Copiez cette clé maintenant — elle ne sera plus affichée.
             </p>
-            <div className="mt-2 flex gap-2">
-              <Input readOnly value={newKey} className="font-mono text-xs" />
-              <Button type="button" variant="outline" size="icon" onClick={copyKey}>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <Input readOnly value={newKey} className="min-w-0 font-mono text-xs" />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="size-11 shrink-0 self-end sm:size-9"
+                onClick={copyKey}
+              >
                 <Copy className="size-4" />
               </Button>
             </div>
@@ -115,12 +121,12 @@ export function ApiKeyPanel({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
             {keys.map((k) => (
               <li
                 key={k.id}
-                className="flex justify-between rounded-md border px-3 py-2"
+                className="flex flex-col gap-1 rounded-md border px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
               >
-                <span>
-                  {k.name} — <code>{k.keyPrefix}…</code>
+                <span className="min-w-0 break-words">
+                  {k.name} — <code className="break-all">{k.keyPrefix}…</code>
                 </span>
-                <span className="text-muted-foreground">
+                <span className="shrink-0 text-muted-foreground">
                   {k.lastUsedAt
                     ? `Utilisée ${new Date(k.lastUsedAt).toLocaleDateString("fr-FR")}`
                     : "Jamais utilisée"}

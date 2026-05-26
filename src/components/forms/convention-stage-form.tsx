@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 
 import { CompanyFields } from "@/components/forms/fields/company-fields";
 import { FormField, TextArea } from "@/components/forms/fields/form-field";
+import { ProfessionalAdviceBanner } from "@/components/legal/professional-advice-banner";
 import { FormShell, ReviewBlock, WatermarkNotice } from "@/components/forms/shared/form-shell";
+import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
@@ -22,6 +24,8 @@ const defaultValues: ConventionStageFormValues = {
   traineeName: "",
   traineeAddress: "",
   schoolName: "",
+  schoolAddress: "",
+  schoolRepresentative: "",
   tutorName: "",
   startDate: "",
   endDate: "",
@@ -63,6 +67,10 @@ export function ConventionStageForm() {
       )}
       {currentStep.id === "stage" && (
         <>
+          <Alert variant="warning" title="Convention officielle obligatoire">
+            Ce document est une base de travail. La convention tripartite signée par
+            l&apos;établissement (Cerfa / modèle de l&apos;école) est seule opposable.
+          </Alert>
           <FormField id="tutorName" label="Nom du tuteur de stage" error={formState.errors.tutorName?.message}>
             <Input className="h-10" {...register("tutorName")} />
           </FormField>
@@ -72,8 +80,19 @@ export function ConventionStageForm() {
           <FormField id="traineeAddress" label="Adresse du stagiaire" error={formState.errors.traineeAddress?.message}>
             <Input className="h-10" {...register("traineeAddress")} />
           </FormField>
-          <FormField id="schoolName" label="Établissement d'enseignement" error={formState.errors.schoolName?.message}>
-            <Input className="h-10" {...register("schoolName")} />
+          <FormField id="schoolName" label="Établissement d'enseignement *" error={formState.errors.schoolName?.message}>
+            <Input className="h-10" {...register("schoolName")} placeholder="Université / lycée / école" />
+          </FormField>
+          <FormField id="schoolAddress" label="Adresse de l'établissement *" error={formState.errors.schoolAddress?.message}>
+            <Input className="h-10" {...register("schoolAddress")} />
+          </FormField>
+          <FormField
+            id="schoolRepresentative"
+            label="Représentant de l'établissement *"
+            hint="Directeur, responsable des stages — signataire de la convention Cerfa"
+            error={formState.errors.schoolRepresentative?.message}
+          >
+            <Input className="h-10" {...register("schoolRepresentative")} placeholder="Mme Dupont, Proviseur" />
           </FormField>
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField id="startDate" label="Date de début" error={formState.errors.startDate?.message}>
@@ -101,6 +120,7 @@ export function ConventionStageForm() {
       )}
       {currentStep.id === "review" && (
         <div className="space-y-4">
+          <ProfessionalAdviceBanner slug="convention-stage" />
           <ReviewBlock title="Stage">
             <p>{values.traineeName} — {values.schoolName}</p>
             <p>{values.startDate} → {values.endDate}</p>

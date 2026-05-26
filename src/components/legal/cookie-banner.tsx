@@ -35,7 +35,7 @@ export function CookieBanner() {
     <div
       role="dialog"
       aria-label="Information cookies"
-      className="fixed inset-x-0 bottom-0 z-50 border-t bg-background/95 p-4 shadow-lg backdrop-blur-md sm:p-5"
+      className="fixed inset-x-0 top-14 z-40 border-b bg-background/95 px-4 py-4 shadow-lg backdrop-blur-md sm:top-auto sm:z-50 sm:border-b-0 sm:border-t sm:safe-bottom"
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed text-muted-foreground">
@@ -47,7 +47,7 @@ export function CookieBanner() {
           </Link>
           .
         </p>
-        <Button type="button" size="sm" onClick={accept} className="shrink-0">
+        <Button type="button" size="sm" onClick={accept} className="h-11 w-full shrink-0 sm:h-9 sm:w-auto">
           J&apos;ai compris
         </Button>
       </div>

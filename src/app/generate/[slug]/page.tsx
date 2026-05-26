@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
+import { DocumentLegalNotice } from "@/components/legal/document-legal-notice";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { documentForms } from "@/lib/documents/forms";
 import { getAllGenerateSlugs } from "@/lib/documents/seo-landings";
@@ -81,7 +82,7 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
       <JsonLdScript data={jsonLd} />
 
       <nav
-        className="mb-6 flex flex-wrap items-center gap-1 rounded-lg border bg-muted/20 px-3 py-2 text-sm text-muted-foreground"
+        className="mb-6 flex flex-wrap items-center gap-x-1 gap-y-1 rounded-lg border bg-muted/20 px-3 py-2.5 text-xs text-muted-foreground sm:text-sm"
         aria-label="Fil d'Ariane"
       >
         <Link href="/" className="hover:text-foreground">
@@ -106,15 +107,17 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
       </nav>
 
       <header className="mb-8 space-y-3 border-b border-border/60 pb-8">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl md:text-4xl">
           {page.h1}
         </h1>
-        <p className="text-lg leading-relaxed text-muted-foreground">
+        <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
           {page.intro}
         </p>
       </header>
 
       <FormComponent />
+
+      <DocumentLegalNotice documentSlug={page.documentSlug} />
 
       <article className="mt-16 space-y-12 border-t pt-12">
         <section>

@@ -40,7 +40,16 @@
     <p>
       Les données peuvent être communiquées aux prestataires techniques strictement nécessaires
       (hébergement, messagerie, CRM) dans le cadre de contrats conformes à l'article 28 du RGPD.
-      Aucun transfert hors Union européenne n'est effectué sans garanties appropriées.
+    </p>
+    {{#if hasHosting}}
+    <p>
+      <strong>Hébergeur du site :</strong> {{hostingProvider}} — {{hostingAddress}}.
+    </p>
+    {{/if}}
+    <p>
+      Tout transfert hors Union européenne (hébergeur, outils US, etc.) n'est effectué qu'avec
+      des garanties appropriées (clauses contractuelles types, décision d'adéquation) décrites
+      dans les contrats avec les sous-traitants concernés.
     </p>
 
     <h2>Article 6 — Vos droits</h2>

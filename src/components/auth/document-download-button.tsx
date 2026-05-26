@@ -44,6 +44,7 @@ export function DocumentDownloadButton({
       size="sm"
       onClick={handleDownload}
       disabled={loading}
+      className="h-11 w-full shrink-0 sm:h-8 sm:w-auto"
     >
       <Download className="size-4" />
       {loading ? "…" : "Retélécharger"}

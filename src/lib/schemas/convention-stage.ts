@@ -6,6 +6,11 @@ export const stageDetailsSchema = z.object({
   traineeName: z.string().min(2).max(120),
   traineeAddress: z.string().min(10).max(300),
   schoolName: z.string().min(2).max(200),
+  schoolAddress: z.string().min(10).max(300),
+  schoolRepresentative: z
+    .string()
+    .min(2, "Représentant de l'établissement requis")
+    .max(120),
   tutorName: z.string().min(2).max(120),
   startDate: z.string().min(3).max(40),
   endDate: z.string().min(3).max(40),

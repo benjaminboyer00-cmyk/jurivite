@@ -6,6 +6,14 @@
     <style><!-- LEGAL_STYLES --></style>
   </head>
   <body>
+    <p class="legal-notice" style="margin-bottom: 1.5rem; border: 1px solid #b45309; padding: 1rem;">
+      <strong>Document de travail — ne remplace pas le Cerfa officiel.</strong>
+      La convention de stage est un acte <strong>tripartite obligatoire</strong> (organisme d'accueil,
+      établissement d'enseignement, stagiaire) conformément à l'article L124-1 du Code de l'éducation.
+      Utilisez le modèle fourni par l'<strong>établissement scolaire</strong> ou la plateforme Cerfa ;
+      faites signer les trois parties avant le début du stage.
+    </p>
+
     <h1>Convention de Stage</h1>
     <p class="meta-block">
       Période : du <strong>{{startDate}}</strong> au <strong>{{endDate}}</strong><br />
@@ -15,53 +23,63 @@
     <h2>Article 1 — Organisme d'accueil</h2>
     <p>
       <strong>{{companyName}}</strong>, {{legalForm}}, {{address}}, SIRET {{siret}},
-      représentée par <strong>{{tutorName}}</strong> (tuteur de stage), {{email}} — {{phone}}.
+      représentée par <strong>{{tutorName}}</strong> en qualité de tuteur de stage,
+      {{email}} — {{phone}}.
     </p>
 
-    <h2>Article 2 — Stagiaire et établissement</h2>
+    <h2>Article 2 — Établissement d'enseignement</h2>
+    <p>
+      <strong>{{schoolName}}</strong><br />
+      {{schoolAddress}}<br />
+      Représenté(e) par : <strong>{{schoolRepresentative}}</strong>, en qualité de
+      responsable de l'établissement (signataire de la convention tripartite officielle).
+    </p>
+
+    <h2>Article 3 — Stagiaire</h2>
     <p>
       <strong>{{traineeName}}</strong>, demeurant {{traineeAddress}}, étudiant(e) de
-      <strong>{{schoolName}}</strong>.
+      l'établissement susmentionné.
     </p>
 
-    <h2>Article 3 — Objet du stage</h2>
+    <h2>Article 4 — Objet du stage</h2>
     <p><em>{{missionDescription}}</em></p>
 
-    <h2>Article 4 — Encadrement</h2>
+    <h2>Article 5 — Encadrement</h2>
     <p>
       Le stagiaire est placé sous la responsabilité de {{tutorName}}, qui veille à l'accueil,
-      l'encadrement pédagogique et l'évaluation des activités conformément à la convention
-      tripartite signée avec l'établissement d'enseignement.
+      l'encadrement pédagogique et l'évaluation des activités, en lien avec le référent pédagogique
+      de {{schoolName}}.
     </p>
 
-    <h2>Article 5 — Gratification</h2>
+    <h2>Article 6 — Gratification</h2>
     {{#if hasGratification}}
     <p>
-      Une gratification minimale est versée : <strong>{{gratificationAmount}}</strong>, conformément
-      aux articles L.124-6 et suivants du Code de l'éducation lorsque la durée du stage excède
+      Une gratification est versée : <strong>{{gratificationAmount}}</strong>, conformément
+      aux articles L124-6 et suivants du Code de l'éducation lorsque la durée du stage excède
       deux mois consécutifs.
     </p>
     {{else}}
     <p>
       Le stage n'ouvre pas droit à gratification lorsque sa durée est inférieure ou égale à deux
-      mois consécutifs, sauf disposition plus favorable de l'organisme.
+      mois consécutifs, sauf disposition plus favorable de l'organisme d'accueil.
     </p>
     {{/if}}
 
-    <h2>Article 6 — Assurance et protection</h2>
+    <h2>Article 7 — Assurance et protection</h2>
     <p>
       L'organisme d'accueil et l'établissement d'enseignement s'assurent que le stagiaire bénéficie
       de la couverture sociale requise (accident du travail, responsabilité civile) selon la
-      réglementation en vigueur.
+      réglementation en vigueur. L'attestation d'assurance de l'établissement doit être jointe
+      à la convention signée.
     </p>
 
-    <h2>Article 7 — Confidentialité</h2>
+    <h2>Article 8 — Confidentialité</h2>
     <p>
       Le stagiaire s'engage à respecter la confidentialité des informations auxquelles il pourrait
       avoir accès pendant le stage.
     </p>
 
-    <h2>Article 8 — Fin de stage</h2>
+    <h2>Article 9 — Fin de stage</h2>
     <p>
       À l'issue du stage, une attestation et, le cas échéant, une évaluation seront remises au
       stagiaire et transmises à l'établissement.
@@ -71,18 +89,26 @@
       <div class="signature-box">
         <strong>L'organisme d'accueil</strong><br />
         {{companyName}}<br /><br />
-        Le tuteur : {{tutorName}}
+        Le tuteur : {{tutorName}}<br />
+        Date et signature :
+      </div>
+      <div class="signature-box">
+        <strong>L'établissement d'enseignement</strong><br />
+        {{schoolName}}<br /><br />
+        {{schoolRepresentative}}<br />
+        Date et signature :
       </div>
       <div class="signature-box">
         <strong>Le stagiaire</strong><br />
         {{traineeName}}<br /><br />
-        Signature :
+        Date et signature :
       </div>
     </div>
 
     <p class="legal-notice">
-      Convention type — doit être complétée par la convention tripartite de l'établissement
-      (école, université) conformément à l'article L.124-1 du Code de l'éducation.
+      <strong>Rappel :</strong> transmettez ce document à l'établissement pour intégration au
+      Cerfa / convention officielle. JuriVite ne délivre pas de convention opposable sans
+      signature de l'école. Vérifiez durée maximale, gratification et couverture sociale.
     </p>
     <p class="doc-footer">Document généré via JuriVite — jurivite.fr</p>
   </body>
