@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import { verifyApiKey } from "@/lib/db/api-keys";
+import { captureServerError } from "@/lib/observability/sentry";
 import { generateDocument } from "@/lib/pdf/document-service";
-
-const bodySchema = z.object({
-  slug: z.string(),
-  data: z.record(z.string(), z.unknown()),
-});
+import { generatePdfBodySchema } from "@/lib/schemas/api-pdf";
 
 export async function POST(request: Request) {
   const authHeader = request.headers.get("authorization");
@@ -29,7 +25,7 @@ export async function POST(request: Request) {
 
   try {
     const json = await request.json();
-    const parsed = bodySchema.safeParse(json);
+    const parsed = generatePdfBodySchema.safeParse(json);
 
     if (!parsed.success) {
       return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
@@ -58,7 +54,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("[api/v1/generate-pdf]", error);
+    captureServerError(error, { route: "api-v1-generate-pdf" });
     return NextResponse.json({ error: "Erreur génération PDF" }, { status: 500 });
   }
 }

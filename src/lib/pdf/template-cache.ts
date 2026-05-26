@@ -1,6 +1,20 @@
 import Handlebars from "handlebars";
 
 import type { DocumentSlug } from "@/lib/documents/registry";
+
+/** Empêche l'échappement désactivé via {{{ }}} sur des données utilisateur */
+Handlebars.Utils.escapeExpression = (value: unknown) => {
+  if (value == null) return "";
+  const str = String(value);
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/`/g, "&#x60;")
+    .replace(/=/g, "&#x3D;");
+};
 import { documentSlugs } from "@/lib/documents/registry";
 import { loadTemplateSource } from "@/lib/pdf/templates";
 

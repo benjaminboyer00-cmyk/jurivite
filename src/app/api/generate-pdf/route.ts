@@ -1,19 +1,14 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import { auth } from "@/auth";
 import { captureServerError } from "@/lib/observability/sentry";
 import { generateDocument } from "@/lib/pdf/document-service";
-
-const bodySchema = z.object({
-  slug: z.string(),
-  data: z.record(z.string(), z.unknown()),
-});
+import { generatePdfBodySchema } from "@/lib/schemas/api-pdf";
 
 export async function POST(request: Request) {
   try {
     const json = await request.json();
-    const parsed = bodySchema.safeParse(json);
+    const parsed = generatePdfBodySchema.safeParse(json);
 
     if (!parsed.success) {
       return NextResponse.json({ error: "Requête invalide" }, { status: 400 });

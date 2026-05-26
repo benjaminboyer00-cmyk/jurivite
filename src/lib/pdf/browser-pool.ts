@@ -3,9 +3,11 @@ import puppeteer from "puppeteer";
 
 const PDF_TIMEOUT_MS = 45_000;
 
+/** Sandbox Chromium activé par défaut. Docker/VPS : PDF_CHROME_NO_SANDBOX=1 */
 const LAUNCH_ARGS = [
-  "--no-sandbox",
-  "--disable-setuid-sandbox",
+  ...(process.env.PDF_CHROME_NO_SANDBOX === "1"
+    ? ["--no-sandbox", "--disable-setuid-sandbox"]
+    : []),
   "--disable-dev-shm-usage",
   "--disable-gpu",
   "--disable-extensions",
@@ -40,12 +42,31 @@ export async function getSharedBrowser(): Promise<Browser> {
   return browser;
 }
 
+async function hardenPdfPage(page: Page): Promise<void> {
+  await page.setJavaScriptEnabled(false);
+  await page.setRequestInterception(true);
+
+  page.on("request", (req) => {
+    const url = req.url();
+    const isInline =
+      url === "about:blank" ||
+      url.startsWith("data:") ||
+      url.startsWith("blob:");
+    if (isInline) {
+      void req.continue();
+      return;
+    }
+    void req.abort("blockedbyclient");
+  });
+}
+
 export async function withPdfPage<T>(
   fn: (page: Page) => Promise<T>,
 ): Promise<T> {
   const browser = await getSharedBrowser();
   const page = await browser.newPage();
   page.setDefaultTimeout(PDF_TIMEOUT_MS);
+  await hardenPdfPage(page);
 
   try {
     return await fn(page);
