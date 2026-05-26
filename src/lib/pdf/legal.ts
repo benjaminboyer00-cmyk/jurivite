@@ -1,6 +1,6 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
 import { classifyLegalForm, usesFranchiseTva } from "@/lib/legal/forms";
-import { juriviteLegal } from "@/lib/legal/jurivite-site";
+import { juriviteLegal, PDF_LEGAL_NOTICE } from "@/lib/legal/jurivite-site";
 import { formatIbanDisplay, normalizeIban } from "@/lib/schemas/iban";
 
 export function safeFilePart(value: unknown, maxLength = 48): string {
@@ -112,6 +112,7 @@ export function enrichLegalContext(
     anneeCourante: now.getFullYear(),
     documentYear: now.getFullYear(),
     generatedAt: now.toISOString(),
+    pdfLegalDisclaimer: PDF_LEGAL_NOTICE,
   };
 }
 

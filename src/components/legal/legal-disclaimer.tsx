@@ -1,16 +1,31 @@
 import Link from "next/link";
 
 import { Alert } from "@/components/ui/alert";
-import { LEGAL_MODEL_DISCLAIMER } from "@/lib/legal/disclaimers";
+import {
+  DISCLAIMER_FULL_TEXT,
+  LEGAL_ACCEPTANCE_TEXT,
+  LEGAL_MODEL_DISCLAIMER,
+  SERVICE_DISCLAIMER,
+} from "@/lib/legal/jurivite-site";
 
 export function LegalDisclaimerBanner() {
   return (
-    <Alert variant="info" title="Information importante">
-      {LEGAL_MODEL_DISCLAIMER}{" "}
-      <Link href="/cgu" className="font-medium text-primary underline-offset-4 hover:underline">
-        CGU du service
-      </Link>
-      .
+    <Alert variant="info" title="Avertissement important">
+      <p className="leading-relaxed">{SERVICE_DISCLAIMER}</p>
+      <p className="mt-2 text-sm leading-relaxed">{LEGAL_MODEL_DISCLAIMER}</p>
+      <p className="mt-3 text-sm">
+        <Link href="/avis-juridique" className="font-medium text-primary underline">
+          Avis juridique complet
+        </Link>
+        {" · "}
+        <Link href="/confidentialite" className="font-medium text-primary underline">
+          Politique de confidentialité
+        </Link>
+        {" · "}
+        <Link href="/cgu" className="font-medium text-primary underline">
+          CGU
+        </Link>
+      </p>
     </Alert>
   );
 }
@@ -26,26 +41,36 @@ export function LegalAcceptanceCheckbox({
   id?: string;
 }) {
   return (
-    <label
-      htmlFor={id}
-      className="flex cursor-pointer gap-3 rounded-lg border border-amber-200/80 bg-amber-50/50 p-4 text-sm leading-relaxed dark:border-amber-900/50 dark:bg-amber-950/20"
-    >
-      <input
-        id={id}
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 size-4 shrink-0 rounded border-input"
-      />
-      <span>
-        Je confirme avoir relu mes informations et comprendre que ce PDF est un{" "}
-        <strong>modèle</strong>, non un avis juridique (relecture CGV B2C / RGPD recommandée
-        selon mon activité). J&apos;accepte les{" "}
-        <Link href="/cgu" className="text-primary underline" target="_blank">
-          CGU
-        </Link>{" "}
-        pour l&apos;usage du générateur.
-      </span>
-    </label>
+    <div className="space-y-3 rounded-lg border border-amber-300/80 bg-amber-50/60 p-4 dark:border-amber-800 dark:bg-amber-950/30">
+      <p className="text-sm font-semibold text-amber-950 dark:text-amber-100">
+        Avertissement important
+      </p>
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        {DISCLAIMER_FULL_TEXT}
+      </p>
+      <label
+        htmlFor={id}
+        className="flex cursor-pointer gap-3 text-sm leading-relaxed"
+      >
+        <input
+          id={id}
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="mt-0.5 size-4 shrink-0 rounded border-input"
+          required
+        />
+        <span>
+          {LEGAL_ACCEPTANCE_TEXT}{" "}
+          <Link href="/avis-juridique" className="text-primary underline" target="_blank">
+            (détail)
+          </Link>
+          {" · "}
+          <Link href="/cgu" className="text-primary underline" target="_blank">
+            CGU
+          </Link>
+        </span>
+      </label>
+    </div>
   );
 }

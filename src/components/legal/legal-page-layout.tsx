@@ -66,12 +66,20 @@ export function LegalPageLayout({
         <footer className="mt-12 border-t pt-8 text-sm text-muted-foreground">
           <p className="flex flex-wrap gap-x-2 gap-y-1">
             Voir aussi :{" "}
-            <Link href="/mentions-legales" className="text-primary hover:underline">
-              Mentions légales
+            <Link href="/avis-juridique" className="text-primary hover:underline">
+              Avis juridique
             </Link>
             {" · "}
             <Link href="/confidentialite" className="text-primary hover:underline">
               Confidentialité
+            </Link>
+            {" · "}
+            <Link href="/mentions-legales" className="text-primary hover:underline">
+              Mentions légales
+            </Link>
+            {" · "}
+            <Link href="/a-propos" className="text-primary hover:underline">
+              À propos
             </Link>
             {" · "}
             <Link href="/cgu" className="text-primary hover:underline">

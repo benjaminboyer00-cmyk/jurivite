@@ -1,1 +1,7 @@
-export { LEGAL_MODEL_DISCLAIMER, PDF_LEGAL_NOTICE } from "@/lib/legal/jurivite-site";
+export {
+  DISCLAIMER_FULL_TEXT,
+  LEGAL_ACCEPTANCE_TEXT,
+  LEGAL_MODEL_DISCLAIMER,
+  PDF_LEGAL_NOTICE,
+  SERVICE_DISCLAIMER,
+} from "@/lib/legal/jurivite-site";

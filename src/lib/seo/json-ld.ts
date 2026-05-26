@@ -1,4 +1,8 @@
 import { documents, type DocumentSlug } from "@/lib/documents/registry";
+import {
+  getPublisherSameAsLinks,
+  juriviteLegal,
+} from "@/lib/legal/jurivite-site";
 import { siteConfig } from "@/lib/seo";
 
 type FaqItem = { question: string; answer: string };
@@ -6,14 +10,35 @@ type FaqItem = { question: string; answer: string };
 type BreadcrumbItem = { name: string; path: string };
 
 export function organizationJsonLd() {
+  const sameAs = getPublisherSameAsLinks();
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: siteConfig.name,
+    name: juriviteLegal.siteName,
+    legalName: `${juriviteLegal.legalEntityName} (${juriviteLegal.tradeName})`,
     url: siteConfig.url,
     logo: `${siteConfig.url}/icon.svg`,
     description: siteConfig.description,
-    sameAs: [],
+    email: juriviteLegal.email,
+    telephone: juriviteLegal.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: juriviteLegal.address,
+      addressCountry: "FR",
+    },
+    identifier: {
+      "@type": "PropertyValue",
+      name: "SIRET",
+      value: juriviteLegal.siret,
+    },
+    founder: {
+      "@type": "Person",
+      name: juriviteLegal.legalEntityName,
+      jobTitle: juriviteLegal.publisherRole,
+      email: juriviteLegal.email,
+    },
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 }
 

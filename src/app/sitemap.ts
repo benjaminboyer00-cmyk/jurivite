@@ -27,16 +27,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${siteConfig.url}/a-propos`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${siteConfig.url}/avis-juridique`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.65,
+    },
+    {
       url: `${siteConfig.url}/mentions-legales`,
       lastModified: now,
       changeFrequency: "yearly",
-      priority: 0.5,
+      priority: 0.55,
     },
     {
       url: `${siteConfig.url}/confidentialite`,
       lastModified: now,
       changeFrequency: "yearly",
-      priority: 0.5,
+      priority: 0.65,
     },
     {
       url: `${siteConfig.url}/cgu`,

@@ -41,7 +41,16 @@ export function loadTemplateSource(slug: DocumentSlug): string {
     );
   }
 
-  const merged = raw.replace("<!-- LEGAL_STYLES -->", legalStylesCache);
+  let merged = raw.replace("<!-- LEGAL_STYLES -->", legalStylesCache);
+
+  if (!merged.includes("pdfLegalDisclaimer")) {
+    const disclaimerBlock = `
+    <p class="legal-notice" style="margin-top:1.5em;border:1px solid #999;padding:0.8em;">
+      <strong>Avertissement important</strong> — {{pdfLegalDisclaimer}}
+    </p>`;
+    merged = merged.replace("</body>", `${disclaimerBlock}\n</body>`);
+  }
+
   templateSourceCache.set(slug, merged);
   return merged;
 }

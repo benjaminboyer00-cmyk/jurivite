@@ -39,13 +39,13 @@ export function CookieBanner() {
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed text-muted-foreground">
-          JuriVite utilise des cookies <strong>strictement nécessaires</strong>{" "}
-          (session, sécurité). En production, des cookies de mesure d&apos;erreurs
-          (Sentry) peuvent être activés — détail dans la{" "}
+          Le site JuriVite (édité par Benjamin Boyer, EI « bzign ») utilise des cookies{" "}
+          <strong>strictement nécessaires</strong> (session). Des traceurs techniques
+          (Sentry) peuvent être activés en production — voir la{" "}
           <Link href="/confidentialite" className="text-primary underline">
             politique de confidentialité
           </Link>
-          .
+          . Vous pouvez retirer votre consentement en nous contactant.
         </p>
         <Button type="button" size="sm" onClick={accept} className="h-11 w-full shrink-0 sm:h-9 sm:w-auto">
           J&apos;ai compris

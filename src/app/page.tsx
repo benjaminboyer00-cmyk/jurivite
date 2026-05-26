@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, FileText, Shield, Zap } from "lucide-react";
 
+import { LegalTrustStrip } from "@/components/legal/legal-trust-strip";
 import { DocumentCard } from "@/components/marketing/document-card";
 import { HeroStats } from "@/components/marketing/hero-stats";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
@@ -81,6 +82,8 @@ export default function HomePage() {
           <HeroStats />
         </div>
       </section>
+
+      <LegalTrustStrip />
 
       <section id="documents" className="page-container section-padding">
         <header className="mb-10 max-w-2xl">

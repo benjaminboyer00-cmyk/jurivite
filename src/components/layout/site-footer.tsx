@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { documents } from "@/lib/documents/registry";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
+import { juriviteLegal } from "@/lib/legal/jurivite-site";
 import { siteConfig } from "@/lib/seo";
 
 export function SiteFooter() {
@@ -17,6 +18,14 @@ export function SiteFooter() {
               Générateur de documents juridiques pour freelances,
               auto-entrepreneurs et TPE. CGV, mentions légales, RGPD, contrats,
               devis — PDF en ligne.
+            </p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              {juriviteLegal.legalEntityName} — {juriviteLegal.tradeName} — SIRET{" "}
+              {juriviteLegal.siret}
+              <br />
+              <a href={`mailto:${juriviteLegal.email}`} className="text-primary hover:underline">
+                {juriviteLegal.email}
+              </a>
             </p>
           </div>
 
@@ -53,13 +62,23 @@ export function SiteFooter() {
             <p className="text-sm font-semibold">Informations légales</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/mentions-legales" className="hover:text-foreground">
-                  Mentions légales
+                <Link href="/avis-juridique" className="hover:text-foreground">
+                  Avis juridique (disclaimer)
                 </Link>
               </li>
               <li>
                 <Link href="/confidentialite" className="hover:text-foreground">
                   Politique de confidentialité
+                </Link>
+              </li>
+              <li>
+                <Link href="/mentions-legales" className="hover:text-foreground">
+                  Mentions légales
+                </Link>
+              </li>
+              <li>
+                <Link href="/a-propos" className="hover:text-foreground">
+                  À propos de l&apos;éditeur
                 </Link>
               </li>
               <li>
@@ -98,15 +117,26 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t pt-6 text-center text-xs leading-relaxed text-muted-foreground">
-          © {year} {siteConfig.name}. Documents générés = modèles structurés, non
-          un conseil juridique. Vous êtes responsable du contenu publié.{" "}
-          <Link href="/cgu" className="text-primary hover:underline">
-            CGU
+          © {year} {juriviteLegal.legalEntityName} / {juriviteLegal.tradeName} — {juriviteLegal.siteName}{" "}
+          (SIRET {juriviteLegal.siret}). Modèles
+          structurés — pas un conseil juridique.{" "}
+          <Link href="/avis-juridique" className="text-primary hover:underline">
+            Disclaimer
+          </Link>
+          {" · "}
+          <Link href="/confidentialite" className="text-primary hover:underline">
+            Confidentialité
           </Link>
           {" · "}
           <Link href="/mentions-legales" className="text-primary hover:underline">
             Mentions légales
           </Link>
+          {" · "}
+          <Link href="/cgu" className="text-primary hover:underline">
+            CGU
+          </Link>
+          {" · "}
+          v{juriviteLegal.softwareVersion}
         </p>
       </div>
     </footer>

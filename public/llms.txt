@@ -9,9 +9,24 @@ JuriVite permet de générer en PDF : CGV, mentions légales, politique de confi
 - Accueil: /
 - Catalogue générateurs: /generate
 - Tarifs: /tarifs
-- Mentions légales (site): /mentions-legales
-- Confidentialité (site): /confidentialite
-- CGV (site): /cgv
+- À propos (éditeur, SIRET): /a-propos
+- Avis juridique (disclaimer): /avis-juridique
+- Politique de confidentialité (RGPD): /confidentialite
+- Mentions légales (LCEN): /mentions-legales
+- CGU (service): /cgu
+- CGV (abonnements): /cgv
+
+## Éditeur (identifié)
+
+- Responsable: Benjamin Boyer, entrepreneur individuel (micro-entreprise)
+- Nom commercial: bzign
+- Service: JuriVite (https://jurivite.fr)
+- Siège: 12 rue Eugène Pottier, 93200 Saint-Denis, France
+- SIRET: 94430254600014
+- Contact: contact@jurivite.fr
+- Disclaimer: /avis-juridique
+- Confidentialité: /confidentialite
+- Version: 0.2.0 (CHANGELOG.md)
 
 ## 10 générateurs
 

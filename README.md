@@ -2,6 +2,21 @@
 
 Générateur de documents juridiques pour freelances et TPE — CGV, mentions légales, RGPD, contrats, devis.
 
+**Version :** voir [`VERSION`](./VERSION) et [`CHANGELOG.md`](./CHANGELOG.md).
+
+## Transparence & légal (site)
+
+| Page | URL |
+|------|-----|
+| Avis juridique (disclaimer) | `/avis-juridique` |
+| Politique de confidentialité | `/confidentialite` |
+| Mentions légales | `/mentions-legales` |
+| À propos de l'éditeur | `/a-propos` |
+| CGU | `/cgu` |
+| CGV abonnements | `/cgv` |
+
+Éditeur : micro-entreprise JuriVite — SIRET `94430254600014`. Identité complète dans `src/lib/legal/jurivite-site.ts` et variables `JURIVITE_*` (voir `.env.example`).
+
 ## Prérequis
 
 - Node.js 20+ (`fnm use`)
