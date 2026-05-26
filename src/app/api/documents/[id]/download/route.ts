@@ -8,7 +8,8 @@ import { isDocumentSlug } from "@/lib/documents/registry";
 import { captureServerError } from "@/lib/observability/sentry";
 import { sanitizePdfPayload } from "@/lib/pdf/sanitize-payload";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
-import { hasNoWatermark } from "@/lib/plans";
+import { getDocumentAccess } from "@/lib/db/entitlements";
+import type { Plan } from "@/lib/plans";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -39,8 +40,13 @@ export async function POST(_request: Request, context: RouteContext) {
     where: eq(users.id, session.user.id),
   });
 
-  const plan = user?.plan ?? "free";
-  const withWatermark = !hasNoWatermark(plan);
+  const plan = (user?.plan ?? "free") as Plan;
+  const access = await getDocumentAccess(
+    session.user.id,
+    doc.slug,
+    plan,
+  );
+  const withWatermark = !access.canDownloadWithoutWatermark;
 
   try {
     const pdfBuffer = await generatePdfBuffer(

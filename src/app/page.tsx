@@ -73,11 +73,11 @@ export default function HomePage() {
             </ButtonLink>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Gratuit (filigrane) · Pro 9 €/mo (20 PDF) ·{" "}
+            Gratuit (filigrane) · Document{" "}
             <Link href="/tarifs" className="font-medium text-primary hover:underline">
-              Business 30 €/mo
+              4,90 €
             </Link>{" "}
-            (illimité + API)
+            · Pack 19,90 € · Pro 29,90 €/mois
           </p>
           <HeroStats />
         </div>

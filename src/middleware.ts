@@ -19,7 +19,10 @@ async function applyApiRateLimits(
     return enforceRateLimit(request, "pdf", RATE_LIMITS.pdf);
   }
 
-  if (pathname === "/api/checkout") {
+  if (
+    pathname === "/api/checkout" ||
+    pathname === "/api/checkout/one-shot"
+  ) {
     return enforceRateLimit(request, "checkout", RATE_LIMITS.checkout);
   }
 
@@ -68,6 +71,7 @@ export const config = {
     "/api/generate-pdf",
     "/api/v1/generate-pdf",
     "/api/checkout",
+    "/api/checkout/one-shot",
     "/api/api-keys",
   ],
 };

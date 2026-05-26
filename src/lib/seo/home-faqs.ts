@@ -12,7 +12,7 @@ export const homeFaqs = [
   {
     question: "Combien coûte JuriVite ?",
     answer:
-      "Gratuit avec filigrane. Pro à 9 €/mois (20 PDF sans filigrane). Business à 30 €/mois (illimité + clé API).",
+      "Gratuit avec filigrane. Document à 4,90 €, pack 3 documents à 19,90 €, abonnement Pro à 29,90 €/mois (illimité). Business sur devis (API).",
   },
   {
     question: "Les PDF sont-ils conformes pour un site français ?",

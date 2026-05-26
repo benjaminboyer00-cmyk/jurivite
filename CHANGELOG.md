@@ -4,6 +4,20 @@ Toutes les modifications notables du projet JuriVite sont documentées dans ce f
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le versionnement [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [0.3.0] — 2026-05-26
+
+### Ajouté
+
+- Tarification hybride : document **4,90 €**, pack **19,90 €**, abonnement **Pro 29,90 €/mois**
+- Checkout Stripe one-shot (`/api/checkout/one-shot`) + droits document (`purchase`, `document_entitlement`)
+- Configurateur d'offre sur `/tarifs`, CTA achat depuis les formulaires (filigrane)
+- Mises à jour à vie (document unitaire) et crédits pack (3 documents / 3 mois)
+
+### Modifié
+
+- Pro : PDF illimités (plus de quota 20/mois) ; Business : sur devis uniquement (pas de checkout public)
+- CGV, accueil, FAQ et JSON-LD alignés sur les nouveaux prix
+
 ## [0.2.0] — 2026-05-26
 
 ### Ajouté

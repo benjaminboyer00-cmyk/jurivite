@@ -16,8 +16,12 @@ import { captureServerError } from "@/lib/observability/sentry";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
 import { buildDocumentFileName } from "@/lib/pdf/legal";
 import { sanitizePdfPayload } from "@/lib/pdf/sanitize-payload";
+import {
+  ensureEntitlementOnGenerate,
+  getDocumentAccess,
+} from "@/lib/db/entitlements";
 import type { Plan } from "@/lib/plans";
-import { hasNoWatermark } from "@/lib/plans";
+import { hasPaidSubscription } from "@/lib/plans";
 import { validatePdfPayload } from "@/lib/schemas/pdf-payloads";
 import { companySchema } from "@/lib/schemas/company";
 
@@ -75,7 +79,18 @@ export async function generateDocument(
     }
   }
 
-  const withWatermark = !hasNoWatermark(plan);
+  let withWatermark = true;
+  if (userId) {
+    const access = await getDocumentAccess(
+      userId,
+      slug as DocumentSlug,
+      plan,
+    );
+    withWatermark = !access.canDownloadWithoutWatermark;
+  } else if (hasPaidSubscription(plan)) {
+    withWatermark = false;
+  }
+
   const sanitizedData = sanitizePdfPayload(validated.data);
 
   let pdfBuffer: Buffer;
@@ -104,6 +119,14 @@ export async function generateDocument(
     slug as DocumentSlug,
     validated.data,
   );
+
+  if (userId && !withWatermark) {
+    await ensureEntitlementOnGenerate(
+      userId,
+      slug as DocumentSlug,
+      plan,
+    );
+  }
 
   if (userId && db && !input.skipPersist) {
     const companyParse = companySchema.safeParse(validated.data);

@@ -61,7 +61,9 @@ JuriVite permet de générer en PDF : CGV, mentions légales, politique de confi
 ## Tarification
 
 - Gratuit: PDF avec filigrane
-- Pro: 9 EUR/mois, 20 PDF sans filigrane
+- Document: 4.90 EUR one-shot, mises a jour a vie sur le slug
+- Pack Essentiel: 19.90 EUR, 3 documents
+- Pro: 29.90 EUR/mois, PDF illimites sans filigrane
 - Business: 30 EUR/mois, illimité + API REST
 
 ## API

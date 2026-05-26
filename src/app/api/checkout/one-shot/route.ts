@@ -5,12 +5,24 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { stripePriceIdForPlan } from "@/lib/plans";
+import { documentSlugs } from "@/lib/documents/registry";
+import {
+  formatPriceEur,
+  ONE_SHOT_PRODUCTS,
+  stripePriceIdForOneShot,
+  type OneShotProduct,
+} from "@/lib/plans";
 import { stripe } from "@/lib/stripe";
 import { siteConfig } from "@/lib/seo";
 
+const slugTuple = documentSlugs as [
+  (typeof documentSlugs)[number],
+  ...(typeof documentSlugs)[number][],
+];
+
 const bodySchema = z.object({
-  plan: z.literal("pro"),
+  product: z.enum(["single_doc", "pack_essential"]),
+  slug: z.enum(slugTuple).optional(),
   acceptedCgv: z.literal(true, {
     error: "Acceptation des CGV requise",
   }),
@@ -33,16 +45,29 @@ export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Acceptation des CGV et CGU requise" },
+      { error: parsed.error.issues[0]?.message ?? "Requête invalide" },
       { status: 400 },
     );
   }
-  const plan = parsed.data.plan;
 
-  const priceId = stripePriceIdForPlan(plan);
+  const { product } = parsed.data;
+
+  if (product === "single_doc" && !parsed.data.slug) {
+    return NextResponse.json(
+      { error: "Choisissez le document à débloquer." },
+      { status: 400 },
+    );
+  }
+
+  const priceId = stripePriceIdForOneShot(product);
   if (!priceId) {
     return NextResponse.json(
-      { error: "STRIPE_PRICE_ID_PRO manquant" },
+      {
+        error:
+          product === "single_doc"
+            ? "STRIPE_PRICE_ID_SINGLE_DOC manquant"
+            : "STRIPE_PRICE_ID_PACK_ESSENTIAL manquant",
+      },
       { status: 503 },
     );
   }
@@ -66,28 +91,29 @@ export async function POST(request: Request) {
       .where(eq(users.id, session.user.id));
   }
 
-  const currentPlan = user?.plan ?? "free";
-  if (currentPlan === "pro" || currentPlan === "business") {
-    return NextResponse.json(
-      { error: "Vous avez déjà un abonnement actif. Gérez-le depuis Mon compte." },
-      { status: 400 },
-    );
-  }
+  const productInfo = ONE_SHOT_PRODUCTS[product as OneShotProduct];
+  const slug = parsed.data.slug;
 
   const checkoutSession = await stripe.checkout.sessions.create({
     customer: customerId,
     client_reference_id: session.user.id,
-    mode: "subscription",
+    mode: "payment",
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${siteConfig.url}/dashboard?checkout=success&plan=${plan}`,
-    cancel_url: `${siteConfig.url}/tarifs?checkout=cancel`,
-    metadata: { userId: session.user.id, plan, acceptedCgv: "true" },
-    subscription_data: {
-      metadata: { userId: session.user.id, plan },
+    success_url: slug
+      ? `${siteConfig.url}/generate/${slug}?checkout=success&product=${product}`
+      : `${siteConfig.url}/dashboard?checkout=success&product=${product}`,
+    cancel_url: slug
+      ? `${siteConfig.url}/generate/${slug}?checkout=cancel`
+      : `${siteConfig.url}/tarifs?checkout=cancel`,
+    metadata: {
+      userId: session.user.id,
+      product,
+      acceptedCgv: "true",
+      ...(slug ? { slug } : {}),
     },
     custom_text: {
-      terms_of_service_acceptance: {
-        message: `J'accepte les Conditions Générales de Vente de JuriVite (${siteConfig.url}/cgv).`,
+      submit: {
+        message: `${productInfo.label} — ${formatPriceEur(productInfo.price)} TTC`,
       },
     },
   });

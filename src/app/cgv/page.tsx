@@ -9,7 +9,7 @@ import { getContractPartyLabel, juriviteLegal } from "@/lib/legal/jurivite-site"
 export const metadata: Metadata = legalPageMetadata({
   title: "Conditions Générales de Vente",
   description:
-    "CGV abonnements JuriVite : Pro 9€, Business 30€, micro-entreprise Benjamin Boyer / bzign.",
+    "CGV JuriVite : document 4,90€, pack 19,90€, Pro 29,90€/mois, Business sur devis.",
   path: "/cgv",
 });
 
@@ -44,10 +44,19 @@ export default function CgvPage() {
             <strong>Gratuit</strong> : PDF avec filigrane, sans limite de volume.
           </li>
           <li>
-            <strong>Pro — 9 € TTC / mois</strong> : 20 PDF / mois sans filigrane, historique.
+            <strong>Document à l&apos;unité — 4,90 € TTC</strong> : 1 document sans
+            filigrane, mises à jour à vie sur ce document (achat unique).
           </li>
           <li>
-            <strong>Business — 30 € TTC / mois</strong> : PDF illimités, API REST.
+            <strong>Pack Essentiel — 19,90 € TTC</strong> : 3 documents au choix,
+            mises à jour pendant 3 mois.
+          </li>
+          <li>
+            <strong>Pro — 29,90 € TTC / mois</strong> : tous les documents en PDF
+            illimités sans filigrane, mises à jour continues.
+          </li>
+          <li>
+            <strong>Business — sur devis</strong> : API REST, volume, intégration.
           </li>
         </ul>
         <p className="mt-3">

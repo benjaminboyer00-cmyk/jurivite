@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const plan = await resolveUserPlan(session.user.id);
   if (plan !== "business") {
     return NextResponse.json(
-      { error: "Clés API réservées au plan Business (30 €/mois)" },
+      { error: "Clés API réservées au plan Business (sur devis)" },
       { status: 403 },
     );
   }

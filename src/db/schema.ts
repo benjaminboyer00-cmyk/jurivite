@@ -12,6 +12,11 @@ import type { AdapterAccountType } from "next-auth/adapters";
 
 export const planEnum = pgEnum("plan", ["free", "pro", "business"]);
 
+export const purchaseTypeEnum = pgEnum("purchase_type", [
+  "single_doc",
+  "pack_essential",
+]);
+
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
@@ -99,6 +104,40 @@ export const apiKeys = pgTable("api_key", {
   lastUsedAt: timestamp("last_used_at", { mode: "date" }),
 });
 
+/** Achats one-shot (document unitaire ou pack 3 documents) */
+export const purchases = pgTable("purchase", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: purchaseTypeEnum("type").notNull(),
+  stripeCheckoutSessionId: text("stripe_checkout_session_id").unique(),
+  /** Crédits restants (pack uniquement) */
+  documentsRemaining: integer("documents_remaining").notNull().default(0),
+  /** Fin des mises à jour pour les documents du pack */
+  updatesUntil: timestamp("updates_until", { mode: "date" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
+/** Droit de télécharger sans filigrane + mises à jour pour un slug */
+export const documentEntitlements = pgTable("document_entitlement", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  slug: text("slug").notNull(),
+  purchaseId: text("purchase_id").references(() => purchases.id, {
+    onDelete: "set null",
+  }),
+  updatesForever: integer("updates_forever").notNull().default(0),
+  updatesUntil: timestamp("updates_until", { mode: "date" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
 export const documents = pgTable("document", {
   id: text("id")
     .primaryKey()
@@ -123,7 +162,28 @@ export const usersRelations = relations(users, ({ many }) => ({
   companies: many(companies),
   documents: many(documents),
   apiKeys: many(apiKeys),
+  purchases: many(purchases),
+  documentEntitlements: many(documentEntitlements),
 }));
+
+export const purchasesRelations = relations(purchases, ({ one, many }) => ({
+  user: one(users, { fields: [purchases.userId], references: [users.id] }),
+  entitlements: many(documentEntitlements),
+}));
+
+export const documentEntitlementsRelations = relations(
+  documentEntitlements,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [documentEntitlements.userId],
+      references: [users.id],
+    }),
+    purchase: one(purchases, {
+      fields: [documentEntitlements.purchaseId],
+      references: [purchases.id],
+    }),
+  }),
+);
 
 export const apiKeysRelations = relations(apiKeys, ({ one }) => ({
   user: one(users, { fields: [apiKeys.userId], references: [users.id] }),

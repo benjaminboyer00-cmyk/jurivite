@@ -6,11 +6,8 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { captureServerError } from "@/lib/observability/sentry";
 import type { Plan } from "@/lib/plans";
-import {
-  applyPlanToUser,
-  resolvePlanFromSubscription,
-  resolveUserIdFromCheckoutSession,
-} from "@/lib/stripe/sync-user-plan";
+import { handleCheckoutSessionCompleted } from "@/lib/stripe/handle-checkout-completed";
+import { resolvePlanFromSubscription } from "@/lib/stripe/sync-user-plan";
 import { stripe } from "@/lib/stripe";
 import {
   StripeWebhookVerificationError,
@@ -52,29 +49,9 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        const userId = await resolveUserIdFromCheckoutSession(session);
-        const customerId = session.customer as string | null;
-        const subscriptionId = session.subscription as string | null;
-
-        let plan: Plan =
-          session.metadata?.plan === "business" ? "business" : "pro";
-
-        if (subscriptionId) {
-          const sub = await stripe.subscriptions.retrieve(subscriptionId);
-          plan = await resolvePlanFromSubscription(sub);
-        }
-
-        if (!userId) {
-          console.warn(
-            `[stripe webhook] checkout.session.completed — utilisateur introuvable (session ${session.id})`,
-          );
-          break;
-        }
-
-        await applyPlanToUser(userId, plan, customerId, subscriptionId);
-
+        await handleCheckoutSessionCompleted(session);
         console.info(
-          `[stripe webhook] utilisateur ${userId} → plan ${plan} (session ${session.id})`,
+          `[stripe webhook] checkout.session.completed ${session.mode} (${session.id})`,
         );
         break;
       }

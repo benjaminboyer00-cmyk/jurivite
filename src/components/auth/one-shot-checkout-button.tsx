@@ -4,25 +4,42 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import type { DocumentSlug } from "@/lib/documents/registry";
+import type { OneShotProduct } from "@/lib/plans";
+import { formatPriceEur, ONE_SHOT_PRODUCTS } from "@/lib/plans";
 
-export function CheckoutButton({
+export function OneShotCheckoutButton({
+  product,
+  slug,
   label,
 }: {
+  product: OneShotProduct;
+  slug?: DocumentSlug;
   label?: string;
 }) {
   const [loading, setLoading] = useState(false);
   const [acceptedCgv, setAcceptedCgv] = useState(false);
 
-  const defaultLabel = "S'abonner Pro — 29,90 €/mois";
+  const info = ONE_SHOT_PRODUCTS[product];
+  const defaultLabel =
+    product === "single_doc"
+      ? `Acheter — ${formatPriceEur(info.price)}`
+      : `Pack Essentiel — ${formatPriceEur(info.price)}`;
 
   async function handleCheckout() {
     if (!acceptedCgv) return;
+    if (product === "single_doc" && !slug) return;
+
     setLoading(true);
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetch("/api/checkout/one-shot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "pro", acceptedCgv: true }),
+        body: JSON.stringify({
+          product,
+          slug,
+          acceptedCgv: true,
+        }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Erreur Stripe");
@@ -52,15 +69,14 @@ export function CheckoutButton({
           <Link href="/cgu" className="text-primary underline" target="_blank">
             CGU
           </Link>
-          . Pour un contenu numérique fourni immédiatement, je demande l&apos;exécution
-          immédiate et reconnais perdre mon droit de rétractation une fois le service
-          commencé (art. L221-28 C. consom.).
+          . Exécution immédiate du contenu numérique — renonciation au droit de
+          rétractation une fois le service commencé (art. L221-28).
         </span>
       </label>
       <Button
         onClick={handleCheckout}
         disabled={loading || !acceptedCgv}
-        variant="default"
+        variant={product === "pack_essential" ? "default" : "outline"}
         className="h-11 w-full sm:h-9"
       >
         {loading ? "Redirection Stripe…" : (label ?? defaultLabel)}

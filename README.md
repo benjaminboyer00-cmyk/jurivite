@@ -45,7 +45,7 @@ npm run dev
 | PDF Puppeteer | `POST /api/generate-pdf` |
 | Auth Google + Magic Link | `/api/auth/[...nextauth]`, `/login` |
 | Dashboard | `/dashboard` (historique + retéléchargement) |
-| Stripe Pro 9€/mo | `/api/checkout`, `/api/webhooks/stripe` |
+| Stripe (one-shot + Pro) | `/api/checkout`, `/api/checkout/one-shot`, webhooks |
 | SEO | `/generate/[slug]`, `/sitemap.xml`, `/robots.txt` |
 
 ## PDF local

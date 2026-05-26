@@ -63,7 +63,7 @@ export async function canGeneratePdf(
       allowed: false,
       used,
       limit,
-      reason: `Quota atteint : ${limit} PDF par mois (plan ${plan}). Passez Business pour l'illimité.`,
+      reason: `Quota atteint : ${limit} PDF par mois (plan ${plan}).`,
     };
   }
 

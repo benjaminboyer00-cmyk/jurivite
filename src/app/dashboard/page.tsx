@@ -3,26 +3,31 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { FileText } from "lucide-react";
+import { eq } from "drizzle-orm";
 
 import { SessionPlanSync } from "@/components/auth/session-plan-sync";
 import { CheckoutButton } from "@/components/auth/checkout-button";
+import { OneShotCheckoutButton } from "@/components/auth/one-shot-checkout-button";
 import { DocumentDownloadButton } from "@/components/auth/document-download-button";
 import { AccountPrivacyPanel } from "@/components/dashboard/account-privacy-panel";
 import { ApiKeyPanel } from "@/components/dashboard/api-key-panel";
 import { Alert } from "@/components/ui/alert";
-import { ProgressBar } from "@/components/ui/progress-bar";
-import { eq } from "drizzle-orm";
-
 import { auth, signOut } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { listApiKeys } from "@/lib/db/api-keys";
 import {
-  countMonthlyPdfGenerations,
-  countMonthlyPdfWithoutWatermark,
-} from "@/lib/db/usage";
+  getPackCreditsRemaining,
+  listUserEntitlements,
+} from "@/lib/db/entitlements";
+import { countMonthlyPdfGenerations } from "@/lib/db/usage";
 import { getUserDocuments } from "@/lib/db/documents";
-import { PLAN_LIMITS, type Plan } from "@/lib/plans";
+import {
+  formatPriceEur,
+  PLAN_LIMITS,
+  PRICING,
+  type Plan,
+} from "@/lib/plans";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -34,6 +39,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createMetadata } from "@/lib/seo";
+import { juriviteLegal } from "@/lib/legal/jurivite-site";
 
 export const metadata: Metadata = createMetadata({
   title: "Mon tableau de bord",
@@ -49,7 +55,7 @@ function planBadgeLabel(plan: Plan) {
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ checkout?: string; plan?: string }>;
+  searchParams: Promise<{ checkout?: string; plan?: string; product?: string }>;
 }) {
   const session = await auth();
   if (!session?.user) redirect("/login");
@@ -57,13 +63,9 @@ export default async function DashboardPage({
   const params = await searchParams;
   const plan = session.user.plan;
   const docs = await getUserDocuments(session.user.id);
-  const usedThisMonthAll = await countMonthlyPdfGenerations(session.user.id);
-  const usedThisMonthClean = await countMonthlyPdfWithoutWatermark(
-    session.user.id,
-  );
-  const limit = PLAN_LIMITS[plan].pdfPerMonth;
-  const usedThisMonth =
-    plan === "pro" ? usedThisMonthClean : usedThisMonthAll;
+  const usedThisMonth = await countMonthlyPdfGenerations(session.user.id);
+  const packCredits = await getPackCreditsRemaining(session.user.id);
+  const entitlements = await listUserEntitlements(session.user.id);
 
   const dbUser = db
     ? await db.query.users.findFirst({
@@ -87,15 +89,27 @@ export default async function DashboardPage({
       </Suspense>
       {params.checkout === "success" && (
         <Alert variant="success" title="Paiement confirmé" className="mb-6">
-          Plan{" "}
-          <strong>{params.plan === "business" ? "Business" : "Pro"}</strong> — activation
-          en cours (quelques secondes).
+          {params.product === "pack_essential" ? (
+            <>
+              Pack Essentiel activé — <strong>{packCredits}</strong> document(s)
+              à débloquer depuis les générateurs.
+            </>
+          ) : params.product === "single_doc" ? (
+            <>Document débloqué — régénérez-le sans filigrane.</>
+          ) : (
+            <>
+              Abonnement <strong>Pro</strong> — activation en cours (quelques
+              secondes).
+            </>
+          )}
         </Alert>
       )}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Tableau de bord</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Tableau de bord
+          </h1>
           <p className="mt-1 truncate text-sm text-muted-foreground sm:text-base">
             {session.user.email}
           </p>
@@ -120,77 +134,102 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      {plan === "pro" && limit !== null && (
+      {(plan === "pro" || plan === "business") && (
         <Card className="mt-6">
-          <CardContent className="space-y-3 py-5">
-            <ProgressBar
-              value={usedThisMonth}
-              max={limit}
-              label="PDF sans filigrane ce mois"
-            />
-            {usedThisMonth >= limit && (
-              <Alert variant="warning" title="Quota atteint">
-                Passez Business pour des PDF illimités et l&apos;API REST.
-              </Alert>
-            )}
+          <CardContent className="py-4 text-sm">
+            <span className="font-medium">Générations ce mois :</span>{" "}
+            {usedThisMonth} —{" "}
+            <span className="text-primary">PDF illimités sans filigrane</span>
           </CardContent>
         </Card>
       )}
 
-      {plan === "business" && (
-        <Card className="mt-6">
-          <CardContent className="py-4 text-sm">
-            <span className="font-medium">Générations ce mois :</span>{" "}
-            {usedThisMonth} — <span className="text-primary">illimité</span>
+      {plan === "free" && (packCredits > 0 || entitlements.length > 0) && (
+        <Card className="mt-6 border-primary/30 bg-primary/5">
+          <CardHeader>
+            <CardTitle className="text-base">Vos achats</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            {packCredits > 0 ? (
+              <p>
+                Pack Essentiel : <strong>{packCredits}</strong> crédit(s)
+                document restant(s).
+              </p>
+            ) : null}
+            {entitlements.length > 0 ? (
+              <p>
+                Documents débloqués :{" "}
+                {[...new Set(entitlements.map((e) => e.slug))].join(", ")}
+              </p>
+            ) : null}
           </CardContent>
         </Card>
       )}
 
       {plan === "free" && (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <Card className="border-primary/30 bg-primary/5">
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          <Card>
             <CardHeader>
-              <CardTitle>Pro — 9 €/mois</CardTitle>
+              <CardTitle className="text-base">À l&apos;unité</CardTitle>
               <CardDescription>
-                20 PDF/mois sans filigrane
+                {formatPriceEur(PRICING.singleDoc)} — 1 document, mises à jour à
+                vie
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <CheckoutButton plan="pro" />
+              <ButtonLink href="/#documents" variant="outline" className="w-full">
+                Choisir un document
+              </ButtonLink>
+            </CardContent>
+          </Card>
+          <Card className="border-primary/30">
+            <CardHeader>
+              <CardTitle className="text-base">Pack Essentiel</CardTitle>
+              <CardDescription>
+                {formatPriceEur(PRICING.packEssential)} — 3 documents
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <OneShotCheckoutButton product="pack_essential" />
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Business — 30 €/mois</CardTitle>
-              <CardDescription>Illimité + clé API</CardDescription>
+              <CardTitle className="text-base">Pro</CardTitle>
+              <CardDescription>
+                {formatPriceEur(PRICING.proMonthly)}/mois — illimité
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <CheckoutButton plan="business" />
+              <CheckoutButton />
             </CardContent>
           </Card>
         </div>
       )}
 
-      {plan === "pro" && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className="text-base">Besoin de plus ?</CardTitle>
-            <CardDescription>
-              Business : PDF illimités et intégration API pour votre équipe.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CheckoutButton plan="business" />
-          </CardContent>
-        </Card>
-      )}
-
       {plan === "business" && <ApiKeyPanel initialKeys={apiKeys} />}
+
+      {plan === "free" && (
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Business (API, volume) :{" "}
+          <Link
+            href={`mailto:${juriviteLegal.email}?subject=JuriVite%20Business`}
+            className="text-primary underline"
+          >
+            contactez-nous
+          </Link>
+        </p>
+      )}
 
       <section className="mt-10">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-lg font-semibold sm:text-xl">Mes documents</h2>
-          <ButtonLink href="/#documents" size="sm" variant="outline" className="w-full sm:w-auto">
+          <ButtonLink
+            href="/#documents"
+            size="sm"
+            variant="outline"
+            className="w-full sm:w-auto"
+          >
             Nouveau document
           </ButtonLink>
         </div>
@@ -198,16 +237,14 @@ export default async function DashboardPage({
         {docs.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="flex flex-col items-center py-14 text-center">
-              <span className="flex size-14 items-center justify-center rounded-2xl bg-muted">
-                <FileText className="size-7 text-muted-foreground" aria-hidden />
-              </span>
-              <p className="mt-4 font-medium">Aucun document pour le moment</p>
+              <FileText className="size-12 text-muted-foreground/50" />
+              <p className="mt-4 font-medium">Aucun document pour l&apos;instant</p>
               <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Générez un PDF connecté à votre compte — il apparaîtra ici pour
-                retéléchargement.
+                Générez votre premier PDF depuis le catalogue (CGV, mentions
+                légales, etc.).
               </p>
               <ButtonLink href="/generate/cgv" className="mt-6">
-                Créer mes CGV
+                Créer des CGV
               </ButtonLink>
             </CardContent>
           </Card>
@@ -215,19 +252,13 @@ export default async function DashboardPage({
           <ul className="space-y-3">
             {docs.map((doc) => (
               <li key={doc.id}>
-                <Card className="transition-colors hover:border-primary/25">
+                <Card>
                   <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="font-medium">{doc.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(doc.createdAt).toLocaleDateString("fr-FR", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                        {doc.hasWatermark ? " · Filigrane" : ` · ${planBadgeLabel(plan)}`}
+                    <div className="min-w-0">
+                      <p className="font-medium truncate">{doc.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(doc.createdAt).toLocaleDateString("fr-FR")}
+                        {doc.hasWatermark ? " · Filigrane" : " · Sans filigrane"}
                       </p>
                     </div>
                     <DocumentDownloadButton

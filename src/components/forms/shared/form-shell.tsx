@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, FileDown, Loader2 } from "lucide-react";
 
+import { OneShotCheckoutButton } from "@/components/auth/one-shot-checkout-button";
 import { LegalAcceptanceCheckbox } from "@/components/legal/legal-disclaimer";
-
 import { StepIndicator } from "@/components/forms/step-indicator";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { isDocumentSlug } from "@/lib/documents/registry";
+import { formatPriceEur, PRICING } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
 type FormStep = {
@@ -77,7 +80,6 @@ export function FormShell({
         </Alert>
       ) : null}
 
-      {/* Barre d'actions sticky sur mobile */}
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 px-4 pt-3 backdrop-blur-md safe-bottom sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none",
@@ -128,17 +130,31 @@ export function FormShell({
 }
 
 export function WatermarkNotice() {
+  const pathname = usePathname();
+  const slugMatch = pathname?.match(/\/generate\/([^/]+)/);
+  const slug =
+    slugMatch?.[1] && isDocumentSlug(slugMatch[1]) ? slugMatch[1] : undefined;
+
   return (
     <Alert variant="warning" title="Version gratuite">
-      PDF avec filigrane JuriVite.{" "}
-      <Link href="/tarifs" className="font-medium text-primary underline-offset-4 hover:underline">
-        Pro 9 €/mo
-      </Link>{" "}
-      (20 PDF sans filigrane) ou{" "}
-      <Link href="/tarifs" className="font-medium text-primary underline-offset-4 hover:underline">
-        Business 30 €/mo
-      </Link>{" "}
-      (illimité + API).
+      <p>
+        PDF avec filigrane. Débloquez sans filigrane et mises à jour à vie sur ce
+        document :{" "}
+        <strong>{formatPriceEur(PRICING.singleDoc)}</strong> — ou{" "}
+        <Link href="/tarifs" className="font-medium text-primary underline">
+          voir toutes les offres
+        </Link>
+        .
+      </p>
+      {slug ? (
+        <div className="mt-4">
+          <OneShotCheckoutButton
+            product="single_doc"
+            slug={slug}
+            label={`Débloquer ce document — ${formatPriceEur(PRICING.singleDoc)}`}
+          />
+        </div>
+      ) : null}
     </Alert>
   );
 }

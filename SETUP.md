@@ -26,8 +26,9 @@ openssl rand -base64 32   # coller dans AUTH_SECRET et NEXTAUTH_SECRET
 | `AUTH_SECRET` | `openssl rand -base64 32` |
 | `AUTH_URL` | `http://localhost:3000` |
 | `STRIPE_SECRET_KEY` | Stripe Dashboard → Développeurs → Clés API (mode test) |
-| `STRIPE_PRICE_ID_PRO` | Produit « JuriVite Pro » 9€/mois (20 PDF) → `price_...` |
-| `STRIPE_PRICE_ID_BUSINESS` | Produit « JuriVite Business » 30€/mois (illimité + API) |
+| `STRIPE_PRICE_ID_SINGLE_DOC` | Produit one-shot « Document » 4,90€ → `price_...` |
+| `STRIPE_PRICE_ID_PACK_ESSENTIAL` | Produit one-shot « Pack Essentiel » 19,90€ → `price_...` |
+| `STRIPE_PRICE_ID_PRO` | Abonnement « Pro » 29,90€/mois → `price_...` |
 | `STRIPE_WEBHOOK_SECRET` | `stripe listen` (voir §3) |
 | `RESEND_API_KEY` | resend.com → API Keys |
 
@@ -48,7 +49,7 @@ npm run db:push    # Tables Drizzle
 ## 3. Stripe (mode test)
 
 1. [dashboard.stripe.com](https://dashboard.stripe.com) → **Mode test**
-2. Produits récurrents : **Pro** 9 €/mois → `STRIPE_PRICE_ID_PRO` · **Business** 30 €/mois → `STRIPE_PRICE_ID_BUSINESS`
+2. Produits Stripe : **Document** 4,90 € · **Pack** 19,90 € (mode payment) · **Pro** 29,90 €/mois (récurrent)
 3. Installer [Stripe CLI](https://stripe.com/docs/stripe-cli)
 
 ```bash

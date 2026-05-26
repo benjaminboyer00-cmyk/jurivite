@@ -25,7 +25,8 @@ export async function resolvePlanFromSubscription(
   }
 
   const metaPlan = subscription.metadata?.plan as Plan | undefined;
-  if (metaPlan === "pro" || metaPlan === "business") return metaPlan;
+  if (metaPlan === "pro") return metaPlan;
+  if (metaPlan === "business") return "business";
 
   return "pro";
 }
