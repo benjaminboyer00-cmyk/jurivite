@@ -140,8 +140,10 @@ export default function CguPage() {
           .
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
-          {l.lastUpdated} — {l.legalEntityName} ({l.tradeName}) — SIRET {l.siret} —{" "}
-          {l.address}
+          {l.lastUpdated} — {l.legalEntityName} ({l.tradeName}) —{" "}
+          <a href="/mentions-legales" className="text-primary underline">
+            identification complète (LCEN)
+          </a>
         </p>
       </section>
     </LegalPageLayout>

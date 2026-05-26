@@ -6,7 +6,6 @@ import {
   legalPageMetadata,
 } from "@/components/legal/legal-page-layout";
 import {
-  formatLegalEditorBlock,
   getPublisherSameAsLinks,
   isHostingConfigured,
   juriviteLegal,
@@ -15,7 +14,7 @@ import {
 export const metadata: Metadata = legalPageMetadata({
   title: "À propos — Benjamin Boyer / bzign",
   description:
-    "Éditeur de JuriVite : Benjamin Boyer, micro-entreprise, 12 rue Eugène Pottier Saint-Denis, SIRET 94430254600014.",
+    "Éditeur de JuriVite : Benjamin Boyer, micro-entreprise bzign. Identification complète sur la page Mentions légales.",
   path: "/a-propos",
 });
 
@@ -45,8 +44,14 @@ export default function AProposPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Identification complète (LCEN)</h2>
-        <p className="mt-3 whitespace-pre-line">{formatLegalEditorBlock()}</p>
+        <h2 className="text-xl font-semibold">Identification de l&apos;éditeur</h2>
+        <p className="mt-3">
+          SIRET, adresse postale, téléphone et hébergeur sont publiés sur la page{" "}
+          <Link href="/mentions-legales" className="text-primary hover:underline">
+            Mentions légales
+          </Link>{" "}
+          (obligation LCEN).
+        </p>
       </section>
 
       <section>
@@ -80,9 +85,11 @@ export default function AProposPage() {
       <section>
         <h2 className="text-xl font-semibold">Hébergement</h2>
         <p className="mt-3">
-          {l.hostingProvider}
-          <br />
-          {l.hostingAddress}
+          Coordonnées de l&apos;hébergeur sur la page{" "}
+          <Link href="/mentions-legales" className="text-primary hover:underline">
+            Mentions légales
+          </Link>
+          .
         </p>
         {!isHostingConfigured() && (
           <p className="mt-2 text-sm text-amber-700 dark:text-amber-400">

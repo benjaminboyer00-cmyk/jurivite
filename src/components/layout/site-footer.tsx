@@ -20,12 +20,11 @@ export function SiteFooter() {
               devis — PDF en ligne.
             </p>
             <p className="mt-3 text-xs text-muted-foreground">
-              {juriviteLegal.legalEntityName} — {juriviteLegal.tradeName} — SIRET{" "}
-              {juriviteLegal.siret}
+              {juriviteLegal.legalEntityName} — {juriviteLegal.tradeName}
               <br />
-              <a href={`mailto:${juriviteLegal.email}`} className="text-primary hover:underline">
-                {juriviteLegal.email}
-              </a>
+              <Link href="/mentions-legales" className="text-primary hover:underline">
+                Mentions légales & contact
+              </Link>
             </p>
           </div>
 
@@ -117,8 +116,8 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t pt-6 text-center text-xs leading-relaxed text-muted-foreground">
-          © {year} {juriviteLegal.legalEntityName} / {juriviteLegal.tradeName} — {juriviteLegal.siteName}{" "}
-          (SIRET {juriviteLegal.siret}). Modèles
+          © {year} {juriviteLegal.legalEntityName} / {juriviteLegal.tradeName} — {juriviteLegal.siteName}.
+          Modèles
           structurés — pas un conseil juridique.{" "}
           <Link href="/avis-juridique" className="text-primary hover:underline">
             Disclaimer

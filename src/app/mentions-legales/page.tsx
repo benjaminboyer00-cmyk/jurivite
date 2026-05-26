@@ -31,6 +31,11 @@ export default function MentionsLegalesPage() {
         <h2 className="text-xl font-semibold">Éditeur du site (LCEN)</h2>
         <p className="mt-3 whitespace-pre-line">{formatLegalEditorBlock()}</p>
         <p className="mt-3 text-sm text-muted-foreground">
+          Cette page centralise l&apos;identification légale de l&apos;éditeur (coordonnées,
+          SIRET, hébergeur). Elle complète les autres documents du site sans répéter ces
+          informations sur les pages marketing.
+        </p>
+        <p className="mt-3 text-sm text-muted-foreground">
           Le site {l.websiteUrl} propose le service « {l.siteName} » (générateur de
           modèles de documents juridiques en PDF). La marque {l.siteName} est exploitée
           par l&apos;entrepreneur individuel identifié ci-dessus sous le nom commercial «{" "}

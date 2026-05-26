@@ -42,7 +42,7 @@ const tarifsFaqs = [
   {
     question: "Quelle différence entre le Pack Essentiel et l'abonnement Pro ?",
     answer:
-      "Le pack (19,90 €) couvre 3 documents au choix avec 3 mois de mises à jour — idéal pour un besoin ponctuel. Pro (29,90 €/mois) donne tous les documents en illimité et des mises à jour continues.",
+      `Le pack (${formatPriceEur(PRICING.packEssential)}) couvre 3 documents au choix avec 3 mois de mises à jour — idéal pour un besoin ponctuel. Pro (${formatPriceEur(PRICING.proMonthly)}/mois) donne tous les documents en illimité et des mises à jour continues.`,
   },
   {
     question: "Comment obtenir l'offre Business ?",
@@ -54,7 +54,7 @@ const tarifsFaqs = [
 export const metadata: Metadata = createMetadata({
   title: "Tarifs — Payez à l'usage ou abonnez-vous",
   description:
-    "JuriVite : document à 4,90 €, pack 3 documents à 19,90 €, abonnement Pro 29,90 €/mois. PDF juridiques sans filigrane, mises à jour incluses.",
+    `JuriVite : document à ${formatPriceEur(PRICING.singleDoc)}, pack 3 documents à ${formatPriceEur(PRICING.packEssential)}, abonnement Pro ${formatPriceEur(PRICING.proMonthly)}/mois. PDF juridiques sans filigrane, mises à jour incluses.`,
   path: "/tarifs",
   keywords: [
     "tarifs jurivite",

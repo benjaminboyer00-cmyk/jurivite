@@ -5,11 +5,12 @@ import {
   legalPageMetadata,
 } from "@/components/legal/legal-page-layout";
 import { getContractPartyLabel, juriviteLegal } from "@/lib/legal/jurivite-site";
+import { formatPriceEur, PRICING } from "@/lib/plans";
 
 export const metadata: Metadata = legalPageMetadata({
   title: "Conditions Générales de Vente",
   description:
-    "CGV JuriVite : document 4,90€, pack 19,90€, Pro 29,90€/mois, Business sur devis.",
+    `CGV JuriVite : document ${formatPriceEur(PRICING.singleDoc)}, pack ${formatPriceEur(PRICING.packEssential)}, Pro ${formatPriceEur(PRICING.proMonthly)}/mois, Business sur devis.`,
   path: "/cgv",
 });
 
@@ -44,15 +45,15 @@ export default function CgvPage() {
             <strong>Gratuit</strong> : PDF avec filigrane, sans limite de volume.
           </li>
           <li>
-            <strong>Document à l&apos;unité — 4,90 € TTC</strong> : 1 document sans
+            <strong>Document à l&apos;unité — {formatPriceEur(PRICING.singleDoc)} TTC</strong> : 1 document sans
             filigrane, mises à jour à vie sur ce document (achat unique).
           </li>
           <li>
-            <strong>Pack Essentiel — 19,90 € TTC</strong> : 3 documents au choix,
+            <strong>Pack Essentiel — {formatPriceEur(PRICING.packEssential)} TTC</strong> : 3 documents au choix,
             mises à jour pendant 3 mois.
           </li>
           <li>
-            <strong>Pro — 29,90 € TTC / mois</strong> : tous les documents en PDF
+            <strong>Pro — {formatPriceEur(PRICING.proMonthly)} TTC / mois</strong> : tous les documents en PDF
             illimités sans filigrane, mises à jour continues.
           </li>
           <li>
@@ -120,8 +121,10 @@ export default function CgvPage() {
           . Droit français — {l.competentCourt}.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
-          Vendeur : {l.legalEntityName} — {l.tradeName} — SIRET {l.siret} — {l.address} —{" "}
-          {l.email}
+          Vendeur : {l.legalEntityName} — {l.tradeName} —{" "}
+          <a href="/mentions-legales" className="text-primary underline">
+            identification complète (LCEN)
+          </a>
         </p>
       </section>
     </LegalPageLayout>

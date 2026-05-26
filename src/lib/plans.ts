@@ -10,7 +10,7 @@ export const DOCUMENT_CATALOG_SIZE = 10;
 /** Prix TTC affichés — alignés Stripe Dashboard */
 export const PRICING = {
   singleDoc: 4.9,
-  packEssential: 19.9,
+  packEssential: 13.9,
   proMonthly: 29.9,
 } as const;
 

@@ -3,6 +3,7 @@ import {
   getPublisherSameAsLinks,
   juriviteLegal,
 } from "@/lib/legal/jurivite-site";
+import { PRICING } from "@/lib/plans";
 import { siteConfig } from "@/lib/seo";
 
 type FaqItem = { question: string; answer: string };
@@ -146,7 +147,7 @@ export function productOffersJsonLd() {
       {
         "@type": "Offer",
         name: "Pack Essentiel",
-        price: "19.9",
+        price: String(PRICING.packEssential),
         priceCurrency: "EUR",
         description: "3 documents + 3 mois de mises à jour",
       },

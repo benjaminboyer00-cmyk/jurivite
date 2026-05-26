@@ -23,10 +23,11 @@ export function LegalTrustStrip() {
               {DISCLAIMER_FULL_TEXT}
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              Éditeur : <strong className="text-foreground">{juriviteLegal.legalEntityName}</strong> —{" "}
-              {juriviteLegal.legalFormShort} « {juriviteLegal.tradeName} » — service{" "}
-              {juriviteLegal.siteName} — SIRET {juriviteLegal.siret} —{" "}
-              {juriviteLegal.address}
+              Éditeur : <strong className="text-foreground">{juriviteLegal.legalEntityName}</strong>{" "}
+              ({juriviteLegal.tradeName}) —{" "}
+              <Link href="/mentions-legales" className="text-primary hover:underline">
+                identification complète (LCEN)
+              </Link>
             </p>
           </div>
           <nav

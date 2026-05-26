@@ -9,6 +9,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { documents } from "@/lib/documents/registry";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
 import { homeFaqs } from "@/lib/seo/home-faqs";
+import { formatPriceEur, PRICING } from "@/lib/plans";
 import {
   faqPageJsonLd,
   itemListJsonLd,
@@ -77,7 +78,7 @@ export default function HomePage() {
             <Link href="/tarifs" className="font-medium text-primary hover:underline">
               4,90 €
             </Link>{" "}
-            · Pack 19,90 € · Pro 29,90 €/mois
+            · Pack {formatPriceEur(PRICING.packEssential)} · Pro {formatPriceEur(PRICING.proMonthly)}/mois
           </p>
           <HeroStats />
         </div>
