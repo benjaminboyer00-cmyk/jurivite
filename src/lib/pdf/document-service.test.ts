@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { generateDocument } from "@/lib/pdf/document-service";
+import { documentSlugs } from "@/lib/documents/registry";
 import { minimalPayloadForSlug } from "@/test/fixtures/pdf-payloads";
 
 vi.mock("@/lib/db/usage", () => ({
@@ -32,14 +33,14 @@ describe("generateDocument", () => {
   it("génère un PDF pour chaque slug avec mock Puppeteer", async () => {
     const { generatePdfBuffer } = await import("@/lib/pdf/generate");
 
-    for (const slug of [
-      "cgv",
-      "mentions-legales",
-      "facture",
-    ] as const) {
+    for (const slug of documentSlugs) {
+      const data = minimalPayloadForSlug(slug);
+      if (slug === "cgv") {
+        data.nicheSlug = "graphiste";
+      }
       const result = await generateDocument({
         slug,
-        data: minimalPayloadForSlug(slug),
+        data,
         plan: "business",
       });
       expect(result.ok, slug).toBe(true);

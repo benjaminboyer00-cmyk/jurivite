@@ -85,5 +85,9 @@ export function sanitizePdfPayload(
     out.siret = String(out.siret).replace(/\D/g, "").slice(0, 14);
   }
 
+  if (typeof out.nicheSlug === "string") {
+    out.nicheSlug = String(out.nicheSlug).trim().slice(0, 80);
+  }
+
   return out;
 }

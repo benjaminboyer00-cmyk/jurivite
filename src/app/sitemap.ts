@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { documents } from "@/lib/documents/registry";
+import { cgvNiches } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
 import { siteConfig } from "@/lib/seo";
 
@@ -21,10 +22,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${siteConfig.url}/tarifs`,
+      url: `${siteConfig.url}/modeles`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.85,
+      changeFrequency: "weekly",
+      priority: 0.88,
     },
     {
       url: `${siteConfig.url}/a-propos`,
@@ -80,5 +81,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
-  return [...staticPages, ...documentPages, ...landingPages];
+  const nichePages: MetadataRoute.Sitemap = cgvNiches.map((niche) => ({
+    url: `${siteConfig.url}${niche.path}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.82,
+  }));
+
+  return [...staticPages, ...documentPages, ...landingPages, ...nichePages];
 }

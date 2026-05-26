@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { documents } from "@/lib/documents/registry";
+import { CGV_NICHE_CLUSTERS } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
 import { juriviteLegal } from "@/lib/legal/jurivite-site";
 import { siteConfig } from "@/lib/seo";
@@ -11,7 +12,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-5">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <div className="lg:col-span-1">
             <p className="font-semibold">{siteConfig.name}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -54,6 +55,27 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Modèles CGV par métier">
+            <p className="text-sm font-semibold">Modèles par métier</p>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              {Object.values(CGV_NICHE_CLUSTERS).map((cluster) => (
+                <li key={cluster.id}>
+                  <Link
+                    href={`/modeles#cluster-${cluster.id}`}
+                    className="hover:text-foreground"
+                  >
+                    CGV {cluster.shortLabel}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/modeles" className="font-medium text-primary hover:underline">
+                  Tous les métiers (50)
+                </Link>
+              </li>
             </ul>
           </nav>
 

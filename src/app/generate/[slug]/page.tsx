@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { ChevronRight } from "lucide-react";
 
 import { DocumentLegalNotice } from "@/components/legal/document-legal-notice";
+import { CgvNichePicker } from "@/components/marketing/cgv-niche-picker";
+import { CgvForm } from "@/components/forms/cgv-form";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { documentForms } from "@/lib/documents/forms";
 import { getAllGenerateSlugs } from "@/lib/documents/seo-landings";
@@ -113,9 +116,28 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
         <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
           {page.intro}
         </p>
+        {page.documentSlug === "cgv" ? (
+          <p className="text-sm">
+            <Link href="/modeles" className="font-medium text-primary hover:underline">
+              → 50 modèles CGV par métier
+            </Link>
+          </p>
+        ) : null}
       </header>
 
-      <FormComponent />
+      {page.documentSlug === "cgv" ? <CgvNichePicker /> : null}
+
+      {page.documentSlug === "cgv" ? (
+        <Suspense
+          fallback={
+            <div className="h-40 animate-pulse rounded-lg border bg-muted/40" />
+          }
+        >
+          <CgvForm />
+        </Suspense>
+      ) : (
+        <FormComponent />
+      )}
 
       <DocumentLegalNotice documentSlug={page.documentSlug} />
 

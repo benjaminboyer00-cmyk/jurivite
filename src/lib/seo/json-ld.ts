@@ -121,6 +121,23 @@ export function itemListJsonLd() {
   };
 }
 
+export function namedItemListJsonLd(
+  name: string,
+  items: { name: string; path: string }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: `${siteConfig.url}${item.path}`,
+    })),
+  };
+}
+
 export function productOffersJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -188,6 +205,30 @@ export function howToJsonLd({
       name: text,
       text,
     })),
+  };
+}
+
+export function webPageJsonLd({
+  name,
+  description,
+  path,
+}: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url: `${siteConfig.url}${path}`,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    inLanguage: "fr-FR",
   };
 }
 

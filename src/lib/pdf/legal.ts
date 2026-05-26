@@ -1,4 +1,5 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
+import { getCgvNiche } from "@/lib/documents/niches-seo";
 import { classifyLegalForm, usesFranchiseTva } from "@/lib/legal/forms";
 import { juriviteLegal, PDF_LEGAL_NOTICE } from "@/lib/legal/jurivite-site";
 import { formatIbanDisplay, normalizeIban } from "@/lib/schemas/iban";
@@ -170,6 +171,14 @@ export function enrichSlugSpecificData(
       String(data.mediatorUrl ?? "").trim() || juriviteLegal.mediatorUrl;
     enriched.mediatorContact =
       String(data.mediatorContact ?? "").trim() || juriviteLegal.mediatorContact;
+
+    const nicheSlug = String(data.nicheSlug ?? "").trim();
+    if (nicheSlug) {
+      const niche = getCgvNiche(nicheSlug);
+      if (niche?.industryClausesHtml) {
+        enriched.industryClausesHtml = niche.industryClausesHtml;
+      }
+    }
   }
 
   return enriched;

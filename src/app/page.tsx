@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { CheckCircle2, FileText, Shield, Zap } from "lucide-react";
 
 import { LegalTrustStrip } from "@/components/legal/legal-trust-strip";
 import { DocumentCard } from "@/components/marketing/document-card";
 import { HeroStats } from "@/components/marketing/hero-stats";
+import { NicheSearch, PopularNichePills } from "@/components/marketing/niche-search";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { ButtonLink } from "@/components/ui/button-link";
 import { documents } from "@/lib/documents/registry";
+import { POPULAR_NICHE_SLUGS } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
 import { homeFaqs } from "@/lib/seo/home-faqs";
 import { formatPriceEur, PRICING } from "@/lib/plans";
@@ -65,12 +68,25 @@ export default function HomePage() {
             sur Google. Évitez les amendes, sécurisez vos ventes et gagnez du
             temps sur la paperasse.
           </p>
+          <Suspense
+            fallback={
+              <div className="mt-6 h-28 max-w-xl animate-pulse rounded-lg bg-muted/50" />
+            }
+          >
+            <NicheSearch
+              label="Sécurisez votre activité de…"
+              directToGenerate={false}
+              submitLabel="Voir mon modèle"
+              className="mt-6 max-w-xl"
+            />
+            <PopularNichePills slugs={POPULAR_NICHE_SLUGS} className="mt-4 max-w-xl" />
+          </Suspense>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
-            <ButtonLink href="/generate/cgv" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
-              Créer mes CGV gratuitement
+            <ButtonLink href="/modeles" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
+              50 modèles par métier
             </ButtonLink>
-            <ButtonLink href="#documents" variant="outline" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
-              Voir tous les documents
+            <ButtonLink href="/generate/cgv" variant="outline" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
+              CGV génériques
             </ButtonLink>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">

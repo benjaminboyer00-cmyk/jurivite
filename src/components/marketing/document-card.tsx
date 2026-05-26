@@ -57,12 +57,21 @@ export function DocumentCard({ document }: DocumentCardProps) {
           Générer gratuitement
           <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
         </ButtonLink>
-        <Link
-          href={document.href}
-          className="text-center text-xs text-muted-foreground transition-colors hover:text-primary"
-        >
-          En savoir plus →
-        </Link>
+        {document.slug === "cgv" ? (
+          <Link
+            href="/modeles"
+            className="text-center text-xs font-medium text-primary transition-colors hover:underline"
+          >
+            50 modèles par métier →
+          </Link>
+        ) : (
+          <Link
+            href={document.href}
+            className="text-center text-xs text-muted-foreground transition-colors hover:text-primary"
+          >
+            En savoir plus →
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );

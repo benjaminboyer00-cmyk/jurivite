@@ -1,6 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { CompanyFields } from "@/components/forms/fields/company-fields";
@@ -15,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentGenerate } from "@/components/forms/use-document-generate";
 import { useSteppedForm } from "@/hooks/use-stepped-form";
+import { getCgvNiche } from "@/lib/documents/niches-seo";
 import { companyDefaultValues, companySchema } from "@/lib/schemas/company";
 import {
   CGV_FORM_STEPS,
@@ -23,21 +26,42 @@ import {
   type CgvFormValues,
 } from "@/lib/schemas/cgv";
 
-const defaultValues: CgvFormValues = {
-  ...companyDefaultValues,
-  activityDescription: "",
-  deliveryDelay: "Sous 15 jours ouvrés après validation du devis.",
-  paymentTerms:
-    "Paiement à 30 % à la commande, solde à la livraison par virement bancaire.",
-  withdrawalPeriodDays: 14,
+type CgvFormProps = {
+  /** Slug métier — sinon lu depuis ?metier= */
+  metier?: string;
 };
 
-export function CgvForm() {
+export function CgvForm({ metier: metierProp }: CgvFormProps) {
+  const searchParams = useSearchParams();
+  const metier = metierProp ?? searchParams.get("metier") ?? undefined;
+
+  const niche = useMemo(
+    () => (metier ? getCgvNiche(metier) : undefined),
+    [metier],
+  );
+
+  const defaultValues: CgvFormValues = useMemo(
+    () => ({
+      ...companyDefaultValues,
+      activityDescription: niche?.activityDescriptionDefault ?? "",
+      deliveryDelay: "Sous 15 jours ouvrés après validation du devis.",
+      paymentTerms:
+        "Paiement à 30 % à la commande, solde à la livraison par virement bancaire.",
+      withdrawalPeriodDays: 14,
+      nicheSlug: niche?.slug,
+    }),
+    [niche],
+  );
+
   const form = useForm<CgvFormValues>({
     resolver: zodResolver(cgvFormSchema),
     defaultValues,
     mode: "onBlur",
   });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   const generatePdf = useDocumentGenerate("cgv");
 
@@ -50,13 +74,13 @@ export function CgvForm() {
     goBack,
     handleGenerate,
   } = useSteppedForm({
-      form,
-      steps: CGV_FORM_STEPS,
-      stepSchemas: {
-        company: companySchema,
-        commercial: cgvCommercialSchema,
-      },
-    });
+    form,
+    steps: CGV_FORM_STEPS,
+    stepSchemas: {
+      company: companySchema,
+      commercial: cgvCommercialSchema,
+    },
+  });
 
   const values = form.watch();
   const { register, formState } = form;
@@ -67,12 +91,12 @@ export function CgvForm() {
       stepIndex={stepIndex}
       onBack={goBack}
       onNext={goNext}
-      onGenerate={() =>
-        handleGenerate(() => generatePdf(form.getValues()))
-      }
+      onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
     >
+      <input type="hidden" {...register("nicheSlug")} />
+
       {currentStep.id === "company" && (
         <CompanyFields
           register={register}
@@ -91,7 +115,10 @@ export function CgvForm() {
             <TextArea
               id="activityDescription"
               {...register("activityDescription")}
-              placeholder="Prestations de design graphique pour TPE…"
+              placeholder={
+                niche?.activityDescriptionPlaceholder ??
+                "Prestations de design graphique pour TPE…"
+              }
             />
           </FormField>
           <FormField
@@ -126,6 +153,14 @@ export function CgvForm() {
       {currentStep.id === "review" && (
         <div className="space-y-4">
           <ProfessionalAdviceBanner slug="cgv" />
+          {niche ? (
+            <ReviewBlock title="Clauses métier">
+              <p className="text-sm text-muted-foreground">
+                {niche.industrySpecificClauses.length} disposition(s) spécifique(s) à{" "}
+                {niche.profession.toLowerCase()} seront ajoutées au PDF.
+              </p>
+            </ReviewBlock>
+          ) : null}
           <ReviewBlock title="Entreprise">
             <p>{values.companyName}</p>
             <p className="text-muted-foreground">{values.legalForm}</p>

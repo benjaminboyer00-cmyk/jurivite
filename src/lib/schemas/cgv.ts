@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { isCgvNicheSlug } from "@/lib/documents/niches-seo";
 import { companySchema } from "@/lib/schemas/company";
 
 export const cgvCommercialSchema = z.object({
@@ -20,6 +21,14 @@ export const cgvCommercialSchema = z.object({
     .int()
     .min(0, "Minimum 0 jour")
     .max(30, "Maximum 30 jours"),
+  /** Slug métier — injecte les clauses sectorielles dans le PDF */
+  nicheSlug: z
+    .string()
+    .max(80)
+    .optional()
+    .refine((val) => !val || isCgvNicheSlug(val), {
+      message: "Modèle métier inconnu",
+    }),
 });
 
 export const cgvFormSchema = companySchema.merge(cgvCommercialSchema);
