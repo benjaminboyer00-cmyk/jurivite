@@ -15,6 +15,11 @@ import {
 import { captureServerError } from "@/lib/observability/sentry";
 import { generatePdfBuffer } from "@/lib/pdf/generate";
 import { buildDocumentFileName } from "@/lib/pdf/legal";
+import {
+  getPdfErrorDetail,
+  pdfLog,
+  shouldExposePdfErrorDetail,
+} from "@/lib/pdf/pdf-log";
 import { sanitizePdfPayload } from "@/lib/pdf/sanitize-payload";
 import {
   ensureEntitlementOnGenerate,
@@ -42,7 +47,7 @@ export type GenerateDocumentResult =
       withWatermark: boolean;
       title: string;
     }
-  | { ok: false; status: number; error: string };
+  | { ok: false; status: number; error: string; code?: string; detail?: string };
 
 export async function resolveUserPlan(userId: string): Promise<Plan> {
   if (!db) return "free";
@@ -93,6 +98,13 @@ export async function generateDocument(
 
   const sanitizedData = sanitizePdfPayload(validated.data);
 
+  pdfLog("sanitize_payload", {
+    slug,
+    userId: userId ?? "anonymous",
+    withWatermark,
+    fieldCount: Object.keys(sanitizedData).length,
+  });
+
   let pdfBuffer: Buffer;
   try {
     pdfBuffer = await generatePdfBuffer(
@@ -100,17 +112,29 @@ export async function generateDocument(
       sanitizedData,
       withWatermark,
     );
+    pdfLog("complete", {
+      slug,
+      userId: userId ?? "anonymous",
+      pdfBytes: pdfBuffer.length,
+      withWatermark,
+    });
   } catch (error) {
+    const { stage, message, code } = getPdfErrorDetail(error);
     captureServerError(error, {
       slug,
       userId,
       plan,
       withWatermark,
+      stage,
+      code,
     });
     return {
       ok: false,
       status: 500,
-      error: "La génération PDF a échoué. Réessayez ou contactez le support.",
+      error:
+        "La génération PDF a échoué. Réessayez dans quelques secondes ou contactez le support.",
+      code,
+      detail: shouldExposePdfErrorDetail() ? message : undefined,
     };
   }
 

@@ -49,7 +49,7 @@ export function SiteHeaderNav({ isLoggedIn }: SiteHeaderNavProps) {
             </Link>
           ))}
           <Link
-            href={isLoggedIn ? "/dashboard" : "/login"}
+            href={isLoggedIn ? "/dashboard/signatures" : "/login"}
             className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             {isLoggedIn ? "Tableau de bord" : "Connexion"}
@@ -96,7 +96,7 @@ export function SiteHeaderNav({ isLoggedIn }: SiteHeaderNavProps) {
           {[
             ...navLinks,
             {
-              href: isLoggedIn ? "/dashboard" : "/login",
+              href: isLoggedIn ? "/dashboard/signatures" : "/login",
               label: isLoggedIn ? "Tableau de bord" : "Connexion",
             },
           ].map(

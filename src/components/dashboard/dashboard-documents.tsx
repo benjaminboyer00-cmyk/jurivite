@@ -1,15 +1,16 @@
 import { FileText, Receipt } from "lucide-react";
+import Link from "next/link";
 
 import { DocumentDownloadButton } from "@/components/auth/document-download-button";
 import { SendSignButton } from "@/components/signing/send-sign-button";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import type { documents, signingRequests } from "@/db/schema";
-import { isSignableDocumentSlug } from "@/lib/signing/constants";
+import {
+  isSignableDocumentSlug,
+  isSignatureHubSlug,
+} from "@/lib/signing/constants";
 
 type Doc = typeof documents.$inferSelect;
 type SigningRow = typeof signingRequests.$inferSelect;
@@ -17,13 +18,9 @@ type SigningRow = typeof signingRequests.$inferSelect;
 function signingStatusLabel(status: SigningRow["status"] | undefined) {
   switch (status) {
     case "pending":
-      return { label: "En attente de signature", variant: "secondary" as const };
+      return { label: "Lien actif", variant: "secondary" as const };
     case "signed":
       return { label: "Signé", variant: "default" as const };
-    case "expired":
-      return { label: "Lien expiré", variant: "outline" as const };
-    case "cancelled":
-      return { label: "Lien remplacé", variant: "outline" as const };
     default:
       return null;
   }
@@ -66,10 +63,7 @@ function DocumentRow({
               defaultClientName={String(formData.clientName ?? "")}
             />
           ) : null}
-          <DocumentDownloadButton
-            documentId={doc.id}
-            fileName={doc.fileName}
-          />
+          <DocumentDownloadButton documentId={doc.id} fileName={doc.fileName} />
         </div>
       </CardContent>
     </Card>
@@ -94,9 +88,7 @@ function EmptySection({
       <CardContent className="flex flex-col items-center py-10 text-center">
         <Icon className="size-10 text-muted-foreground/50" />
         <p className="mt-3 font-medium">{title}</p>
-        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-          {description}
-        </p>
+        <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
         <ButtonLink href={href} className="mt-4" size="sm">
           {cta}
         </ButtonLink>
@@ -112,10 +104,11 @@ export function DashboardDocuments({
   docs: Doc[];
   signingByDocumentId: Map<string, SigningRow>;
 }) {
-  const contracts = docs.filter((d) => isSignableDocumentSlug(d.slug));
-  const invoices = docs.filter((d) => d.slug === "facture");
-  const others = docs.filter(
-    (d) => !isSignableDocumentSlug(d.slug) && d.slug !== "facture",
+  const archiveDocs = docs.filter((d) => !isSignatureHubSlug(d.slug));
+  const devis = archiveDocs.filter((d) => d.slug === "devis");
+  const invoices = archiveDocs.filter((d) => d.slug === "facture");
+  const others = archiveDocs.filter(
+    (d) => d.slug !== "devis" && d.slug !== "facture",
   );
 
   if (docs.length === 0) {
@@ -123,39 +116,40 @@ export function DashboardDocuments({
       <EmptySection
         icon={FileText}
         title="Aucun document pour l'instant"
-        description="Générez votre premier PDF depuis le catalogue (CGV, contrat, facture…)."
+        description="Générez votre premier PDF depuis le catalogue."
         href="/generate/contrat-prestation"
-        cta="Créer un contrat"
+        cta="Créer un document"
       />
     );
   }
 
   return (
     <div className="space-y-10">
-      <section>
-        <h3 className="mb-4 text-base font-semibold">Contrats & signatures</h3>
-        {contracts.length === 0 ? (
-          <EmptySection
-            icon={FileText}
-            title="Aucun contrat"
-            description="Créez un contrat de prestation, puis envoyez-le à votre client par lien pour signature."
-            href="/generate/contrat-prestation"
-            cta="Créer un contrat"
-          />
-        ) : (
+      <p className="rounded-lg border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+        Les <strong className="text-foreground">contrats</strong> et leur suivi
+        de signature sont dans{" "}
+        <Link href="/dashboard/signatures" className="font-medium text-primary hover:underline">
+          Signatures
+        </Link>
+        .
+      </p>
+
+      {devis.length > 0 ? (
+        <section>
+          <h3 className="mb-4 text-base font-semibold">Devis</h3>
           <ul className="space-y-3">
-            {contracts.map((doc) => (
+            {devis.map((doc) => (
               <li key={doc.id}>
                 <DocumentRow
                   doc={doc}
                   signing={signingByDocumentId.get(doc.id)}
-                  showSignActions
+                  showSignActions={isSignableDocumentSlug(doc.slug)}
                 />
               </li>
             ))}
           </ul>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <section>
         <h3 className="mb-4 text-base font-semibold">Factures</h3>
@@ -163,7 +157,7 @@ export function DashboardDocuments({
           <EmptySection
             icon={Receipt}
             title="Aucune facture"
-            description="Générez une facture depuis le catalogue pour la retrouver ici."
+            description="Générez une facture depuis le catalogue."
             href="/generate/facture"
             cta="Créer une facture"
           />

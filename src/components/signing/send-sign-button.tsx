@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Check, Copy, Link2 } from "lucide-react";
 
@@ -10,11 +11,13 @@ import { Label } from "@/components/ui/label";
 type SendSignButtonProps = {
   documentId: string;
   defaultClientName?: string;
+  label?: string;
 };
 
 export function SendSignButton({
   documentId,
   defaultClientName = "",
+  label = "Envoyer à signer",
 }: SendSignButtonProps) {
   const [open, setOpen] = useState(false);
   const [clientName, setClientName] = useState(defaultClientName);
@@ -23,6 +26,7 @@ export function SendSignButton({
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleCreateLink() {
     if (clientName.trim().length < 2) {
@@ -48,6 +52,7 @@ export function SendSignButton({
         throw new Error(data.error ?? "Impossible de créer le lien");
       }
       setSigningUrl(data.signingUrl);
+      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
     } finally {
@@ -71,7 +76,7 @@ export function SendSignButton({
         onClick={() => setOpen(true)}
       >
         <Link2 className="size-4" />
-        Envoyer à signer
+        {label}
       </Button>
     );
   }

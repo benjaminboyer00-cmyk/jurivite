@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { buildSigningUrl } from "@/lib/db/signing";
+import { buildSigningUrl } from "@/lib/signing/urls";
 import {
   isSignableDocumentSlug,
+  isSignatureHubSlug,
   SIGNABLE_DOCUMENT_SLUGS,
+  SIGNATURE_HUB_SLUGS,
   SIGNING_LINK_TTL_DAYS,
 } from "@/lib/signing/constants";
 import { isValidSignatureDataUrl } from "@/lib/signing/validate-signature";
@@ -18,6 +20,13 @@ describe("signing constants", () => {
   it("rejette les slugs non signables", () => {
     expect(isSignableDocumentSlug("cgv")).toBe(false);
     expect(isSignableDocumentSlug("contrat-prestation")).toBe(true);
+  });
+
+  it("hub signatures sans devis", () => {
+    expect(SIGNATURE_HUB_SLUGS).toContain("contrat-prestation");
+    expect(SIGNATURE_HUB_SLUGS).not.toContain("devis");
+    expect(isSignatureHubSlug("devis")).toBe(false);
+    expect(isSignatureHubSlug("contrat-prestation")).toBe(true);
   });
 });
 

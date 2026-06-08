@@ -1,5 +1,7 @@
 import type { Browser, Page } from "puppeteer";
 
+import { pdfTimed } from "@/lib/pdf/pdf-log";
+
 const PDF_TIMEOUT_MS = 45_000;
 
 const isVercel = process.env.VERCEL === "1";
@@ -33,44 +35,48 @@ async function resolveChromiumExecutablePath(
   }
 }
 
-async function launchVercelBrowser(): Promise<Browser> {
-  const chromium = (await import("@sparticuz/chromium")).default;
-  const puppeteer = (await import("puppeteer-core")).default;
+async function launchVercelBrowser(slug?: string): Promise<Browser> {
+  return pdfTimed("puppeteer_launch", { slug, runtime: "vercel" }, async () => {
+    const chromium = (await import("@sparticuz/chromium")).default;
+    const puppeteer = (await import("puppeteer-core")).default;
 
-  chromium.setGraphicsMode = false;
+    chromium.setGraphicsMode = false;
 
-  const executablePath = await resolveChromiumExecutablePath(chromium);
-  const headless = "shell" as const;
+    const executablePath = await resolveChromiumExecutablePath(chromium);
+    const headless = "shell" as const;
 
-  return (await puppeteer.launch({
-    args: puppeteer.defaultArgs({
-      args: [...chromium.args, ...LAUNCH_ARGS],
+    return (await puppeteer.launch({
+      args: puppeteer.defaultArgs({
+        args: [...chromium.args, ...LAUNCH_ARGS],
+        headless,
+      }),
+      executablePath,
       headless,
-    }),
-    executablePath,
-    headless,
-  })) as unknown as Browser;
-}
-
-async function launchLocalBrowser(): Promise<Browser> {
-  const puppeteer = await import("puppeteer");
-  return puppeteer.default.launch({
-    headless: true,
-    args: LAUNCH_ARGS,
+    })) as unknown as Browser;
   });
 }
 
-async function launchBrowser(): Promise<Browser> {
+async function launchLocalBrowser(slug?: string): Promise<Browser> {
+  return pdfTimed("puppeteer_launch", { slug, runtime: "local" }, async () => {
+    const puppeteer = await import("puppeteer");
+    return puppeteer.default.launch({
+      headless: true,
+      args: LAUNCH_ARGS,
+    });
+  });
+}
+
+async function launchBrowser(slug?: string): Promise<Browser> {
   if (isVercel) {
-    return launchVercelBrowser();
+    return launchVercelBrowser(slug);
   }
-  return launchLocalBrowser();
+  return launchLocalBrowser(slug);
 }
 
 /** Instance Chromium partagée — VPS / Node long-running uniquement. */
-export async function getSharedBrowser(): Promise<Browser> {
+export async function getSharedBrowser(slug?: string): Promise<Browser> {
   if (!browserPromise) {
-    browserPromise = launchBrowser().catch((error) => {
+    browserPromise = launchBrowser(slug).catch((error) => {
       browserPromise = null;
       throw error;
     });
@@ -79,7 +85,7 @@ export async function getSharedBrowser(): Promise<Browser> {
   const browser = await browserPromise;
   if (!browser.connected) {
     browserPromise = null;
-    return getSharedBrowser();
+    return getSharedBrowser(slug);
   }
 
   return browser;
@@ -105,9 +111,10 @@ async function hardenPdfPage(page: Page): Promise<void> {
 
 export async function withPdfPage<T>(
   fn: (page: Page) => Promise<T>,
+  slug?: string,
 ): Promise<T> {
   if (isVercel) {
-    const browser = await launchVercelBrowser();
+    const browser = await launchVercelBrowser(slug);
     const page = await browser.newPage();
     page.setDefaultTimeout(PDF_TIMEOUT_MS);
     await hardenPdfPage(page);
@@ -120,7 +127,7 @@ export async function withPdfPage<T>(
     }
   }
 
-  const browser = await getSharedBrowser();
+  const browser = await getSharedBrowser(slug);
   const page = await browser.newPage();
   page.setDefaultTimeout(PDF_TIMEOUT_MS);
   await hardenPdfPage(page);

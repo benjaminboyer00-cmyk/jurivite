@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { AccountPasswordForm } from "@/components/dashboard/account-password-form";
 import { AccountPrivacyPanel } from "@/components/dashboard/account-privacy-panel";
+import { ApiKeyPanel } from "@/components/dashboard/api-key-panel";
+import { listApiKeys } from "@/lib/db/api-keys";
 import { PLAN_LIMITS } from "@/lib/plans";
 import { createMetadata } from "@/lib/seo";
 import { findUserById } from "@/lib/auth/user-repository";
@@ -30,18 +31,19 @@ export default async function AccountPage() {
   const user = await findUserById(session.user.id);
   const plan = user?.plan ?? session.user.plan ?? "free";
 
-  return (
-    <div className="page-container max-w-2xl py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-muted-foreground">
-        <Link href="/dashboard" className="hover:text-foreground">
-          Tableau de bord
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground">Mon compte</span>
-      </nav>
+  const apiKeys =
+    plan === "business"
+      ? (await listApiKeys(session.user.id)).map((k) => ({
+          ...k,
+          createdAt: k.createdAt.toISOString(),
+          lastUsedAt: k.lastUsedAt?.toISOString() ?? null,
+        }))
+      : [];
 
-      <h1 className="text-3xl font-bold tracking-tight">Mon compte</h1>
-      <p className="mt-2 text-muted-foreground">{session.user.email}</p>
+  return (
+    <>
+      <h2 className="text-lg font-semibold sm:text-xl">Mon compte</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{session.user.email}</p>
 
       <Card className="mt-8">
         <CardHeader>
@@ -80,7 +82,9 @@ export default async function AccountPage() {
         </CardContent>
       </Card>
 
+      {plan === "business" ? <ApiKeyPanel initialKeys={apiKeys} /> : null}
+
       <AccountPrivacyPanel hasStripeCustomer={Boolean(user?.stripeCustomerId)} />
-    </div>
+    </>
   );
 }

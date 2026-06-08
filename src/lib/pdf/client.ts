@@ -1,5 +1,36 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
 
+type PdfApiError = {
+  error?: string;
+  code?: string;
+  detail?: string;
+  requestId?: string;
+};
+
+function formatPdfError(status: number, payload: PdfApiError): string {
+  const parts: string[] = [
+    payload.error ?? "Échec de la génération du PDF",
+  ];
+
+  if (payload.code) {
+    parts.push(`[${payload.code}]`);
+  }
+
+  if (payload.detail) {
+    parts.push(payload.detail);
+  }
+
+  if (payload.requestId) {
+    parts.push(`ref: ${payload.requestId.slice(0, 12)}`);
+  }
+
+  if (status === 402) {
+    parts.push("— voir /tarifs");
+  }
+
+  return parts.join(" ");
+}
+
 export async function downloadGeneratedPdf(
   slug: DocumentSlug,
   data: Record<string, unknown>,
@@ -11,13 +42,8 @@ export async function downloadGeneratedPdf(
   });
 
   if (!response.ok) {
-    const err = await response.json().catch(() => ({}));
-    const message =
-      (err as { error?: string }).error ?? "Échec de la génération du PDF";
-    if (response.status === 402) {
-      throw new Error(`${message} — voir /tarifs`);
-    }
-    throw new Error(message);
+    const err = (await response.json().catch(() => ({}))) as PdfApiError;
+    throw new Error(formatPdfError(response.status, err));
   }
 
   const blob = await response.blob();

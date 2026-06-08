@@ -40,7 +40,11 @@ export async function POST(request: Request) {
 
     if (!result.ok) {
       return NextResponse.json(
-        { error: result.error },
+        {
+          error: result.error,
+          code: result.code,
+          detail: result.detail,
+        },
         { status: result.status },
       );
     }
