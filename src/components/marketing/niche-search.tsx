@@ -8,11 +8,15 @@ import { ArrowRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  searchAllModels,
+  type CatalogModelHit,
+  type UnifiedSearchResult,
+} from "@/lib/documents/model-search";
+import {
   CGV_NICHE_CLUSTERS,
   cgvNiches,
   getCgvNichePath,
   getGenerateCgvUrl,
-  searchCgvNiches,
   type CgvNiche,
   type CgvNicheCluster,
 } from "@/lib/documents/niches-seo";
@@ -34,7 +38,7 @@ type NicheSearchProps = {
 
 export function NicheSearch({
   label = "Quel est votre métier ?",
-  placeholder = "Ex. photographe, sophrologue, développeur web…",
+  placeholder = "Ex. contrat, devis, photographe, sophrologue…",
   showSubmitButton = true,
   submitLabel = "Générer mes CGV",
   directToGenerate = false,
@@ -53,14 +57,21 @@ export function NicheSearch({
     setQuery(defaultQuery);
   }, [defaultQuery]);
 
-  const results = useMemo(() => searchCgvNiches(query, 8), [query]);
+  const results = useMemo(() => searchAllModels(query, 8), [query]);
 
-  const navigate = useCallback(
-    (niche: CgvNiche) => {
+  const navigateResult = useCallback(
+    (result: UnifiedSearchResult) => {
       setOpen(false);
-      setQuery(niche.profession);
+      if (result.type === "catalog") {
+        setQuery(result.item.title);
+        router.push(result.item.href);
+        return;
+      }
+      setQuery(result.niche.profession);
       router.push(
-        directToGenerate ? getGenerateCgvUrl(niche.slug) : getCgvNichePath(niche.slug),
+        directToGenerate
+          ? getGenerateCgvUrl(result.niche.slug)
+          : getCgvNichePath(result.niche.slug),
       );
     },
     [directToGenerate, router],
@@ -73,9 +84,9 @@ export function NicheSearch({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const match = searchCgvNiches(query, 1)[0];
+    const match = searchAllModels(query, 1)[0];
     if (match) {
-      navigate(match);
+      navigateResult(match);
       return;
     }
     if (onQueryChange) {
@@ -129,7 +140,7 @@ export function NicheSearch({
                 setActiveIndex((i) => Math.max(i - 1, 0));
               } else if (e.key === "Enter" && results[activeIndex]) {
                 e.preventDefault();
-                navigate(results[activeIndex]);
+                navigateResult(results[activeIndex]);
               }
             }}
             className="h-11 pl-9"
@@ -140,25 +151,39 @@ export function NicheSearch({
               role="listbox"
               className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-md border bg-popover py-1 shadow-md"
             >
-              {results.map((niche, index) => (
-                <li key={niche.slug} role="option" aria-selected={index === activeIndex}>
+              {results.map((result, index) => (
+                <li
+                  key={
+                    result.type === "catalog"
+                      ? result.item.id
+                      : result.niche.slug
+                  }
+                  role="option"
+                  aria-selected={index === activeIndex}
+                >
                   <button
                     type="button"
                     className={`flex w-full flex-col px-3 py-2.5 text-left text-sm hover:bg-muted ${
                       index === activeIndex ? "bg-muted" : ""
                     }`}
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => navigate(niche)}
+                    onClick={() => navigateResult(result)}
                   >
-                    <span className="flex items-center gap-2">
-                      <span className="font-medium">{niche.profession}</span>
-                      <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-primary">
-                        {CGV_NICHE_CLUSTERS[niche.cluster].shortLabel}
-                      </span>
-                    </span>
-                    <span className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                      {niche.intro}
-                    </span>
+                    {result.type === "catalog" ? (
+                      <CatalogSearchOption item={result.item} />
+                    ) : (
+                      <>
+                        <span className="flex items-center gap-2">
+                          <span className="font-medium">{result.niche.profession}</span>
+                          <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-primary">
+                            {CGV_NICHE_CLUSTERS[result.niche.cluster].shortLabel}
+                          </span>
+                        </span>
+                        <span className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                          {result.niche.intro}
+                        </span>
+                      </>
+                    )}
                   </button>
                 </li>
               ))}
@@ -166,9 +191,13 @@ export function NicheSearch({
           ) : null}
           {open && query.trim() && results.length === 0 ? (
             <div className="absolute z-20 mt-1 w-full rounded-md border bg-popover px-3 py-2 text-sm text-muted-foreground shadow-md">
-              Aucun métier trouvé —{" "}
+              Aucun modèle trouvé —{" "}
+              <Link href="/generate/contrat-prestation" className="text-primary underline">
+                Contrat
+              </Link>
+              {" · "}
               <Link href="/generate/cgv" className="text-primary underline">
-                CGV génériques
+                CGV
               </Link>
             </div>
           ) : null}
@@ -182,13 +211,29 @@ export function NicheSearch({
       </form>
       {!compactFooter ? (
         <p className="mt-2 text-xs text-muted-foreground">
-          {cgvNiches.length} métiers couverts —{" "}
+          Contrats, devis, factures et {cgvNiches.length} métiers —{" "}
           <Link href="/modeles" className="text-primary hover:underline">
             voir tous les modèles
           </Link>
         </p>
       ) : null}
     </div>
+  );
+}
+
+function CatalogSearchOption({ item }: { item: CatalogModelHit }) {
+  return (
+    <>
+      <span className="flex items-center gap-2">
+        <span className="font-medium">{item.title}</span>
+        <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-emerald-700 dark:text-emerald-400">
+          {item.badge}
+        </span>
+      </span>
+      <span className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+        {item.description}
+      </span>
+    </>
   );
 }
 

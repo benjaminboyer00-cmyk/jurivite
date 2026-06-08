@@ -75,12 +75,11 @@ export default function ModelesPage() {
             {cgvNiches.length} métiers couverts
           </p>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            CGV adaptées à votre métier
+            Modèles juridiques & CGV par métier
           </h1>
           <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Trouvez le modèle qui correspond à votre activité — clauses spécifiques,
-            conformité et sérénité. Pas un PDF générique : un cadre pensé pour votre
-            secteur.
+            Contrats, devis, factures et {cgvNiches.length} CGV par profession —
+            trouvez le modèle adapté à votre activité en une recherche.
           </p>
         </header>
 
