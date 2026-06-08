@@ -124,7 +124,6 @@
   html {
     @apply scroll-smooth font-sans;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
   }
   body {
     @apply min-h-screen overflow-x-clip bg-background text-foreground antialiased;

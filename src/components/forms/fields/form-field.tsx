@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import * as React from "react";
 
 const fieldInputClass =
   "flex w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm shadow-xs transition-colors placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/40";
@@ -17,6 +18,14 @@ export function FormField({
   error?: string;
   children: React.ReactNode;
 }) {
+  const child =
+    error && React.isValidElement(children)
+      ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+          "aria-invalid": true,
+          "data-field-error": true,
+        })
+      : children;
+
   return (
     <div className="space-y-2">
       <Label htmlFor={id} className="text-sm font-medium">
@@ -25,9 +34,9 @@ export function FormField({
       {hint ? (
         <p className="text-xs text-muted-foreground">{hint}</p>
       ) : null}
-      {children}
+      {child}
       {error ? (
-        <p className="text-sm text-destructive" role="alert">
+        <p className="text-sm text-destructive" role="alert" id={`${id}-error`}>
           {error}
         </p>
       ) : null}

@@ -55,7 +55,7 @@ Les formulaires appellent `/api/generate-pdf` qui :
 1. Valide les données (Zod par slug + `validatePdfPayload`)
 2. Nettoie les champs (`sanitizePdfPayload`)
 3. Compile le template Handlebars (`templates/*.html`, échappement `{{ }}`)
-4. Sanitize le HTML final (`isomorphic-dompurify` dans `generate.ts`)
+4. Sanitize le HTML final (`sanitize-html` dans `generate.ts`)
 5. Génère le PDF via Puppeteer (JS désactivé, requêtes externes bloquées, timeout 45 s)
 6. Applique un filigrane si plan `free`
 7. Sauvegarde en base si utilisateur connecté
@@ -65,7 +65,7 @@ Les formulaires appellent `/api/generate-pdf` qui :
 | Mesure | Implémentation |
 |--------|----------------|
 | Validation API | Zod sur routes sensibles + enum des 10 slugs PDF |
-| HTML → PDF | DOMPurify + Puppeteer durci (`src/lib/pdf/generate.ts`) |
+| HTML → PDF | sanitize-html + Puppeteer durci (`src/lib/pdf/generate.ts`) |
 | Rate limiting | Middleware — mémoire ou **Upstash** si `UPSTASH_REDIS_REST_*` |
 | Webhook Stripe | `verifyStripeWebhookEvent()` → `constructEvent` obligatoire |
 | En-têtes HTTP | CSP, X-Frame-Options, HSTS en production (`middleware` + `next.config.ts`) |

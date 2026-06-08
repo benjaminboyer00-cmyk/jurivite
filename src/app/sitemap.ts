@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
 
+import {
+  CONTRACT_HUB_PATH,
+  getContractLandingSitemapPriority,
+  isContractRelatedLanding,
+} from "@/lib/documents/contract-seo-hub";
 import { documents } from "@/lib/documents/registry";
 import { cgvNiches } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
@@ -26,6 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.88,
+    },
+    {
+      url: `${siteConfig.url}${CONTRACT_HUB_PATH}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.94,
     },
     {
       url: `${siteConfig.url}/a-propos`,
@@ -69,7 +80,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteConfig.url}${doc.href}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
-    priority: 0.95,
+    priority: doc.slug === "contrat-prestation" ? 0.97 : 0.95,
   }));
 
   const landingPages: MetadataRoute.Sitemap = seoLandingPages.map(
@@ -77,7 +88,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteConfig.url}/generate/${landing.slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
-      priority: 0.9,
+      priority: isContractRelatedLanding(landing.slug)
+        ? getContractLandingSitemapPriority(landing.slug)
+        : 0.9,
     }),
   );
 

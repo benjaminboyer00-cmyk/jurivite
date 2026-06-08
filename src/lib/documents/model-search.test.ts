@@ -24,6 +24,11 @@ describe("searchCatalogModels", () => {
     );
     expect(hit).toBeDefined();
   });
+
+  it("priorise contrat-freelance-norme pour « contrat freelance norme »", () => {
+    const hits = searchCatalogModels("contrat freelance norme", 5);
+    expect(hits[0]?.href).toBe("/generate/contrat-freelance-norme");
+  });
 });
 
 describe("searchAllModels", () => {

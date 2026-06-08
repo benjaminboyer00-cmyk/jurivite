@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 
+import Link from "next/link";
+
 import { ModelesHub } from "@/components/marketing/modeles-hub";
 import { ModelesSeoIndex } from "@/components/marketing/modeles-seo-index";
+import { CONTRACT_HUB_PATH } from "@/lib/documents/contract-seo-hub";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { cgvNiches } from "@/lib/documents/niches-seo";
 import { createMetadata } from "@/lib/seo";
@@ -80,6 +83,14 @@ export default function ModelesPage() {
           <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
             Contrats, devis, factures et {cgvNiches.length} CGV par profession —
             trouvez le modèle adapté à votre activité en une recherche.
+          </p>
+          <p className="mt-4 text-sm">
+            <Link
+              href={CONTRACT_HUB_PATH}
+              className="font-medium text-primary hover:underline"
+            >
+              → Contrat freelance norme & guides prestation
+            </Link>
           </p>
         </header>
 

@@ -23,6 +23,8 @@ const DEFAULT_KEYWORDS = [
   "mentions légales",
   "RGPD",
   "contrat prestation",
+  "contrat freelance norme",
+  "modèle contrat freelance",
   "devis conforme",
   "modèle juridique pdf",
 ] as const;

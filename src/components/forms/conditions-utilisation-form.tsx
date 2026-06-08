@@ -35,7 +35,17 @@ export function ConditionsUtilisationForm() {
   });
 
   const generatePdf = useDocumentGenerate("conditions-utilisation");
-  const { stepIndex, currentStep, isGenerating, generateError, goNext, goBack, handleGenerate } =
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    generateSuccess,
+    stepErrorCount,
+    goNext,
+    goBack,
+    handleGenerate,
+  } =
     useSteppedForm({
       form,
       steps: CGU_STEPS,
@@ -54,6 +64,8 @@ export function ConditionsUtilisationForm() {
       onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} legalForm={values.legalForm} />

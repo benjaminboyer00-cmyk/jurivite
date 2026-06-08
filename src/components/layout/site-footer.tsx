@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+import {
+  CONTRACT_HUB_PATH,
+  getContractLandings,
+  isContractRelatedLanding,
+} from "@/lib/documents/contract-seo-hub";
 import { documents } from "@/lib/documents/registry";
 import { CGV_NICHE_CLUSTERS } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
@@ -8,11 +13,15 @@ import { siteConfig } from "@/lib/seo";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+  const contractLandings = getContractLandings();
+  const guideLandings = seoLandingPages.filter(
+    (landing) => !isContractRelatedLanding(landing.slug),
+  );
 
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7">
           <div className="lg:col-span-1">
             <p className="font-semibold">{siteConfig.name}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -42,10 +51,34 @@ export function SiteFooter() {
             </ul>
           </nav>
 
+          <nav aria-label="Contrats freelance">
+            <p className="text-sm font-semibold">Contrats freelance</p>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link
+                  href={CONTRACT_HUB_PATH}
+                  className="font-medium text-primary hover:underline"
+                >
+                  Hub contrats & modèles normés
+                </Link>
+              </li>
+              {contractLandings.map((landing) => (
+                <li key={landing.slug}>
+                  <Link
+                    href={`/generate/${landing.slug}`}
+                    className="hover:text-foreground"
+                  >
+                    {landing.h1}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <nav aria-label="Guides SEO">
             <p className="text-sm font-semibold">Guides populaires</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              {seoLandingPages.map((landing) => (
+              {guideLandings.map((landing) => (
                 <li key={landing.slug}>
                   <Link
                     href={`/generate/${landing.slug}`}

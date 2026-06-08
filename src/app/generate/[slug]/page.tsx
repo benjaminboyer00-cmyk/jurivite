@@ -8,7 +8,11 @@ import { DocumentLegalNotice } from "@/components/legal/document-legal-notice";
 import { CgvNichePicker } from "@/components/marketing/cgv-niche-picker";
 import { CgvForm } from "@/components/forms/cgv-form";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
+import { GeneratePageMeta } from "@/components/marketing/generate-page-meta";
+import { GenerateSeoSection } from "@/components/marketing/generate-seo-section";
+import { CONTRACT_HUB_PATH } from "@/lib/documents/contract-seo-hub";
 import { documentForms } from "@/lib/documents/forms";
+import { getDocumentStepCount } from "@/lib/documents/step-counts";
 import { getAllGenerateSlugs } from "@/lib/documents/seo-landings";
 import { getRelatedDocuments } from "@/lib/documents/related-documents";
 import { resolveGeneratePage, isValidGenerateSlug } from "@/lib/documents/resolve-page";
@@ -109,7 +113,11 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
         )}
       </nav>
 
-      <header className="mb-8 space-y-3 border-b border-border/60 pb-8">
+      <header className="mb-8 space-y-4 border-b border-border/60 pb-8">
+        <GeneratePageMeta
+          doc={page.doc}
+          stepCount={getDocumentStepCount(page.documentSlug)}
+        />
         <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl md:text-4xl">
           {page.h1}
         </h1>
@@ -120,6 +128,16 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
           <p className="text-sm">
             <Link href="/modeles" className="font-medium text-primary hover:underline">
               → 50 modèles CGV par métier
+            </Link>
+          </p>
+        ) : null}
+        {page.documentSlug === "contrat-prestation" ? (
+          <p className="text-sm">
+            <Link
+              href={CONTRACT_HUB_PATH}
+              className="font-medium text-primary hover:underline"
+            >
+              → Tous les guides contrat freelance norme
             </Link>
           </p>
         ) : null}
@@ -141,57 +159,12 @@ export default async function GenerateDocumentPage({ params }: PageProps) {
 
       <DocumentLegalNotice documentSlug={page.documentSlug} />
 
-      <article className="mt-16 space-y-12 border-t pt-12">
-        <section>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Guide complet — {page.doc.title}
-          </h2>
-          <div className="mt-8 space-y-8">
-            {page.seoBlocks.map((block) => (
-              <section key={block.heading}>
-                <h3 className="text-xl font-semibold tracking-tight">
-                  {block.heading}
-                </h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">
-                  {block.body}
-                </p>
-              </section>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Questions fréquentes
-          </h2>
-          <dl className="mt-6 space-y-4">
-            {page.faqs.map((faq) => (
-              <div
-                key={faq.question}
-                className="rounded-lg border bg-card px-5 py-4 shadow-sm"
-              >
-                <dt className="font-semibold">{faq.question}</dt>
-                <dd className="mt-2 leading-relaxed text-muted-foreground">
-                  {faq.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="rounded-lg border bg-muted/30 p-6">
-          <h2 className="font-semibold">Documents associés</h2>
-          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            {relatedLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="text-primary hover:underline">
-                  {link.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </article>
+      <GenerateSeoSection
+        docTitle={page.doc.title}
+        seoBlocks={page.seoBlocks}
+        faqs={page.faqs}
+        relatedLinks={relatedLinks}
+      />
     </>
   );
 }

@@ -8,6 +8,11 @@ import { HeroStats } from "@/components/marketing/hero-stats";
 import { NicheSearch, PopularNichePills } from "@/components/marketing/niche-search";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { ButtonLink } from "@/components/ui/button-link";
+import {
+  CONTRACT_HUB_PATH,
+  getContractLandings,
+  isContractRelatedLanding,
+} from "@/lib/documents/contract-seo-hub";
 import { documents } from "@/lib/documents/registry";
 import { POPULAR_NICHE_SLUGS } from "@/lib/documents/niches-seo";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
@@ -42,6 +47,11 @@ const features = [
 ] as const;
 
 export default function HomePage() {
+  const contractLandings = getContractLandings().slice(0, 6);
+  const nonContractLandings = seoLandingPages.filter(
+    (l) => !isContractRelatedLanding(l.slug),
+  );
+
   const jsonLd = [
     organizationJsonLd(),
     websiteJsonLd(),
@@ -81,8 +91,15 @@ export default function HomePage() {
             />
             <PopularNichePills slugs={POPULAR_NICHE_SLUGS} className="mt-4 max-w-xl" />
           </Suspense>
-          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
-            <ButtonLink href="/modeles" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
+            <ButtonLink
+              href="/generate/contrat-freelance-norme"
+              size="lg"
+              className="h-11 w-full sm:h-10 sm:w-auto"
+            >
+              Contrat freelance norme
+            </ButtonLink>
+            <ButtonLink href="/modeles" variant="outline" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
               50 modèles par métier
             </ButtonLink>
             <ButtonLink href="/generate/cgv" variant="outline" size="lg" className="h-11 w-full sm:h-10 sm:w-auto">
@@ -122,13 +139,46 @@ export default function HomePage() {
       <section className="border-y bg-muted/30">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Pages par métier et statut
+            Contrat freelance norme & prestation
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Guides SEO dédiés : auto-entrepreneur, freelance, site web, blog…
+            Modèles structurés pour les recherches les plus fréquentes : norme,
+            auto-entrepreneur, PDF, consultant, B2B.
           </p>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {seoLandingPages.map((landing) => (
+            {contractLandings.map((landing) => (
+              <li key={landing.slug}>
+                <Link
+                  href={`/generate/${landing.slug}`}
+                  className="block rounded-lg border bg-background px-4 py-3 text-sm transition-colors hover:border-primary hover:bg-primary/5"
+                >
+                  <span className="font-medium">{landing.h1}</span>
+                  <span className="mt-1 block text-muted-foreground">
+                    Générer en PDF →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm">
+            <Link href={CONTRACT_HUB_PATH} className="font-medium text-primary hover:underline">
+              Voir tous les guides contrat →
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-background">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            CGV, mentions légales & site web
+          </h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Guides par statut et par canal : auto-entrepreneur, freelance, blog,
+            e-commerce…
+          </p>
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {nonContractLandings.map((landing) => (
               <li key={landing.slug}>
                 <Link
                   href={`/generate/${landing.slug}`}

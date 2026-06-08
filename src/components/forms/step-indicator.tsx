@@ -40,7 +40,7 @@ export function StepIndicator({
                 )}
                 <span
                   className={cn(
-                    "flex size-7 shrink-0 items-center justify-center rounded-full border-2 text-[0.65rem] font-semibold transition-colors sm:size-8 sm:text-xs",
+                    "flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold shadow-sm transition-all sm:size-9",
                     isDone &&
                       "border-primary bg-primary text-primary-foreground",
                     isCurrent && "border-primary bg-primary/10 text-primary",

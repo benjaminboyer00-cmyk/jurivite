@@ -9,6 +9,7 @@ import {
   PopularNichePills,
   useModelesHubParams,
 } from "@/components/marketing/niche-search";
+import { CONTRACT_HUB_PATH } from "@/lib/documents/contract-seo-hub";
 import {
   getFeaturedDocuments,
   searchCatalogModels,
@@ -95,6 +96,14 @@ function ModelesHubInner() {
               </Link>
             ))}
           </div>
+          <p className="mt-4 text-center text-sm">
+            <Link
+              href={CONTRACT_HUB_PATH}
+              className="font-medium text-primary hover:underline"
+            >
+              Contrat freelance norme — tous les guides →
+            </Link>
+          </p>
         </section>
       ) : null}
 

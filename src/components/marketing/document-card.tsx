@@ -14,8 +14,9 @@ import {
 import type { DocumentDefinition } from "@/lib/documents/registry";
 import { cn } from "@/lib/utils";
 
-const priorityStyles: Record<number, string> = {
-  1: "ring-1 ring-primary/20",
+const priorityStyles: Record<string, string> = {
+  cgv: "ring-1 ring-primary/20",
+  "contrat-prestation": "ring-1 ring-emerald-500/25",
 };
 
 type DocumentCardProps = {
@@ -27,7 +28,7 @@ export function DocumentCard({ document }: DocumentCardProps) {
     <Card
       className={cn(
         "group flex h-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md",
-        priorityStyles[document.priority],
+        priorityStyles[document.slug],
       )}
     >
       <CardHeader className="space-y-4">
@@ -63,6 +64,13 @@ export function DocumentCard({ document }: DocumentCardProps) {
             className="text-center text-xs font-medium text-primary transition-colors hover:underline"
           >
             50 modèles par métier →
+          </Link>
+        ) : document.slug === "contrat-prestation" ? (
+          <Link
+            href="/generate/contrat-freelance-norme"
+            className="text-center text-xs font-medium text-primary transition-colors hover:underline"
+          >
+            Contrat freelance norme →
           </Link>
         ) : (
           <Link

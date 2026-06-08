@@ -170,30 +170,264 @@ export const seoLandingPages: SeoLandingPage[] = [
     ],
   },
   {
+    slug: "contrat-freelance-norme",
+    documentSlug: "contrat-prestation",
+    metaTitle:
+      "Contrat freelance norme — modèle conforme PDF (prestation de services)",
+    metaDescription:
+      "Contrat freelance aux normes : clauses mission, prix, TVA art. 293 B, paiement, confidentialité, signatures. Générateur PDF pour indépendants et auto-entrepreneurs.",
+    h1: "Contrat freelance norme",
+    intro:
+      "Un contrat de prestation structuré selon les usages professionnels français : 11 articles, mentions TVA, zones de signature et envoi client par lien. Idéal freelance, consultant ou micro-entreprise.",
+    seoKeywords: [
+      "contrat freelance norme",
+      "contrat freelance conforme",
+      "modèle contrat freelance norme",
+      "contrat prestation norme",
+      "contrat indépendant pdf",
+    ],
+    seoBlocks: [
+      {
+        heading: "Que contient un contrat freelance « aux normes » ?",
+        body: "Identification complète des parties (raison sociale, SIRET, adresses), objet et périmètre de la mission, prix et modalités de paiement, délais de livraison, TVA ou mention franchise art. 293 B, confidentialité, propriété intellectuelle, responsabilité, résiliation et droit applicable. JuriVite structure ces éléments en articles lisibles, prêts à faire signer.",
+      },
+      {
+        heading: "Pourquoi viser un modèle normé plutôt qu'un Word générique ?",
+        body: "Les modèles américains ou datés oublient la TVA française, les pénalités de retard B2B ou les mentions micro-entreprise. Un PDF normé rassure le client, accélère la validation comptable et limite les litiges sur le scope ou les impayés.",
+      },
+      {
+        heading: "Enchaînement devis → contrat → facture",
+        body: "Après acceptation du devis, le contrat formalise l'engagement. Reprenez les mêmes montants et le même SIRET sur la facture pour une chaîne documentaire cohérente devant un service achats.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Un contrat freelance norme remplace-t-il un avocat ?",
+        answer:
+          "Non : c'est un modèle structuré pour les missions courantes B2B. Pour des montants élevés, secteurs réglementés ou clauses sur mesure, faites relire par un professionnel du droit.",
+      },
+      {
+        question: "Le contrat est-il adapté auto-entrepreneur et société ?",
+        answer:
+          "Oui : le formulaire adapte les mentions TVA, capital social et RCS selon votre forme juridique (micro-entreprise, EURL, SAS, etc.).",
+      },
+      {
+        question: "Comment faire signer le client ?",
+        answer:
+          "Générez le PDF puis envoyez un lien de signature depuis votre tableau de bord JuriVite. Le client signe en ligne ; vous retéléchargez la version signée.",
+      },
+    ],
+  },
+  {
     slug: "contrat-freelance",
     documentSlug: "contrat-prestation",
-    metaTitle: "Contrat freelance PDF — prestation de services en ligne",
+    metaTitle:
+      "Contrat freelance PDF — modèle prestation de services en ligne",
     metaDescription:
-      "Modèle de contrat freelance : mission, prix, délais, paiement. Sécurisez vos prestations et limitez les impayés.",
+      "Modèle de contrat freelance : mission, prix, délais, paiement, TVA. Sécurisez vos prestations, limitez les impayés et faites signer par lien.",
     h1: "Contrat freelance",
     intro:
-      "Formalisez chaque mission avant de démarrer. Contrat de prestation prêt à faire signer.",
+      "Formalisez chaque mission avant de démarrer. Contrat de prestation professionnel, prêt à envoyer au client.",
     seoKeywords: [
       "contrat freelance",
       "contrat prestation freelance pdf",
       "modèle contrat indépendant",
+      "contrat consultant pdf",
     ],
     seoBlocks: [
       {
         heading: "Contrat freelance : les clauses qui comptent",
-        body: "Périmètre de la mission, prix, échéancier de paiement, délais, propriété des livrables et résiliation. Un PDF signé vaut mieux qu'un accord oral.",
+        body: "Périmètre de la mission, prix, échéancier de paiement, délais, propriété des livrables, confidentialité et résiliation. Un PDF signé vaut mieux qu'un accord oral ou un échange de mails dispersé.",
+      },
+      {
+        heading: "Contrat freelance et conformité française",
+        body: "Mentions SIRET, TVA ou art. 293 B, délais de paiement et pénalités de retard alignés sur le Code de commerce. Le rendu PDF est présentable face à un service juridique client.",
       },
     ],
     faqs: [
       {
         question: "Contrat freelance sans avocat : est-ce suffisant ?",
         answer:
-          "Un modèle structuré couvre 80 % des cas standard. Pour des montants élevés ou secteurs réglementés, faites relire par un professionnel.",
+          "Un modèle structuré couvre la majorité des missions standard. Pour des enjeux financiers importants, complétez par un avis juridique.",
+      },
+      {
+        question: "CGV ou contrat freelance en premier ?",
+        answer:
+          "Les CGV encadrent votre relation globale sur le site ; le contrat précise une mission (client, prix, planning). Utilisez les deux pour les freelances qui vendent des prestations.",
+      },
+    ],
+  },
+  {
+    slug: "contrat-prestation-norme",
+    documentSlug: "contrat-prestation",
+    metaTitle:
+      "Contrat de prestation aux normes — générateur PDF freelance & TPE",
+    metaDescription:
+      "Créez un contrat de prestation conforme : soussignés, 11 articles, TVA, paiement, signatures. Modèle normé pour freelances et petites entreprises.",
+    h1: "Contrat de prestation aux normes",
+    intro:
+      "Le socle contractuel attendu en prestation de services B2B : structure professionnelle, mentions légales françaises et export PDF immédiat.",
+    seoKeywords: [
+      "contrat prestation norme",
+      "contrat de prestation conforme",
+      "modèle contrat prestation services",
+      "contrat prestation pdf",
+    ],
+    seoBlocks: [
+      {
+        heading: "Articles standards d'un contrat de prestation normé",
+        body: "Objet, délais, prix, obligations réciproques, propriété intellectuelle, confidentialité, responsabilité, résiliation et loi applicable. JuriVite les pré-remplit selon vos réponses au formulaire.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Contrat de prestation ou bon pour accord sur devis ?",
+        answer:
+          "Le devis accepté peut suffire pour une petite mission ; le contrat normé renforce la sécurité dès que le montant ou la durée augmente.",
+      },
+    ],
+  },
+  {
+    slug: "modele-contrat-freelance",
+    documentSlug: "contrat-prestation",
+    metaTitle: "Modèle contrat freelance — PDF gratuit à personnaliser",
+    metaDescription:
+      "Téléchargez un modèle de contrat freelance après personnalisation : SIRET, mission, prix, TVA. PDF structuré pour consultants et créatifs.",
+    h1: "Modèle de contrat freelance",
+    intro:
+      "Partez d'un modèle professionnel et adaptez-le à chaque client en quelques minutes — sans repartir d'une page blanche.",
+    seoKeywords: [
+      "modèle contrat freelance",
+      "modèle contrat freelance word pdf",
+      "exemple contrat freelance",
+      "template contrat prestation",
+    ],
+    seoBlocks: [
+      {
+        heading: "Modèle vs contrat sur mesure",
+        body: "Un modèle normé couvre 90 % des missions freelance. Vous personnalisez mission, client, montant et délais ; le cadre juridique reste cohérent d'un projet à l'autre.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Puis-je réutiliser le même modèle pour tous mes clients ?",
+        answer:
+          "Oui, en régénérant un PDF par mission avec le bon client, périmètre et prix — ne réutilisez jamais un ancien PDF sans mise à jour.",
+      },
+    ],
+  },
+  {
+    slug: "contrat-freelance-auto-entrepreneur",
+    documentSlug: "contrat-prestation",
+    metaTitle:
+      "Contrat freelance auto-entrepreneur — modèle micro-entreprise PDF",
+    metaDescription:
+      "Contrat de prestation pour auto-entrepreneur : franchise TVA art. 293 B, SIRET, mission et paiement. PDF conforme micro-entreprise.",
+    h1: "Contrat freelance auto-entrepreneur",
+    intro:
+      "Modèle adapté aux micro-entrepreneurs : mentions TVA franchise en base, identité et clauses de prestation prêtes pour vos clients.",
+    seoKeywords: [
+      "contrat auto-entrepreneur",
+      "contrat freelance micro-entreprise",
+      "contrat prestation auto entrepreneur pdf",
+    ],
+    seoBlocks: [
+      {
+        heading: "Spécificités auto-entrepreneur dans le contrat",
+        body: "Mention TVA non applicable art. 293 B, identité de l'entrepreneur individuel, SIRET et adresse professionnelle. Pas de capital social à indiquer — le formulaire s'adapte automatiquement.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Un auto-entrepreneur doit-il faire signer un contrat ?",
+        answer:
+          "Fortement recommandé dès qu'une mission dépasse un simple one-shot : le contrat fixe le prix, le périmètre et les délais de paiement.",
+      },
+    ],
+  },
+  {
+    slug: "contrat-consultant-independant",
+    documentSlug: "contrat-prestation",
+    metaTitle:
+      "Contrat consultant indépendant — modèle prestation intellectuelle PDF",
+    metaDescription:
+      "Contrat pour consultant freelance : mission, livrables, TJM ou forfait, confidentialité, PI. PDF professionnel B2B.",
+    h1: "Contrat consultant indépendant",
+    intro:
+      "Encadrez vos missions de conseil, audit ou accompagnement avec un contrat structuré avant le premier jour de facturation.",
+    seoKeywords: [
+      "contrat consultant indépendant",
+      "contrat consultant freelance",
+      "modèle contrat mission conseil",
+    ],
+    seoBlocks: [
+      {
+        heading: "Consultant : obligation de moyens et périmètre",
+        body: "Le contrat précise la nature du conseil, les livrables attendus, le nombre de jours ou le forfait, et rappelle l'obligation de moyens sauf stipulation contraire.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Contrat consultant et clause de confidentialité ?",
+        answer:
+          "Le contrat de prestation inclut un article confidentialité. Pour des données très sensibles en amont, ajoutez un NDA JuriVite.",
+      },
+    ],
+  },
+  {
+    slug: "contrat-prestation-b2b",
+    documentSlug: "contrat-prestation",
+    metaTitle: "Contrat de prestation B2B — modèle PDF entre professionnels",
+    metaDescription:
+      "Contrat B2B prestation de services : prix HT, TVA, délais de paiement, pénalités de retard, résiliation. Pour freelances et TPE.",
+    h1: "Contrat de prestation B2B",
+    intro:
+      "Relation entre professionnels : mentions adaptées aux délais de paiement légaux, TVA et facturation récurrente.",
+    seoKeywords: [
+      "contrat prestation b2b",
+      "contrat prestation entre professionnels",
+      "contrat commercial prestation services",
+    ],
+    seoBlocks: [
+      {
+        heading: "Contrat B2B et délais de paiement",
+        body: "Le modèle intègre les usages de facturation inter-entreprises : échéances, pénalités de retard et indemnité forfaitaire de recouvrement (art. L.441-10 C. com.).",
+      },
+    ],
+    faqs: [
+      {
+        question: "Droit de rétractation en B2B ?",
+        answer:
+          "Pas de rétractation B2C sur une prestation B2B classique — le contrat fixe les conditions de résiliation anticipée.",
+      },
+    ],
+  },
+  {
+    slug: "contrat-freelance-pdf",
+    documentSlug: "contrat-prestation",
+    metaTitle: "Contrat freelance PDF — générer et faire signer en ligne",
+    metaDescription:
+      "Générez un contrat freelance en PDF : formulaire 5 min, filigrane gratuit, signature client par lien. Modèle normé prestation de services.",
+    h1: "Contrat freelance PDF",
+    intro:
+      "Export PDF immédiat après validation du formulaire. Envoyez au client pour signature électronique simple depuis votre compte.",
+    seoKeywords: [
+      "contrat freelance pdf",
+      "contrat freelance pdf gratuit",
+      "générer contrat freelance",
+      "contrat prestation pdf télécharger",
+    ],
+    seoBlocks: [
+      {
+        heading: "PDF professionnel vs document Word",
+        body: "Un PDF fige la mise en page, évite les modifications accidentelles et se signe plus facilement. JuriVite produit un rendu prêt à envoyer, pas un fichier à reformater.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Version gratuite avec filigrane : à quoi ça sert ?",
+        answer:
+          "Testez le rendu et les clauses avant achat. Débloquez le PDF sans filigrane à partir de 4,90 € ou via abonnement Pro.",
       },
     ],
   },

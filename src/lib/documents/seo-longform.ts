@@ -185,9 +185,9 @@ export const documentPageContent: Record<DocumentSlug, DocumentPageContent> = {
   },
   "contrat-prestation": {
     metaTitle:
-      "Contrat de prestation de services freelance — modèle PDF structuré",
+      "Contrat de prestation norme — modèle PDF freelance & auto-entrepreneur",
     metaDescription:
-      "Générez un contrat de prestation : mission, prix, délais, TVA, paiement, confidentialité. Sécurisez vos missions et limitez impayés et scope creep.",
+      "Contrat de prestation aux normes : mission, prix, délais, TVA art. 293 B, paiement, confidentialité, signatures. Modèle structuré pour freelances et TPE.",
     h1: "Contrat de prestation de services",
     intro:
       "Formaliser une mission avant le premier jour de travail protège le freelance comme le client : périmètre, prix, calendrier et modalités de paiement deviennent écrits. JuriVite produit un contrat en articles professionnels, calé sur votre statut (micro ou société) et réutilisable mission après mission.",

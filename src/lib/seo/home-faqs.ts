@@ -7,7 +7,7 @@ export const homeFaqs = [
   {
     question: "Quels documents juridiques puis-je générer ?",
     answer:
-      "CGV, mentions légales, politique de confidentialité RGPD, contrat de prestation de services et devis conforme — avec export PDF.",
+      "CGV, mentions légales, politique de confidentialité RGPD, contrat freelance norme (prestation de services), NDA, devis et factures conformes — avec export PDF et signature en ligne.",
   },
   {
     question: "Combien coûte JuriVite ?",

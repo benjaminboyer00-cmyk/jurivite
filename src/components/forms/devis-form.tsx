@@ -53,6 +53,8 @@ export function DevisForm() {
     currentStep,
     isGenerating,
     generateError,
+    generateSuccess,
+    stepErrorCount,
     goNext,
     goBack,
     handleGenerate,
@@ -83,6 +85,8 @@ export function DevisForm() {
       }
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields

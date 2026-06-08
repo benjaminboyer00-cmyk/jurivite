@@ -37,7 +37,17 @@ export function AccordConfidentialiteForm() {
   });
 
   const generatePdf = useDocumentGenerate("accord-confidentialite");
-  const { stepIndex, currentStep, isGenerating, generateError, goNext, goBack, handleGenerate } =
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    generateSuccess,
+    stepErrorCount,
+    goNext,
+    goBack,
+    handleGenerate,
+  } =
     useSteppedForm({
       form,
       steps: NDA_STEPS,
@@ -56,6 +66,8 @@ export function AccordConfidentialiteForm() {
       onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} legalForm={values.legalForm} />

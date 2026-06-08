@@ -1,3 +1,4 @@
+import { PRIORITY_CONTRACT_LANDING_SLUGS } from "@/lib/documents/contract-seo-hub";
 import type { DocumentSlug } from "@/lib/documents/registry";
 import { documents } from "@/lib/documents/registry";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
@@ -33,9 +34,17 @@ export function getRelatedDocuments(
 ): RelatedLink[] {
   const core = relatedByDocument[documentSlug].map(docLink);
 
-  const landings = seoLandingPages
-    .filter((l) => l.documentSlug === documentSlug)
-    .slice(0, 3)
+  const landingSlugs =
+    documentSlug === "contrat-prestation"
+      ? PRIORITY_CONTRACT_LANDING_SLUGS.slice(0, 4)
+      : seoLandingPages
+          .filter((l) => l.documentSlug === documentSlug)
+          .slice(0, 3)
+          .map((l) => l.slug);
+
+  const landings = landingSlugs
+    .map((slug) => seoLandingPages.find((l) => l.slug === slug))
+    .filter((l): l is NonNullable<typeof l> => Boolean(l))
     .map((l) => ({
       href: `/generate/${l.slug}`,
       title: l.h1,

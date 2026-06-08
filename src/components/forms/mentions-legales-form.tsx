@@ -46,6 +46,8 @@ export function MentionsLegalesForm() {
     currentStep,
     isGenerating,
     generateError,
+    generateSuccess,
+    stepErrorCount,
     goNext,
     goBack,
     handleGenerate,
@@ -72,6 +74,8 @@ export function MentionsLegalesForm() {
       }
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields

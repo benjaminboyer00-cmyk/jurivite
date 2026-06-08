@@ -40,8 +40,6 @@ const nextConfig: NextConfig = {
     "puppeteer-core",
     "@sparticuz/chromium",
     "@puppeteer/browsers",
-    "isomorphic-dompurify",
-    "jsdom",
   ],
   outputFileTracingIncludes: Object.fromEntries(
     PDF_API_ROUTES.map((route) => [

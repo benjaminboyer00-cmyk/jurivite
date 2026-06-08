@@ -67,7 +67,13 @@ export const documents: DocumentDefinition[] = [
     shortDescription:
       "Contrat premium : soussignés, 11 articles, TVA art. 293 B, PI, confidentialité, signatures.",
     href: "/generate/contrat-prestation",
-    seoKeywords: ["contrat prestation freelance", "modèle contrat prestation"],
+    seoKeywords: [
+      "contrat prestation freelance",
+      "modèle contrat prestation",
+      "contrat freelance norme",
+      "contrat de prestation norme",
+      "contrat freelance pdf",
+    ],
     estimatedMinutes: 7,
     priority: 4,
     category: "contrats",

@@ -9,6 +9,7 @@ import { siteConfig } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/modeles", label: "Modèles" },
   { href: "/#documents", label: "Documents" },
   { href: "/tarifs", label: "Tarifs" },
 ] as const;

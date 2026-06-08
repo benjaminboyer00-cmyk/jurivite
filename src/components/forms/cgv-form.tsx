@@ -70,6 +70,8 @@ export function CgvForm({ metier: metierProp }: CgvFormProps) {
     currentStep,
     isGenerating,
     generateError,
+    generateSuccess,
+    stepErrorCount,
     goNext,
     goBack,
     handleGenerate,
@@ -94,6 +96,8 @@ export function CgvForm({ metier: metierProp }: CgvFormProps) {
       onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       <input type="hidden" {...register("nicheSlug")} />
 

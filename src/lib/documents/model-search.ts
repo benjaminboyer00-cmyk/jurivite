@@ -6,7 +6,10 @@ import {
   searchCgvNiches,
   type CgvNiche,
 } from "@/lib/documents/niches-seo";
+import { PRIORITY_CONTRACT_LANDING_SLUGS } from "@/lib/documents/contract-seo-hub";
 import { seoLandingPages } from "@/lib/documents/seo-landings";
+
+const PRIORITY_CONTRACT_SLUGS = new Set<string>(PRIORITY_CONTRACT_LANDING_SLUGS);
 
 export type CatalogModelHit = {
   id: string;
@@ -103,7 +106,13 @@ export function searchCatalogModels(query: string, limit = 8): CatalogModelHit[]
       landing.slug.replace(/-/g, " "),
       ...landing.seoKeywords,
     ];
-    const score = scoreTextMatch(terms, q);
+    let score = scoreTextMatch(terms, q);
+    if (PRIORITY_CONTRACT_SLUGS.has(landing.slug)) {
+      score += 3;
+    }
+    if (landing.slug === "contrat-freelance-norme" && q.includes("norme")) {
+      score += 15;
+    }
     if (score > 0) {
       hits.push({
         score,
@@ -128,8 +137,11 @@ export function searchAllModels(query: string, limit = 8): UnifiedSearchResult[]
   const q = query.trim().toLowerCase();
   if (!q) return [];
 
-  const catalog = searchCatalogModels(q, limit);
-  const niches = searchCgvNiches(q, limit);
+  const nicheLimit = Math.max(1, Math.ceil(limit / 2));
+  const catalogLimit = limit - nicheLimit;
+
+  const niches = searchCgvNiches(q, nicheLimit);
+  const catalog = searchCatalogModels(q, catalogLimit);
 
   const merged: UnifiedSearchResult[] = [
     ...catalog.map((item) => ({ type: "catalog" as const, item })),

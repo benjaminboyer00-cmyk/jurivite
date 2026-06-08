@@ -38,7 +38,17 @@ export function CessionDroitsForm() {
   });
 
   const generatePdf = useDocumentGenerate("cession-droits-auteur");
-  const { stepIndex, currentStep, isGenerating, generateError, goNext, goBack, handleGenerate } =
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    generateSuccess,
+    stepErrorCount,
+    goNext,
+    goBack,
+    handleGenerate,
+  } =
     useSteppedForm({
       form,
       steps: CESSION_DROITS_STEPS,
@@ -57,6 +67,8 @@ export function CessionDroitsForm() {
       onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} legalForm={values.legalForm} />

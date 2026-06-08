@@ -42,7 +42,17 @@ export function ConventionStageForm() {
   });
 
   const generatePdf = useDocumentGenerate("convention-stage");
-  const { stepIndex, currentStep, isGenerating, generateError, goNext, goBack, handleGenerate } =
+  const {
+    stepIndex,
+    currentStep,
+    isGenerating,
+    generateError,
+    generateSuccess,
+    stepErrorCount,
+    goNext,
+    goBack,
+    handleGenerate,
+  } =
     useSteppedForm({
       form,
       steps: CONVENTION_STAGE_STEPS,
@@ -61,6 +71,8 @@ export function ConventionStageForm() {
       onGenerate={() => handleGenerate(() => generatePdf(form.getValues()))}
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields register={register} errors={formState.errors} legalForm={values.legalForm} />

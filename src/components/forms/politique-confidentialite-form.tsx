@@ -50,6 +50,8 @@ export function PolitiqueConfidentialiteForm() {
     currentStep,
     isGenerating,
     generateError,
+    generateSuccess,
+    stepErrorCount,
     goNext,
     goBack,
     handleGenerate,
@@ -76,6 +78,8 @@ export function PolitiqueConfidentialiteForm() {
       }
       isGenerating={isGenerating}
       generateError={generateError}
+      generateSuccess={generateSuccess}
+      stepErrorCount={stepErrorCount}
     >
       {currentStep.id === "company" && (
         <CompanyFields
