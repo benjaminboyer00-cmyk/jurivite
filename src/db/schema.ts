@@ -17,6 +17,13 @@ export const purchaseTypeEnum = pgEnum("purchase_type", [
   "pack_essential",
 ]);
 
+export const signingStatusEnum = pgEnum("signing_status", [
+  "pending",
+  "signed",
+  "expired",
+  "cancelled",
+]);
+
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
@@ -156,11 +163,33 @@ export const documents = pgTable("document", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
 });
 
+/** Lien de signature client pour contrat / devis */
+export const signingRequests = pgTable("signing_request", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  documentId: text("document_id")
+    .notNull()
+    .references(() => documents.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  clientName: text("client_name").notNull(),
+  clientEmail: text("client_email"),
+  status: signingStatusEnum("status").notNull().default("pending"),
+  signatureDataUrl: text("signature_data_url"),
+  signedAt: timestamp("signed_at", { mode: "date" }),
+  expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
   companies: many(companies),
   documents: many(documents),
+  signingRequests: many(signingRequests),
   apiKeys: many(apiKeys),
   purchases: many(purchases),
   documentEntitlements: many(documentEntitlements),
@@ -194,10 +223,22 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   documents: many(documents),
 }));
 
-export const documentsRelations = relations(documents, ({ one }) => ({
+export const documentsRelations = relations(documents, ({ one, many }) => ({
   user: one(users, { fields: [documents.userId], references: [users.id] }),
   company: one(companies, {
     fields: [documents.companyId],
     references: [companies.id],
+  }),
+  signingRequests: many(signingRequests),
+}));
+
+export const signingRequestsRelations = relations(signingRequests, ({ one }) => ({
+  document: one(documents, {
+    fields: [signingRequests.documentId],
+    references: [documents.id],
+  }),
+  user: one(users, {
+    fields: [signingRequests.userId],
+    references: [users.id],
   }),
 }));

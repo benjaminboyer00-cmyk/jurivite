@@ -76,10 +76,18 @@
         {{companyName}}<br /><br />
         Signature :
       </div>
-      <div class="signature-box">
+      <div class="signature-box signature-box-client">
         <strong>Le Client</strong><br />
+        {{#if hasClientSignature}}
+        « Bon pour accord » — {{clientSignerName}}<br />
+        Date : {{clientSignedAt}}<br />
+        <div class="signature-canvas-area">
+        <img src="{{clientSignatureDataUrl}}" alt="Signature client" class="signature-image" />
+        </div>
+        {{else}}
         « Bon pour accord » — Date :<br /><br />
         Signature :
+        {{/if}}
       </div>
     </div>
 

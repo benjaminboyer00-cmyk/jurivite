@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { FileText } from "lucide-react";
 import { eq } from "drizzle-orm";
 
 import { SessionPlanSync } from "@/components/auth/session-plan-sync";
 import { CheckoutButton } from "@/components/auth/checkout-button";
 import { OneShotCheckoutButton } from "@/components/auth/one-shot-checkout-button";
-import { DocumentDownloadButton } from "@/components/auth/document-download-button";
+import { DashboardDocuments } from "@/components/dashboard/dashboard-documents";
 import { AccountPrivacyPanel } from "@/components/dashboard/account-privacy-panel";
 import { ApiKeyPanel } from "@/components/dashboard/api-key-panel";
 import { Alert } from "@/components/ui/alert";
@@ -22,6 +21,7 @@ import {
 } from "@/lib/db/entitlements";
 import { countMonthlyPdfGenerations } from "@/lib/db/usage";
 import { getUserDocuments } from "@/lib/db/documents";
+import { listSigningRequestsForUser } from "@/lib/db/signing";
 import {
   formatPriceEur,
   PLAN_LIMITS,
@@ -63,6 +63,13 @@ export default async function DashboardPage({
   const params = await searchParams;
   const plan = session.user.plan;
   const docs = await getUserDocuments(session.user.id);
+  const signingRows = await listSigningRequestsForUser(session.user.id);
+  const signingByDocumentId = new Map<string, (typeof signingRows)[number]>();
+  for (const row of signingRows) {
+    if (!signingByDocumentId.has(row.documentId)) {
+      signingByDocumentId.set(row.documentId, row);
+    }
+  }
   const usedThisMonth = await countMonthlyPdfGenerations(session.user.id);
   const packCredits = await getPackCreditsRemaining(session.user.id);
   const entitlements = await listUserEntitlements(session.user.id);
@@ -234,43 +241,10 @@ export default async function DashboardPage({
           </ButtonLink>
         </div>
 
-        {docs.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="flex flex-col items-center py-14 text-center">
-              <FileText className="size-12 text-muted-foreground/50" />
-              <p className="mt-4 font-medium">Aucun document pour l&apos;instant</p>
-              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Générez votre premier PDF depuis le catalogue (CGV, mentions
-                légales, etc.).
-              </p>
-              <ButtonLink href="/generate/cgv" className="mt-6">
-                Créer des CGV
-              </ButtonLink>
-            </CardContent>
-          </Card>
-        ) : (
-          <ul className="space-y-3">
-            {docs.map((doc) => (
-              <li key={doc.id}>
-                <Card>
-                  <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="min-w-0">
-                      <p className="font-medium truncate">{doc.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(doc.createdAt).toLocaleDateString("fr-FR")}
-                        {doc.hasWatermark ? " · Filigrane" : " · Sans filigrane"}
-                      </p>
-                    </div>
-                    <DocumentDownloadButton
-                      documentId={doc.id}
-                      fileName={doc.fileName}
-                    />
-                  </CardContent>
-                </Card>
-              </li>
-            ))}
-          </ul>
-        )}
+        <DashboardDocuments
+          docs={docs}
+          signingByDocumentId={signingByDocumentId}
+        />
       </section>
 
       <AccountPrivacyPanel

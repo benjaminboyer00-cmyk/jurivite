@@ -85,9 +85,19 @@ export function enrichLegalContext(
     paymentTerms: paymentTermsRaw,
   });
 
+  const clientSignatureDataUrl = String(data.clientSignatureDataUrl ?? "").trim();
+  const hasClientSignature = Boolean(
+    data.hasClientSignature && clientSignatureDataUrl.startsWith("data:image/"),
+  );
+
   return {
     ...data,
     ...classification,
+    hasClientSignature,
+    clientSignatureDataUrl: hasClientSignature ? clientSignatureDataUrl : null,
+    clientSignerName:
+      String(data.clientSignerName ?? data.clientName ?? "").trim() || null,
+    clientSignedAt: String(data.clientSignedAt ?? "").trim() || null,
     iban: iban || null,
     ibanFormatted: iban ? formatIbanDisplay(iban) : null,
     bic: bic || null,

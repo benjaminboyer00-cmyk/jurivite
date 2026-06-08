@@ -158,11 +158,19 @@
         <em>Nom et qualité du signataire</em><br /><br />
         <em>Signature précédée de la mention « Lu et approuvé »</em>
       </div>
-      <div class="signature-box">
+      <div class="signature-box signature-box-client">
         <strong>Pour le Client</strong><br />
-        {{clientName}}<br />
-        Fait à ____________________, le {{dateDuJourCourt}}<br /><br />
+        {{#if hasClientSignature}}{{clientSignerName}}{{else}}{{clientName}}{{/if}}<br />
+        Fait à ____________________, le {{#if hasClientSignature}}{{clientSignedAt}}{{else}}{{dateDuJourCourt}}{{/if}}<br />
+        <div class="signature-canvas-area">
+        {{#if hasClientSignature}}
+        <img src="{{clientSignatureDataUrl}}" alt="Signature client" class="signature-image" />
+        <p class="signature-mention">Lu et approuvé — signature électronique</p>
+        {{else}}
+        <br /><br />
         <em>Signature précédée de la mention « Lu et approuvé »</em>
+        {{/if}}
+        </div>
       </div>
     </div>
 

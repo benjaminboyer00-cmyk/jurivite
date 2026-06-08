@@ -1,11 +1,12 @@
 import type { Browser, Page } from "puppeteer";
-import puppeteer from "puppeteer";
 
 const PDF_TIMEOUT_MS = 45_000;
 
+const isVercel = process.env.VERCEL === "1";
+
 /** Sandbox Chromium activé par défaut. Docker/VPS : PDF_CHROME_NO_SANDBOX=1 */
 const LAUNCH_ARGS = [
-  ...(process.env.PDF_CHROME_NO_SANDBOX === "1"
+  ...(process.env.PDF_CHROME_NO_SANDBOX === "1" || isVercel
     ? ["--no-sandbox", "--disable-setuid-sandbox"]
     : []),
   "--disable-dev-shm-usage",
@@ -18,7 +19,18 @@ const LAUNCH_ARGS = [
 let browserPromise: Promise<Browser> | null = null;
 
 async function launchBrowser(): Promise<Browser> {
-  return puppeteer.launch({
+  if (isVercel) {
+    const chromium = (await import("@sparticuz/chromium")).default;
+    const puppeteer = (await import("puppeteer-core")).default;
+    return (await puppeteer.launch({
+      args: [...chromium.args, ...LAUNCH_ARGS],
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    })) as unknown as Browser;
+  }
+
+  const puppeteer = await import("puppeteer");
+  return puppeteer.default.launch({
     headless: true,
     args: LAUNCH_ARGS,
   });

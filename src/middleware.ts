@@ -30,6 +30,10 @@ async function applyApiRateLimits(
     return enforceRateLimit(request, "api-keys", RATE_LIMITS.apiKey);
   }
 
+  if (pathname.startsWith("/api/sign/")) {
+    return enforceRateLimit(request, "sign", RATE_LIMITS.sign);
+  }
+
   if (
     pathname.startsWith("/api/auth/") &&
     !pathname.includes("/callback/") &&
@@ -73,5 +77,6 @@ export const config = {
     "/api/checkout",
     "/api/checkout/one-shot",
     "/api/api-keys",
+    "/api/sign/:path*",
   ],
 };

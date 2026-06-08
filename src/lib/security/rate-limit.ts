@@ -34,4 +34,5 @@ export const RATE_LIMITS = {
   pdf: { limit: 30, windowMs: 60 * 1000 },
   checkout: { limit: 10, windowMs: 10 * 60 * 1000 },
   apiKey: { limit: 20, windowMs: 60 * 1000 },
+  sign: { limit: 30, windowMs: 10 * 60 * 1000 },
 } as const satisfies Record<string, RateLimitConfig>;
