@@ -27,13 +27,31 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: contentSecurityPolicy },
 ];
 
+const PDF_API_ROUTES = [
+  "/api/generate-pdf",
+  "/api/v1/generate-pdf",
+  "/api/documents/*/download",
+  "/api/admin/documents/*/download",
+] as const;
+
 const nextConfig: NextConfig = {
   serverExternalPackages: [
     "puppeteer",
+    "puppeteer-core",
+    "@sparticuz/chromium",
     "@puppeteer/browsers",
     "isomorphic-dompurify",
     "jsdom",
   ],
+  outputFileTracingIncludes: Object.fromEntries(
+    PDF_API_ROUTES.map((route) => [
+      route,
+      [
+        "./templates/**/*",
+        "./node_modules/@sparticuz/chromium/bin/**",
+      ],
+    ]),
+  ),
   poweredByHeader: false,
   async headers() {
     return [

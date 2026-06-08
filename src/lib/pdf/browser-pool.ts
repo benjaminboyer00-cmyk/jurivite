@@ -4,6 +4,11 @@ const PDF_TIMEOUT_MS = 45_000;
 
 const isVercel = process.env.VERCEL === "1";
 
+/** Pack Chromium hébergé sur GitHub si le dossier bin/ n'est pas bundlé (Vercel) */
+const CHROMIUM_PACK_URL =
+  process.env.CHROMIUM_REMOTE_EXEC_PATH ??
+  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.x64.tar";
+
 /** Sandbox Chromium activé par défaut. Docker/VPS : PDF_CHROME_NO_SANDBOX=1 */
 const LAUNCH_ARGS = [
   ...(process.env.PDF_CHROME_NO_SANDBOX === "1" || isVercel
@@ -18,17 +23,36 @@ const LAUNCH_ARGS = [
 
 let browserPromise: Promise<Browser> | null = null;
 
-async function launchBrowser(): Promise<Browser> {
-  if (isVercel) {
-    const chromium = (await import("@sparticuz/chromium")).default;
-    const puppeteer = (await import("puppeteer-core")).default;
-    return (await puppeteer.launch({
-      args: [...chromium.args, ...LAUNCH_ARGS],
-      executablePath: await chromium.executablePath(),
-      headless: true,
-    })) as unknown as Browser;
+async function resolveChromiumExecutablePath(
+  chromium: Awaited<typeof import("@sparticuz/chromium")>["default"],
+): Promise<string> {
+  try {
+    return await chromium.executablePath();
+  } catch {
+    return chromium.executablePath(CHROMIUM_PACK_URL);
   }
+}
 
+async function launchVercelBrowser(): Promise<Browser> {
+  const chromium = (await import("@sparticuz/chromium")).default;
+  const puppeteer = (await import("puppeteer-core")).default;
+
+  chromium.setGraphicsMode = false;
+
+  const executablePath = await resolveChromiumExecutablePath(chromium);
+  const headless = "shell" as const;
+
+  return (await puppeteer.launch({
+    args: puppeteer.defaultArgs({
+      args: [...chromium.args, ...LAUNCH_ARGS],
+      headless,
+    }),
+    executablePath,
+    headless,
+  })) as unknown as Browser;
+}
+
+async function launchLocalBrowser(): Promise<Browser> {
   const puppeteer = await import("puppeteer");
   return puppeteer.default.launch({
     headless: true,
@@ -36,7 +60,14 @@ async function launchBrowser(): Promise<Browser> {
   });
 }
 
-/** Instance Chromium partagée — évite 2–4 s de lancement à chaque PDF (VPS / Node long-running). */
+async function launchBrowser(): Promise<Browser> {
+  if (isVercel) {
+    return launchVercelBrowser();
+  }
+  return launchLocalBrowser();
+}
+
+/** Instance Chromium partagée — VPS / Node long-running uniquement. */
 export async function getSharedBrowser(): Promise<Browser> {
   if (!browserPromise) {
     browserPromise = launchBrowser().catch((error) => {
@@ -75,6 +106,20 @@ async function hardenPdfPage(page: Page): Promise<void> {
 export async function withPdfPage<T>(
   fn: (page: Page) => Promise<T>,
 ): Promise<T> {
+  if (isVercel) {
+    const browser = await launchVercelBrowser();
+    const page = await browser.newPage();
+    page.setDefaultTimeout(PDF_TIMEOUT_MS);
+    await hardenPdfPage(page);
+
+    try {
+      return await fn(page);
+    } finally {
+      await page.close().catch(() => undefined);
+      await browser.close().catch(() => undefined);
+    }
+  }
+
   const browser = await getSharedBrowser();
   const page = await browser.newPage();
   page.setDefaultTimeout(PDF_TIMEOUT_MS);
