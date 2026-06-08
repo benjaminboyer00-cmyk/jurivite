@@ -46,9 +46,29 @@ function resolveStatus(
   if (formData.hasClientSignature) return "signed";
   if (!signing) return "draft";
   if (signing.status === "signed") return "signed";
+  if (
+    signing.status === "pending" &&
+    signing.expiresAt &&
+    signing.expiresAt < new Date()
+  ) {
+    return "expired";
+  }
   if (signing.status === "expired") return "expired";
   if (signing.status === "cancelled") return "cancelled";
   return "pending";
+}
+
+function extractSignedAt(
+  doc: Doc,
+  signing: SigningRow | undefined,
+): Date | null {
+  if (signing?.signedAt) return signing.signedAt;
+  const formData = doc.formData as Record<string, unknown>;
+  if (!formData.hasClientSignature) return null;
+  const label = String(formData.clientSignedAt ?? "").trim();
+  if (!label) return null;
+  const parsed = new Date(label);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
 function extractClientName(doc: Doc, signing?: SigningRow): string {
@@ -106,7 +126,7 @@ export function buildSignatureWorkspace(
         status === "pending" && signing?.token
           ? buildSigningUrl(signing.token, siteUrl)
           : null,
-      signedAt: signing?.signedAt ?? null,
+      signedAt: extractSignedAt(doc, signing),
       expiresAt: signing?.expiresAt ?? null,
       hasWatermark: Boolean(doc.hasWatermark),
       fileName: doc.fileName,

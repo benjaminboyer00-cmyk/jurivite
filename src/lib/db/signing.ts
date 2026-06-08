@@ -3,7 +3,6 @@ import { and, desc, eq, gt } from "drizzle-orm";
 
 import { db } from "@/db";
 import { documents, signingRequests } from "@/db/schema";
-import type { DocumentSlug } from "@/lib/documents/registry";
 import { SIGNING_LINK_TTL_DAYS } from "@/lib/signing/constants";
 
 function generateSigningToken(): string {

@@ -51,7 +51,7 @@ describe("buildSignatureWorkspace", () => {
           status: "pending",
           signatureDataUrl: null,
           signedAt: null,
-          expiresAt: new Date("2026-06-01"),
+          expiresAt: new Date("2099-12-31"),
           createdAt: new Date("2026-05-02"),
         },
       ],
@@ -59,6 +59,30 @@ describe("buildSignatureWorkspace", () => {
     );
     expect(items[0]?.status).toBe("pending");
     expect(items[0]?.signingUrl).toBe("https://jurivite.fr/sign/tok123");
+  });
+
+  it("marque expiré un lien pending dépassé sans ouvrir /sign", () => {
+    const items = buildSignatureWorkspace(
+      [baseDoc],
+      [
+        {
+          id: "sig-1",
+          documentId: "doc-1",
+          userId: "u1",
+          token: "tok123",
+          clientName: "Client Vitre",
+          clientEmail: null,
+          status: "pending",
+          signatureDataUrl: null,
+          signedAt: null,
+          expiresAt: new Date("2020-01-01"),
+          createdAt: new Date("2026-05-02"),
+        },
+      ],
+      "https://jurivite.fr",
+    );
+    expect(items[0]?.status).toBe("expired");
+    expect(items[0]?.signingUrl).toBeNull();
   });
 
   it("filtre et compte par statut", () => {

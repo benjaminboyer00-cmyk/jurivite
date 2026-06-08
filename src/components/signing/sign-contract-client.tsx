@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { CheckCircle2, FileSignature } from "lucide-react";
 
 import { SignaturePad } from "@/components/signing/signature-pad";
@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-type SignInfo = {
+export type SignPageInfo = {
   status: string;
   clientName: string;
   documentTitle: string;
@@ -23,38 +23,28 @@ type SignInfo = {
   signedAt: string | null;
 };
 
-export function SignContractClient({ token }: { token: string }) {
-  const [info, setInfo] = useState<SignInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type SignContractClientProps = {
+  token: string;
+  initialInfo: SignPageInfo | null;
+  initialError: string | null;
+};
+
+export function SignContractClient({
+  token,
+  initialInfo,
+  initialError,
+}: SignContractClientProps) {
+  const [info] = useState(initialInfo);
+  const [error] = useState(initialError);
   const [signature, setSignature] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/sign/${token}`);
-      const data = (await res.json()) as SignInfo & { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Lien invalide");
-      setInfo(data);
-      if (data.status === "signed") setDone(true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Lien invalide");
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const [done, setDone] = useState(
+    initialInfo?.status === "signed" || false,
+  );
 
   async function handleSubmit() {
     if (!signature) return;
     setSubmitting(true);
-    setError(null);
     try {
       const res = await fetch(`/api/sign/${token}`, {
         method: "POST",
@@ -65,18 +55,10 @@ export function SignContractClient({ token }: { token: string }) {
       if (!res.ok) throw new Error(data.error ?? "Signature refusée");
       setDone(true);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur");
+      alert(e instanceof Error ? e.message : "Erreur");
     } finally {
       setSubmitting(false);
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="page-container max-w-lg py-16 text-center text-muted-foreground">
-        Chargement…
-      </div>
-    );
   }
 
   if (error && !info) {
@@ -89,7 +71,13 @@ export function SignContractClient({ token }: { token: string }) {
     );
   }
 
-  if (!info) return null;
+  if (!info) {
+    return (
+      <div className="page-container max-w-lg py-16 text-center text-muted-foreground">
+        Lien introuvable.
+      </div>
+    );
+  }
 
   const expired = info.status === "expired";
   const cancelled = info.status === "cancelled";
@@ -113,8 +101,8 @@ export function SignContractClient({ token }: { token: string }) {
               <CheckCircle2 className="size-12 text-green-600" />
               <p className="font-medium">Document signé avec succès</p>
               <p className="text-sm text-muted-foreground">
-                Merci {info.clientName}. Le prestataire a été notifié et pourra
-                télécharger la version signée depuis son compte.
+                Merci {info.clientName}. Le prestataire pourra télécharger la
+                version signée depuis son espace Signatures.
               </p>
             </div>
           ) : expired || cancelled ? (
@@ -140,9 +128,6 @@ export function SignContractClient({ token }: { token: string }) {
                 En signant, vous confirmez avoir lu le document et acceptez les
                 conditions qui y figurent (signature électronique simple).
               </p>
-              {error ? (
-                <p className="text-sm text-destructive">{error}</p>
-              ) : null}
               <Button
                 className="w-full"
                 disabled={!signature || submitting}

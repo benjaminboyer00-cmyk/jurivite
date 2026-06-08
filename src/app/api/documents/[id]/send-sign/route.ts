@@ -55,6 +55,14 @@ export async function POST(request: Request, context: RouteContext) {
     );
   }
 
+  const formData = doc.formData as Record<string, unknown>;
+  if (formData.hasClientSignature) {
+    return NextResponse.json(
+      { error: "Ce document est déjà signé par le client." },
+      { status: 409 },
+    );
+  }
+
   try {
     const row = await createSigningRequest({
       documentId: doc.id,
