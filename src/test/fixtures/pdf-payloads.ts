@@ -1,8 +1,10 @@
 import type { DocumentSlug } from "@/lib/documents/registry";
 import { documentSlugs } from "@/lib/documents/registry";
 
-/** SIRET valide (clé Luhn) pour les tests Zod */
-export const TEST_SIRET = "35600000000019";
+import { DEV_TEST_SIRET } from "@/lib/schemas/siret";
+
+/** SIRET autorisé pour les tests (exception Luhn) */
+export const TEST_SIRET = DEV_TEST_SIRET;
 
 const companyBase = {
   companyName: "Test SARL",

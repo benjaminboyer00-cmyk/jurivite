@@ -154,7 +154,7 @@ export function CompanyFields({
           inputMode="numeric"
           autoComplete="off"
           maxLength={20}
-          placeholder="12345678900012"
+          placeholder="00000000000000"
         />
       </FormField>
       <FormField id="address" label="Adresse du siège" error={errors.address?.message}>

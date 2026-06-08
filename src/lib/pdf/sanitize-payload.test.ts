@@ -23,17 +23,17 @@ describe("sanitizePdfPayload", () => {
   it("retire les délimiteurs Handlebars des champs texte", () => {
     const out = sanitizePdfPayload({
       companyName: "{{evil}}",
-      siret: "35600000000019",
+      siret: "00000000000000",
     });
     expect(out.companyName).toBe("evil");
-    expect(out.siret).toBe("35600000000019");
+    expect(out.siret).toBe("00000000000000");
   });
 
-  it("normalise le SIRET à 14 chiffres", () => {
+  it("conserve un SIRET de test à 14 chiffres", () => {
     const out = sanitizePdfPayload({
-      siret: "35600000000019",
+      siret: "00000000000000",
       companyName: "Test",
     });
-    expect(out.siret).toBe("35600000000019");
+    expect(out.siret).toBe("00000000000000");
   });
 });

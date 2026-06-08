@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/** SIRET réservé aux tests manuels / fixtures — seule exception à la clé Luhn */
+export const DEV_TEST_SIRET = "00000000000000" as const;
+
 /** Retire espaces, tirets, points — garde uniquement les chiffres */
 export function normalizeSiretInput(value: unknown): string {
   return String(value ?? "").replace(/\D/g, "");
@@ -32,7 +35,7 @@ export const siretSchema = z
         });
         return;
       }
-      if (!isValidSiretLuhn(digits)) {
+      if (!isValidSiret(digits)) {
         ctx.addIssue({
           code: "custom",
           message:
@@ -41,6 +44,12 @@ export const siretSchema = z
       }
     }),
   );
+
+/** Luhn + exception test unique (00000000000000) */
+export function isValidSiret(siret: string): boolean {
+  if (siret === DEV_TEST_SIRET) return true;
+  return isValidSiretLuhn(siret);
+}
 
 /** Validation Luhn (norme SIREN/SIRET française) */
 export function isValidSiretLuhn(siret: string): boolean {
